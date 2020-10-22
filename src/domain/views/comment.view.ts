@@ -1,4 +1,4 @@
 export class CommentView {
-    commentId;
-    content;
+	commentId;
+	content;
 }
