@@ -18,5 +18,33 @@ export class PostEntity {
 	content: string;
 
 	@OneToMany(() => CommentEntity, (c) => c.post)
-	comments: CommentEntity[];
+	comments: CommentEntity[] = [];
+}
+
+export class PostEntityBuilder {
+    private postEntity: PostEntity = new PostEntity()
+
+    withId(id: string): PostEntityBuilder {
+        this.postEntity.id = id;
+        return this;
+    }
+    withClassroom(classroom: ClassroomEntity): PostEntityBuilder {
+        this.postEntity.classRoom = classroom;
+        return this;
+    }
+    withPostOwner(postOwner: UserEntity): PostEntityBuilder {
+        this.postEntity.postOwner = postOwner;
+        return this;
+    }
+    withContent(content: string): PostEntityBuilder {
+        this.postEntity.content = content;
+        return this;
+    }
+    withComments(comments: CommentEntity[]): PostEntityBuilder {
+        this.postEntity.comments = comments;
+        return this;
+    }
+    build(): PostEntity {
+        return this.postEntity;
+    }
 }
