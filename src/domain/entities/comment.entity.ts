@@ -18,25 +18,25 @@ export class CommentEntity {
 }
 
 export class CommentEntityBuilder {
-    private commentEntity: CommentEntity = new CommentEntity();
+	private commentEntity: CommentEntity = new CommentEntity();
 
-    withId(id: string): CommentEntityBuilder {
-        this.commentEntity.id = id;
-        return this;
-    }
-    withCommentOwner(commentOwner: UserEntity): CommentEntityBuilder {
-        this.commentEntity.commentOwner = commentOwner;
-        return this;
-    }
-    withPost(post: PostEntity): CommentEntityBuilder {
-        this.commentEntity.post = post;
-        return this;
-    }
-    withContent(content: string): CommentEntityBuilder {
-        this.commentEntity.content = content;
-        return this;
-    }
-    build(): CommentEntity {
-        return this.commentEntity;
-    }
+	withId(id: string): CommentEntityBuilder {
+		this.commentEntity.id = id;
+		return this;
+	}
+	withCommentOwner(commentOwner: UserEntity): CommentEntityBuilder {
+		this.commentEntity.commentOwner = commentOwner;
+		return this;
+	}
+	withPost(post: PostEntity): CommentEntityBuilder {
+		this.commentEntity.post = post;
+		return this;
+	}
+	withContent(content: string): CommentEntityBuilder {
+		this.commentEntity.content = content;
+		return this;
+	}
+	build(): CommentEntity {
+		return this.commentEntity;
+	}
 }

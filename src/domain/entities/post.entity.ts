@@ -22,29 +22,29 @@ export class PostEntity {
 }
 
 export class PostEntityBuilder {
-    private postEntity: PostEntity = new PostEntity()
+	private postEntity: PostEntity = new PostEntity();
 
-    withId(id: string): PostEntityBuilder {
-        this.postEntity.id = id;
-        return this;
-    }
-    withClassroom(classroom: ClassroomEntity): PostEntityBuilder {
-        this.postEntity.classRoom = classroom;
-        return this;
-    }
-    withPostOwner(postOwner: UserEntity): PostEntityBuilder {
-        this.postEntity.postOwner = postOwner;
-        return this;
-    }
-    withContent(content: string): PostEntityBuilder {
-        this.postEntity.content = content;
-        return this;
-    }
-    withComments(comments: CommentEntity[]): PostEntityBuilder {
-        this.postEntity.comments = comments;
-        return this;
-    }
-    build(): PostEntity {
-        return this.postEntity;
-    }
+	withId(id: string): PostEntityBuilder {
+		this.postEntity.id = id;
+		return this;
+	}
+	withClassroom(classroom: ClassroomEntity): PostEntityBuilder {
+		this.postEntity.classRoom = classroom;
+		return this;
+	}
+	withPostOwner(postOwner: UserEntity): PostEntityBuilder {
+		this.postEntity.postOwner = postOwner;
+		return this;
+	}
+	withContent(content: string): PostEntityBuilder {
+		this.postEntity.content = content;
+		return this;
+	}
+	withComments(comments: CommentEntity[]): PostEntityBuilder {
+		this.postEntity.comments = comments;
+		return this;
+	}
+	build(): PostEntity {
+		return this.postEntity;
+	}
 }
