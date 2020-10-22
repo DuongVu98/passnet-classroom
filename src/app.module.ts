@@ -5,7 +5,7 @@ import { DomainModule } from "./domain/domain.module";
 import { UsecasesModule } from "./usecases/usecases.module";
 import { AdapterModule } from "./adapter/adapter.module";
 import { ConfigModule } from "./config/config.module";
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmModule } from "@nestjs/typeorm";
 
 @Module({
 	imports: [TypeOrmModule.forRoot(), DomainModule, UsecasesModule, AdapterModule, ConfigModule],
