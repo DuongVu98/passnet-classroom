@@ -1,4 +1,4 @@
-export class ClassroomAggregate {
+export class ClassroomAggregateRoot {
 	classroomId: string;
 	courseName: string;
 	studentsId: string[];

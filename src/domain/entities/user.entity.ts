@@ -1,3 +1,4 @@
 export class UserEntity {
-	uid: string;
+    uid: string;
+    onlineState: boolean;
 }
