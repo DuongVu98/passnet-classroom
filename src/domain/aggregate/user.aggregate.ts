@@ -1,4 +1,4 @@
 export class UserAggregate {
-    uid: string;
-    isOnlineState: boolean;
+	uid: string;
+	isOnlineState: boolean;
 }

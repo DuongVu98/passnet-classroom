@@ -1,4 +1,4 @@
 export class CommentAgregate {
-    commentId: string;
-    content: string;
+	commentId: string;
+	content: string;
 }
