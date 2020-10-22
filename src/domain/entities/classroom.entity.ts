@@ -1,7 +1,8 @@
-import { Column, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { PostEntity } from "./post.entity";
 import { UserEntity } from "./user.entity";
 
+@Entity({ name: "classrooms" })
 export class ClassroomEntity {
 	@PrimaryGeneratedColumn("uuid")
 	id: string;

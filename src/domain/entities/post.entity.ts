@@ -1,8 +1,9 @@
-import { Column, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ClassroomEntity } from "./classroom.entity";
 import { CommentEntity } from "./comment.entity";
 import { UserEntity } from "./user.entity";
 
+@Entity({ name: "posts" })
 export class PostEntity {
 	@PrimaryGeneratedColumn("uuid")
 	id: string;
