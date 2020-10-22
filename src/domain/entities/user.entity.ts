@@ -12,17 +12,53 @@ export class UserEntity {
 	onlineState: boolean;
 
 	@ManyToMany(() => ClassroomEntity, (c) => c.students)
-	classRooms: ClassroomEntity[];
+	classRooms: ClassroomEntity[] = [];
 
 	@OneToMany(() => ClassroomEntity, (c) => c.teacher)
-	ownClassrooms: ClassroomEntity[];
+	ownClassrooms: ClassroomEntity[] = [];
 
 	@ManyToMany(() => ClassroomEntity, (c) => c.teacherAssistances)
-	taClassrooms: ClassroomEntity[];
+	taClassrooms: ClassroomEntity[] = [];
 
 	@OneToMany(() => PostEntity, (p) => p.postOwner)
-	posts: PostEntity[];
+	posts: PostEntity[] = [];
 
 	@OneToMany(() => CommentEntity, (c) => c.commentOwner)
-	comments: CommentEntity;
+	comments: CommentEntity[] = [];
+}
+
+export class UserEntityBuilder {
+    private userEntity: UserEntity = new UserEntity();
+
+    withUid(uid: string): UserEntityBuilder {
+        this.userEntity.uid = uid;
+        return this;
+    }
+    withOnlineState(state: boolean): UserEntityBuilder{
+        this.userEntity.onlineState = state;
+        return this;
+    }
+    withClassrooms(classrooms: ClassroomEntity[]): UserEntityBuilder {
+        this.userEntity.classRooms = classrooms;
+        return this;
+    }
+    withOwnClassrooms(ownClassrooms: ClassroomEntity[]): UserEntityBuilder {
+        this.userEntity.ownClassrooms = ownClassrooms;
+        return this;
+    }
+    withTaClassrooms(taClassrooms: ClassroomEntity[]): UserEntityBuilder {
+        this.userEntity.taClassrooms = taClassrooms;
+        return this;
+    }
+    withPosts(posts: PostEntity[]): UserEntityBuilder {
+        this.userEntity.posts = posts;
+        return this;
+    }
+    withComments(comments: CommentEntity[]): UserEntityBuilder {
+        this.userEntity.comments = comments;
+        return this;
+    }
+    build(): UserEntity {
+        return this.userEntity;
+    }
 }
