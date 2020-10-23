@@ -8,7 +8,7 @@ import { AppConfigModule } from "./config/config.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
 @Module({
-	imports: [TypeOrmModule.forRoot(), DomainModule, UsecasesModule, AdapterModule, AppConfigModule],
+	imports: [TypeOrmModule.forRoot(),DomainModule, UsecasesModule, AdapterModule, AppConfigModule],
 	controllers: [AppController],
 	providers: [AppService],
 })

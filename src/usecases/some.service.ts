@@ -4,7 +4,7 @@ import { EntityRepository } from "src/domain/repositories/repository.interface";
 
 @Injectable()
 export class SomeService {
-	logger: Logger;
+	logger: Logger = new Logger();
 
 	constructor(@Inject("classroom-repository") private classroomRepository: EntityRepository<ClassroomEntity>) {}
 

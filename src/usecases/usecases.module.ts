@@ -4,6 +4,7 @@ import { SomeService } from "./some.service";
 
 @Module({
     imports: [DomainModule],
-    providers: [SomeService]
+    providers: [SomeService],
+    exports: [SomeService]
 })
 export class UsecasesModule {}
