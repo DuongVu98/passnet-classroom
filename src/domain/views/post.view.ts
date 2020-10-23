@@ -1,10 +1,9 @@
-export class PostView {
-	postId: string;
-	content: string;
-}
+import { CommentView } from "./comment.view";
+import { StudentView } from "./student.view";
 
-export class PostFullCommentsView {
-	postId: string;
-	content: string;
-	comments: string[];
+export class PostView {
+    postId: string;
+    postOwner: StudentView;
+    content: string;
+    comments: CommentView[];
 }
