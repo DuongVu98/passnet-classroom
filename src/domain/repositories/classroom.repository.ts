@@ -2,9 +2,10 @@ import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { ClassroomEntity } from "../entities/classroom.entity";
+import { EntityRepository } from "./repository.interface";
 
 @Injectable()
-export class ClassroomRepository {
+export class ClassroomRepository implements EntityRepository<ClassroomEntity> {
 	constructor(@InjectRepository(ClassroomEntity) private classroomRepository: Repository<ClassroomEntity>) {}
 
 	async findAll(): Promise<ClassroomEntity[]> {
