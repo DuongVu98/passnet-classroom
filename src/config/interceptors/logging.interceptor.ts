@@ -4,7 +4,7 @@ import { tap } from "rxjs/operators";
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
-    logger: Logger = new Logger();
+	logger: Logger = new Logger();
 
 	intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
 		this.logger.log("Before...");
