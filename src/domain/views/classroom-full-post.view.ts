@@ -1,3 +1,3 @@
 export class ClassroomFullPostsView {
-    classroomId: string;
+	classroomId: string;
 }
