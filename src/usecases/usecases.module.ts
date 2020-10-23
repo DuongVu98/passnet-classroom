@@ -3,8 +3,8 @@ import { DomainModule } from "src/domain/domain.module";
 import { SomeService } from "./some.service";
 
 @Module({
-    imports: [DomainModule],
-    providers: [SomeService],
-    exports: [SomeService]
+	imports: [DomainModule],
+	providers: [SomeService],
+	exports: [SomeService],
 })
 export class UsecasesModule {}
