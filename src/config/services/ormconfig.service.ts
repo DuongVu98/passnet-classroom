@@ -1,3 +1,1 @@
-export class OrmConfigService {
-    
-}
+export class OrmConfigService {}
