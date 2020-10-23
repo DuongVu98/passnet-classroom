@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { CommentEntity } from "../entities/comment.entity";
@@ -6,21 +6,29 @@ import { EntityRepository } from "./repository.interface";
 
 @Injectable()
 export class CommentRepository implements EntityRepository<CommentEntity> {
-	constructor(@InjectRepository(CommentEntity) private classroomRepository: Repository<CommentEntity>) {}
+	constructor(@InjectRepository(CommentEntity) private commentRepository: Repository<CommentEntity>) {}
 
-	findAll(): Promise<CommentEntity[]> {
-		throw new Error("Method not implemented.");
+	async findAll(): Promise<CommentEntity[]> {
+		return await this.commentRepository.find();
 	}
-	findById(id: string): Promise<CommentEntity> {
-		throw new Error("Method not implemented.");
+	async findById(id: string): Promise<CommentEntity> {
+		return await this.commentRepository.findOne({ where: { id: id } });
 	}
-	insert(t: CommentEntity): Promise<CommentEntity> {
-		throw new Error("Method not implemented.");
+	async insert(comment: CommentEntity): Promise<CommentEntity> {
+		return await this.commentRepository.save(comment);
 	}
-	updateById(id: string, t: CommentEntity): Promise<void> {
-		throw new Error("Method not implemented.");
+	async updateById(id: string, data: CommentEntity): Promise<void> {
+		const comment = await this.commentRepository.findOne({ where: { id: id } });
+		if (!comment) {
+			throw new HttpException("Not found", HttpStatus.NOT_FOUND);
+		}
+		await this.commentRepository.update(id, data);
 	}
-	deleteById(id: string): Promise<void> {
-		throw new Error("Method not implemented.");
+	async deleteById(id: string): Promise<void> {
+		const comment = await this.commentRepository.findOne({ where: { id: id } });
+		if (!comment) {
+			throw new HttpException("Not found", HttpStatus.NOT_FOUND);
+		}
+		await this.commentRepository.delete(id);
 	}
 }
