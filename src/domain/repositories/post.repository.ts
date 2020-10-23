@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { PostEntity } from "../entities/post.entity";
@@ -6,21 +6,29 @@ import { EntityRepository } from "./repository.interface";
 
 @Injectable()
 export class PostRepository implements EntityRepository<PostEntity> {
-	constructor(@InjectRepository(PostEntity) private classroomRepository: Repository<PostEntity>) {}
+	constructor(@InjectRepository(PostEntity) private postRepository: Repository<PostEntity>) {}
 
-	findAll(): Promise<PostEntity[]> {
-		throw new Error("Method not implemented.");
+	async findAll(): Promise<PostEntity[]> {
+		return this.postRepository.find();
 	}
-	findById(id: string): Promise<PostEntity> {
-		throw new Error("Method not implemented.");
+	async findById(id: string): Promise<PostEntity> {
+		return this.postRepository.findOne({ where: { id: id } });
 	}
-	insert(post: PostEntity): Promise<PostEntity> {
-		throw new Error("Method not implemented.");
+	async insert(post: PostEntity): Promise<PostEntity> {
+		return await this.postRepository.save(post);
 	}
-	updateById(id: string, t: PostEntity): Promise<void> {
-		throw new Error("Method not implemented.");
+	async updateById(id: string, data: PostEntity): Promise<void> {
+		const post = await this.postRepository.findOne({ where: { id: id } });
+		if (!post) {
+			throw new HttpException("Not found", HttpStatus.NOT_FOUND);
+		}
+		await this.postRepository.update(id, data);
 	}
-	deleteById(id: string): Promise<void> {
-		throw new Error("Method not implemented.");
+	async deleteById(id: string): Promise<void> {
+		const post = await this.postRepository.findOne({ where: { id: id } });
+		if (!post) {
+			throw new HttpException("Not found", HttpStatus.NOT_FOUND);
+		}
+		await this.postRepository.delete(id);
 	}
 }

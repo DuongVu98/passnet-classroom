@@ -1,3 +1,3 @@
 export class StudentView {
-    studentId: string;
+	studentId: string;
 }
