@@ -4,10 +4,11 @@ import { AppService } from "./app.service";
 import { DomainModule } from "./domain/domain.module";
 import { UsecasesModule } from "./usecases/usecases.module";
 import { AdapterModule } from "./adapter/adapter.module";
-import { ConfigModule } from "./config/config.module";
+import { AppConfigModule } from "./config/config.module";
+import { TypeOrmModule } from "@nestjs/typeorm";
 
 @Module({
-	imports: [DomainModule, UsecasesModule, AdapterModule, ConfigModule],
+	imports: [TypeOrmModule.forRoot(), DomainModule, UsecasesModule, AdapterModule, AppConfigModule],
 	controllers: [AppController],
 	providers: [AppService],
 })
