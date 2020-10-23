@@ -14,7 +14,9 @@ export class ClassroomRepository {
     async findById(id: string): Promise<ClassroomEntity> {
         return this.classroomRepository.findOne({where: {id: id}})
     }
-
+    async insert(data: ClassroomEntity): Promise<ClassroomEntity> {
+        return this.classroomRepository.save(data);
+    }
     async updateById(id: string, data: ClassroomEntity): Promise<void> {
         const classroom = await this.classroomRepository.findOne({where: {id: id}})
         if(!classroom) {
