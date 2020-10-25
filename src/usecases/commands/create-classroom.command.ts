@@ -26,8 +26,6 @@ export class CreateClassroomCommand implements ICommand {
 				.withTeacherAssistances(tas)
 				.build();
 
-			this.logger.log(tas);
-
 			this.classroomRepository.insert(newClassroom);
 		});
 	}
