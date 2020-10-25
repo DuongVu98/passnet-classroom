@@ -17,7 +17,7 @@ export class ClassroomEntity {
 	@ManyToOne(() => UserEntity, (u) => u.ownClassrooms)
 	teacher: UserEntity;
 
-	@ManyToMany(() => UserEntity)
+	@ManyToMany(() => UserEntity, (u) => u.taClassrooms)
 	@JoinTable({ name: "classroom_ta" })
 	teacherAssistances: UserEntity[];
 
