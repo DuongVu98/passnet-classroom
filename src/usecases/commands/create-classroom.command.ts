@@ -4,7 +4,7 @@ import { UserEntity } from "src/domain/entities/user.entity";
 import { EntityRepository } from "src/domain/repositories/repository.interface";
 import { ICommand } from "./command.factory";
 
-export class CreateClassroomCommand implements ICommand{
+export class CreateClassroomCommand implements ICommand {
 	private aggregate: ClassroomAggregateRoot;
 	private classroomRepsitory: EntityRepository<ClassroomEntity>;
 	private userRepository: EntityRepository<UserEntity>;

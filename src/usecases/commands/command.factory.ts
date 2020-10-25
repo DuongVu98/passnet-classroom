@@ -5,16 +5,14 @@ import { EntityRepository } from "src/domain/repositories/repository.interface";
 import { CreateClassroomCommand } from "./create-classroom.command";
 
 export interface ICommand {
-    execute()
+	execute();
 }
 
 @Injectable()
 export class CommandFactory {
-    constructor(@Inject("classroom-repository") private classroomRepository: EntityRepository<ClassroomEntity>){}
+	constructor(@Inject("classroom-repository") private classroomRepository: EntityRepository<ClassroomEntity>) {}
 
-    public getCreateClassroomCommand(aggregate: ClassroomAggregateRoot): ICommand {
-        return new CreateClassroomCommand()
-            .withAggregate(aggregate)
-            .withClassroomRepository(this.classroomRepository);
-    }
+	public getCreateClassroomCommand(aggregate: ClassroomAggregateRoot): ICommand {
+		return new CreateClassroomCommand().withAggregate(aggregate).withClassroomRepository(this.classroomRepository);
+	}
 }

@@ -14,10 +14,10 @@ export class HomeController {
 	public createClassroom(
 		@Body() { teacherId, courseName, taIds }: { teacherId: string; courseName: string; taIds: string[] }
 	): HttpResponse {
-        const aggregate = new ClassroomAggregateRoot()
-        aggregate.teacherId = teacherId
-        aggregate.courseName = courseName
-        aggregate.teacherAssistancesId = taIds;
+		const aggregate = new ClassroomAggregateRoot();
+		aggregate.teacherId = teacherId;
+		aggregate.courseName = courseName;
+		aggregate.teacherAssistancesId = taIds;
 
 		const command = this.commandFactory.getCreateClassroomCommand(aggregate);
 		command.execute();
