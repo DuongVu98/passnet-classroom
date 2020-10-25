@@ -24,9 +24,9 @@ export class CreateClassroomCommand implements ICommand {
 				.withCourseName(this.aggregate.courseName)
 				.withTeacher(teacher)
 				.withTeacherAssistances(tas)
-                .build();
-                
-            this.logger.log(tas)
+				.build();
+
+			this.logger.log(tas);
 
 			this.classroomRepository.insert(newClassroom);
 		});
@@ -34,11 +34,11 @@ export class CreateClassroomCommand implements ICommand {
 
 	async toEntity(ids: string[]): Promise<UserEntity[]> {
 		let userList: UserEntity[] = [];
-		const allIdFindingPromises = ids.map(id => this.userRepository.findById(id))
-		await Promise.all(allIdFindingPromises).then(users => {
-            userList =  users;
-        })
-        return userList;
+		const allIdFindingPromises = ids.map((id) => this.userRepository.findById(id));
+		await Promise.all(allIdFindingPromises).then((users) => {
+			userList = users;
+		});
+		return userList;
 	}
 
 	withAggregate(aggregate: ClassroomAggregateRoot): CreateClassroomCommand {

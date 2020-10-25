@@ -11,8 +11,7 @@ export interface ICommand {
 
 @Injectable()
 export class CommandFactory {
-
-    private logger: Logger = new Logger("CommandFactory")
+	private logger: Logger = new Logger("CommandFactory");
 
 	constructor(
 		@Inject("classroom-repository") private classroomRepository: EntityRepository<ClassroomEntity>,
@@ -20,8 +19,7 @@ export class CommandFactory {
 	) {}
 
 	public getCreateClassroomCommand(aggregate: ClassroomAggregateRoot): ICommand {
-
-        this.logger.log(`courseName --> ${aggregate.courseName}`)
+		this.logger.log(`courseName --> ${aggregate.courseName}`);
 		return new CreateClassroomCommand()
 			.withAggregate(aggregate)
 			.withClassroomRepository(this.classroomRepository)
