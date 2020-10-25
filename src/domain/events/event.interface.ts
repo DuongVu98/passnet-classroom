@@ -6,10 +6,9 @@ export interface DomainEvent {
 }
 
 export class ClassroomCreatedEvent implements DomainEvent {
-
 	logger: Logger = new Logger();
 
-    constructor(private aggregate: ClassroomAggregateRoot){}
+	constructor(private aggregate: ClassroomAggregateRoot) {}
 
 	execute(): void {
 		this.logger.log(this.aggregate);

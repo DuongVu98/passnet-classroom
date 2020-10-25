@@ -9,8 +9,8 @@ import { SomeService } from "src/usecases/some.service";
 @Controller("test")
 export class TestApi {
 	constructor(
-        private someService: SomeService,
-        private domainEventFactory: DomainEventFactory,
+		private someService: SomeService,
+		private domainEventFactory: DomainEventFactory,
 		@Inject("domain-event-bus") private domainEventBus: IEventBus<DomainEvent>
 	) {}
 

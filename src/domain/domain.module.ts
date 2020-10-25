@@ -12,7 +12,8 @@ import { UserRepository } from "./repositories/user.repository";
 
 @Module({
 	imports: [TypeOrmModule.forFeature([ClassroomEntity, PostEntity, UserEntity, CommentEntity])],
-	providers: [DomainEventFactory,
+	providers: [
+		DomainEventFactory,
 		{
 			provide: "classroom-repository",
 			useClass: ClassroomRepository,
@@ -30,6 +31,6 @@ import { UserRepository } from "./repositories/user.repository";
 			useClass: CommentRepository,
 		},
 	],
-	exports: [DomainEventFactory,"classroom-repository", "user-repository", "post-repository", "comment-repository"],
+	exports: [DomainEventFactory, "classroom-repository", "user-repository", "post-repository", "comment-repository"],
 })
 export class DomainModule {}

@@ -7,8 +7,8 @@ import { DomainEventHandler } from "./subscribers/domain-event.subscriber";
 @Module({
 	imports: [DomainModule],
 	providers: [
-        SomeService,
-        DomainEventHandler,
+		SomeService,
+		DomainEventHandler,
 		{
 			provide: "domain-event-bus",
 			useClass: DomainEventBus,

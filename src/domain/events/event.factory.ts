@@ -4,8 +4,7 @@ import { ClassroomCreatedEvent, DomainEvent } from "./event.interface";
 
 @Injectable()
 export class DomainEventFactory {
-
-    public produceClassroomCreatedEvent(aggregate: ClassroomAggregateRoot): DomainEvent {
-        return new ClassroomCreatedEvent(aggregate);
-    }
+	public produceClassroomCreatedEvent(aggregate: ClassroomAggregateRoot): DomainEvent {
+		return new ClassroomCreatedEvent(aggregate);
+	}
 }
