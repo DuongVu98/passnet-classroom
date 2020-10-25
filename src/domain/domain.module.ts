@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { CommandFactory } from "src/usecases/commands/command.factory";
 import { ClassroomEntity } from "./entities/classroom.entity";
 import { CommentEntity } from "./entities/comment.entity";
 import { PostEntity } from "./entities/post.entity";
@@ -13,6 +14,7 @@ import { UserRepository } from "./repositories/user.repository";
 @Module({
 	imports: [TypeOrmModule.forFeature([ClassroomEntity, PostEntity, UserEntity, CommentEntity])],
 	providers: [
+		CommandFactory,
 		DomainEventFactory,
 		{
 			provide: "classroom-repository",
@@ -31,6 +33,7 @@ import { UserRepository } from "./repositories/user.repository";
 			useClass: CommentRepository,
 		},
 	],
+	exports: [CommandFactory, "classroom-repository", "user-repository", "post-repository", "comment-repository"],
 	exports: [DomainEventFactory, "classroom-repository", "user-repository", "post-repository", "comment-repository"],
 })
 export class DomainModule {}

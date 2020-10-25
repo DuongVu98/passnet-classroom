@@ -8,7 +8,7 @@ export class PostEntity {
 	@PrimaryGeneratedColumn("uuid")
 	id: string;
 
-	@ManyToOne(() => ClassroomEntity, (c) => c.id)
+	@ManyToOne(() => ClassroomEntity, (c) => c.posts)
 	classRoom: ClassroomEntity;
 
 	@ManyToOne(() => UserEntity, (u) => u.posts)
