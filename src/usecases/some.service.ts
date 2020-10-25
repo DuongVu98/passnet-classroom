@@ -4,7 +4,7 @@ import { ClassroomEntity } from "src/domain/entities/classroom.entity";
 import { EntityRepository } from "src/domain/repositories/repository.interface";
 
 @Injectable()
-@UseInterceptors(new LoggingInterceptor())
+@UseInterceptors(LoggingInterceptor)
 export class SomeService {
 	logger: Logger = new Logger();
 
