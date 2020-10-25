@@ -1,13 +1,13 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { Observer } from "rxjs";
-import { DomainEvent } from "src/domain/events/event.interface";
+import { IDomainEvent } from "src/domain/events/event.interface";
 
 @Injectable()
-export class DomainEventHandler implements Observer<DomainEvent> {
+export class DomainEventHandler implements Observer<IDomainEvent> {
 	closed?: boolean;
 	logger: Logger = new Logger();
 
-	next(event: DomainEvent): void {
+	next(event: IDomainEvent): void {
 		this.logger.log(`subscribe from event bus --> ${event}`);
 		event.execute();
 	}

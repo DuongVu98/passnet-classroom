@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { Subject } from "rxjs";
-import { DomainEvent } from "src/domain/events/event.interface";
+import { IDomainEvent } from "src/domain/events/event.interface";
 import { DomainEventHandler } from "../subscribers/domain-event.subscriber";
 
 export interface IEventBus<EVENT> {
@@ -8,14 +8,14 @@ export interface IEventBus<EVENT> {
 }
 
 @Injectable()
-export class DomainEventBus implements IEventBus<DomainEvent> {
-	eventEmitter: Subject<DomainEvent> = new Subject<DomainEvent>();
+export class DomainEventBus implements IEventBus<IDomainEvent> {
+	eventEmitter: Subject<IDomainEvent> = new Subject<IDomainEvent>();
 
 	constructor(private domainEventHandler: DomainEventHandler) {
 		this.eventEmitter.subscribe(domainEventHandler);
 	}
 
-	publish(event: DomainEvent): void {
+	publish(event: IDomainEvent): void {
 		this.eventEmitter.next(event);
 	}
 }
