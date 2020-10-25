@@ -26,7 +26,7 @@ export class ClassroomEntity {
 }
 
 export class ClassroomEntityBuilder {
-	classroomEntity: ClassroomEntity;
+	classroomEntity: ClassroomEntity = new ClassroomEntity();
 
 	public withId(id: string): ClassroomEntityBuilder {
 		this.classroomEntity.id = id;

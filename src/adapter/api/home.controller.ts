@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from "@nestjs/common";
+import { Body, Controller, Logger, Post } from "@nestjs/common";
 import { ClassroomAggregateRoot } from "src/domain/aggregate/classroom.aggregate";
 import { CommandFactory } from "src/usecases/commands/command.factory";
 
@@ -8,16 +8,20 @@ export class HttpResponse {
 
 @Controller("home")
 export class HomeController {
+	private logger: Logger = new Logger("HomeController");
+
 	constructor(private commandFactory: CommandFactory) {}
 
 	@Post("/create-classroom")
 	public createClassroom(
 		@Body() { teacherId, courseName, taIds }: { teacherId: string; courseName: string; taIds: string[] }
 	): HttpResponse {
-		const aggregate = new ClassroomAggregateRoot();
-		aggregate.teacherId = teacherId;
-		aggregate.courseName = courseName;
-		aggregate.teacherAssistancesId = taIds;
+
+        this.logger.log(`courseName --> ${courseName}`)
+		const aggregate = new ClassroomAggregateRoot()
+			.withCourseName(courseName)
+			.withTeacherId(teacherId)
+			.withTeacherAssistancesId(taIds);
 
 		const command = this.commandFactory.getCreateClassroomCommand(aggregate);
 		command.execute();

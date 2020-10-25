@@ -1,3 +1,4 @@
+import { Logger } from "@nestjs/common";
 import { ClassroomAggregateRoot } from "src/domain/aggregate/classroom.aggregate";
 import { ClassroomEntity, ClassroomEntityBuilder } from "src/domain/entities/classroom.entity";
 import { UserEntity } from "src/domain/entities/user.entity";
@@ -5,6 +6,8 @@ import { EntityRepository } from "src/domain/repositories/repository.interface";
 import { ICommand } from "./command.factory";
 
 export class CreateClassroomCommand implements ICommand {
+	private logger: Logger = new Logger("CreateClassroomCommand");
+
 	private aggregate: ClassroomAggregateRoot;
 	private classroomRepository: EntityRepository<ClassroomEntity>;
 	private userRepository: EntityRepository<UserEntity>;
@@ -14,11 +17,20 @@ export class CreateClassroomCommand implements ICommand {
 		const taFindingPromise = this.toEntity(this.aggregate.teacherAssistancesId);
 
 		Promise.all([teacherFindingPromise, taFindingPromise]).then((values) => {
+			this.logger.log(`courseName --> ${this.aggregate.courseName}`);
+
+			const teacher = values[0];
+			const tas = values[1];
 			const newClassroom = new ClassroomEntityBuilder()
 				.withCourseName(this.aggregate.courseName)
-				.withTeacher(values[0])
-				.withTeacherAssistances(values[1])
+				.withTeacher(teacher)
+				.withTeacherAssistances(tas)
 				.build();
+			tas.forEach((ta) => {
+                this.logger.log(ta.uid)
+				ta.taClassrooms.push(newClassroom);
+				this.userRepository.updateById(ta.uid, ta);
+			});
 
 			this.classroomRepository.insert(newClassroom);
 		});
@@ -41,9 +53,9 @@ export class CreateClassroomCommand implements ICommand {
 	withClassroomRepository(repository: EntityRepository<ClassroomEntity>): CreateClassroomCommand {
 		this.classroomRepository = repository;
 		return this;
-    }
-    withUserRepository(repository: EntityRepository<UserEntity>): CreateClassroomCommand {
-        this.userRepository = repository;
-        return this;
-    }
+	}
+	withUserRepository(repository: EntityRepository<UserEntity>): CreateClassroomCommand {
+		this.userRepository = repository;
+		return this;
+	}
 }
