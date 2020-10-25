@@ -6,7 +6,7 @@ import { ICommand } from "./command.factory";
 
 export class CreateClassroomCommand implements ICommand {
 	private aggregate: ClassroomAggregateRoot;
-	private classroomRepsitory: EntityRepository<ClassroomEntity>;
+	private classroomRepository: EntityRepository<ClassroomEntity>;
 	private userRepository: EntityRepository<UserEntity>;
 
 	async execute(): Promise<void> {
@@ -20,7 +20,7 @@ export class CreateClassroomCommand implements ICommand {
 				.withTeacherAssistances(values[1])
 				.build();
 
-			this.classroomRepsitory.insert(newClassroom);
+			this.classroomRepository.insert(newClassroom);
 		});
 	}
 
@@ -39,7 +39,11 @@ export class CreateClassroomCommand implements ICommand {
 		return this;
 	}
 	withClassroomRepository(repository: EntityRepository<ClassroomEntity>): CreateClassroomCommand {
-		this.classroomRepsitory = repository;
+		this.classroomRepository = repository;
 		return this;
-	}
+    }
+    withUserRepository(repository: EntityRepository<UserEntity>): CreateClassroomCommand {
+        this.userRepository = repository;
+        return this;
+    }
 }
