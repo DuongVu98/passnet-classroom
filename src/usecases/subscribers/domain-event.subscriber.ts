@@ -7,8 +7,9 @@ export class DomainEventHandler implements Observer<DomainEvent>{
     closed?: boolean;
     logger: Logger = new Logger();
 
-    next(value: DomainEvent): void {
-        this.logger.log(`subscribe from event bus --> ${value}`)  
+    next(event: DomainEvent): void {
+        this.logger.log(`subscribe from event bus --> ${event}`)
+        event.execute();
     };
     error: (err: any) => void;
     complete: () => void;

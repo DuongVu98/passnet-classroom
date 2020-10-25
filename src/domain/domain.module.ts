@@ -4,6 +4,7 @@ import { ClassroomEntity } from "./entities/classroom.entity";
 import { CommentEntity } from "./entities/comment.entity";
 import { PostEntity } from "./entities/post.entity";
 import { UserEntity } from "./entities/user.entity";
+import { DomainEventFactory } from "./events/event.factory";
 import { ClassroomRepository } from "./repositories/classroom.repository";
 import { CommentRepository } from "./repositories/comment.repository";
 import { PostRepository } from "./repositories/post.repository";
@@ -11,7 +12,7 @@ import { UserRepository } from "./repositories/user.repository";
 
 @Module({
 	imports: [TypeOrmModule.forFeature([ClassroomEntity, PostEntity, UserEntity, CommentEntity])],
-	providers: [
+	providers: [DomainEventFactory,
 		{
 			provide: "classroom-repository",
 			useClass: ClassroomRepository,
@@ -29,6 +30,6 @@ import { UserRepository } from "./repositories/user.repository";
 			useClass: CommentRepository,
 		},
 	],
-	exports: ["classroom-repository", "user-repository", "post-repository", "comment-repository"],
+	exports: [DomainEventFactory,"classroom-repository", "user-repository", "post-repository", "comment-repository"],
 })
 export class DomainModule {}
