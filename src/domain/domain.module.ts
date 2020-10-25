@@ -33,6 +33,13 @@ import { UserRepository } from "./repositories/user.repository";
 			useClass: CommentRepository,
 		},
 	],
-	exports: [DomainEventFactory, CommandFactory, "classroom-repository", "user-repository", "post-repository", "comment-repository"],
+	exports: [
+		DomainEventFactory,
+		CommandFactory,
+		"classroom-repository",
+		"user-repository",
+		"post-repository",
+		"comment-repository",
+	],
 })
 export class DomainModule {}
