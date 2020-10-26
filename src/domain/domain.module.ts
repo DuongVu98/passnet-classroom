@@ -6,6 +6,9 @@ import { CommentEntity } from "./entities/comment.entity";
 import { PostEntity } from "./entities/post.entity";
 import { UserEntity } from "./entities/user.entity";
 import { DomainEventFactory } from "./events/event.factory";
+import { ClassroomAggregateMapper } from "./mappers/classroom-aggregate.mapper";
+import { PostAggregateMapper } from "./mappers/post-aggregate.mapper";
+import { UserAggregateMapper } from "./mappers/user-aggregate.mapper";
 import { ClassroomRepository } from "./repositories/classroom.repository";
 import { CommentRepository } from "./repositories/comment.repository";
 import { PostRepository } from "./repositories/post.repository";
@@ -32,6 +35,18 @@ import { UserRepository } from "./repositories/user.repository";
 			provide: "comment-repository",
 			useClass: CommentRepository,
 		},
+		{
+			provide: "classroom-aggregate-mapper",
+			useClass: ClassroomAggregateMapper,
+		},
+		{
+			provide: "user-aggregate-mapper",
+			useClass: UserAggregateMapper,
+		},
+		{
+			provide: "post-aggregate-mapper",
+			useClass: PostAggregateMapper,
+		},
 	],
 	exports: [
 		DomainEventFactory,
@@ -40,6 +55,9 @@ import { UserRepository } from "./repositories/user.repository";
 		"user-repository",
 		"post-repository",
 		"comment-repository",
+		"classroom-aggregate-mapper",
+		"user-aggregate-mapper",
+		"post-aggregate-mapper",
 	],
 })
 export class DomainModule {}
