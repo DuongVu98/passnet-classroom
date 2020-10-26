@@ -8,9 +8,9 @@ export interface IDomainEvent {
 export class ClassroomCreatedEvent implements IDomainEvent {
 	logger: Logger = new Logger();
 
-	constructor(private aggregate: ClassroomAggregateRoot) {}
+	constructor(private aggregate: ClassroomAggregateRoot, private aggregateRootIdentifier: string) {}
 
 	execute(): void {
-		this.logger.log(this.aggregate);
+		this.logger.log(`log from event --> ${this.aggregate} - ${this.aggregateRootIdentifier}`);
 	}
 }
