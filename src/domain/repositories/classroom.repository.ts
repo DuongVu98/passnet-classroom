@@ -13,7 +13,10 @@ export class ClassroomRepository implements EntityRepository<ClassroomEntity> {
 	}
 
 	async findById(id: string): Promise<ClassroomEntity> {
-		return this.classroomRepository.findOne({ where: { id: id } });
+		return this.classroomRepository.findOne({
+			where: { id: id },
+			relations: ["posts", "teacher", "students", "teacherAssistances"],
+		});
 	}
 	async insert(data: ClassroomEntity): Promise<ClassroomEntity> {
 		return this.classroomRepository.save(data);
