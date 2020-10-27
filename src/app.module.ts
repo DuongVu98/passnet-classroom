@@ -6,9 +6,17 @@ import { UsecasesModule } from "./usecases/usecases.module";
 import { AdapterModule } from "./adapter/adapter.module";
 import { AppConfigModule } from "./config/config.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { MongooseModule } from "@nestjs/mongoose";
 
 @Module({
-	imports: [TypeOrmModule.forRoot(), DomainModule, UsecasesModule, AdapterModule, AppConfigModule],
+	imports: [
+		TypeOrmModule.forRoot(),
+		MongooseModule.forRoot("mongodb://localhost:27017/passnet_classroom-view"),
+		DomainModule,
+		UsecasesModule,
+		AdapterModule,
+		AppConfigModule,
+	],
 	controllers: [AppController],
 	providers: [AppService],
 })

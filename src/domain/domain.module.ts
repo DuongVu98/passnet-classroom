@@ -1,4 +1,5 @@
 import { Module } from "@nestjs/common";
+import { MongooseModule } from "@nestjs/mongoose";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ClassroomEntity } from "./entities/classroom.entity";
 import { CommentEntity } from "./entities/comment.entity";
@@ -11,9 +12,13 @@ import { ClassroomRepository } from "./repositories/classroom.repository";
 import { CommentRepository } from "./repositories/comment.repository";
 import { PostRepository } from "./repositories/post.repository";
 import { UserRepository } from "./repositories/user.repository";
+import { ClassroomViewSchema } from "./views/classroom.view";
 
 @Module({
-	imports: [TypeOrmModule.forFeature([ClassroomEntity, PostEntity, UserEntity, CommentEntity])],
+	imports: [
+		TypeOrmModule.forFeature([ClassroomEntity, PostEntity, UserEntity, CommentEntity]),
+		MongooseModule.forFeature([{ name: "classroom_views", schema: ClassroomViewSchema}]),
+	],
 	providers: [
 		{
 			provide: "classroom-repository",

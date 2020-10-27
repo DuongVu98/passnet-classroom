@@ -1,9 +1,11 @@
-import { ClassroomAggregateRoot } from "../aggregate/classroom.aggregate";
+import { Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Document } from "mongoose";
 import { PostView } from "./post.view";
 import { StudentView } from "./student.view";
 import { TeacherView } from "./teacher.view";
 
-export class ClassroomView {
+@Schema()
+export class ClassroomView extends Document {
 	classroomId: string;
 	courseName: string;
 	students: StudentView[];
@@ -12,11 +14,14 @@ export class ClassroomView {
 	posts: PostView[];
 }
 
+export const ClassroomViewSchema = SchemaFactory.createForClass(ClassroomView);
+
 export class ClassroomViewEditor {
 	constructor(private view: ClassroomView) {}
 
 	withClassroomId(id: string): ClassroomViewEditor {
 		this.view.classroomId = id;
+		this.view._id = id;
 		return this;
 	}
 	withCourseName(name: string): ClassroomViewEditor {
@@ -36,6 +41,39 @@ export class ClassroomViewEditor {
 		return this;
 	}
 	withPosts(posts: PostView[]): ClassroomViewEditor {
+		this.view.posts = posts;
+		return this;
+	}
+	build(): ClassroomView {
+		return this.view;
+	}
+}
+
+export class ClassroomViewBuilder {
+    private view: ClassroomView = new ClassroomView();
+    
+	withClassroomId(id: string): ClassroomViewBuilder {
+		this.view.classroomId = id;
+		this.view._id = id;
+		return this;
+	}
+	withCourseName(name: string): ClassroomViewBuilder {
+		this.view.courseName = name;
+		return this;
+	}
+	withStudents(students: StudentView[]): ClassroomViewBuilder {
+		this.view.students = students;
+		return this;
+	}
+	withTeacher(teacher: TeacherView): ClassroomViewBuilder {
+		this.view.teacher = teacher;
+		return this;
+	}
+	withTeacherAssistances(tas: StudentView[]): ClassroomViewBuilder {
+		this.view.teacherAssistances = tas;
+		return this;
+	}
+	withPosts(posts: PostView[]): ClassroomViewBuilder {
 		this.view.posts = posts;
 		return this;
 	}
