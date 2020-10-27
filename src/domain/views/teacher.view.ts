@@ -1,3 +1,9 @@
+import { UserAggregate } from "../aggregate/user.aggregate";
+
 export class TeacherView {
-	teacherId: string;
+    teacherId: string;
+    
+    constructor(teacherAggregate: UserAggregate){
+        this.teacherId = teacherAggregate.uid;
+    }
 }
