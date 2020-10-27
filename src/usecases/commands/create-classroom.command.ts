@@ -63,9 +63,9 @@ export class CreateClassroomCommand implements ICommand<ClassroomAggregateRoot> 
 	withUserRepository(repository: EntityRepository<UserEntity>): CreateClassroomCommand {
 		this.userRepository = repository;
 		return this;
-    }
-    withAggregateMapper(mapper: IAggregateMapper<ClassroomAggregateRoot>): CreateClassroomCommand {
-        this.aggregateMapper = mapper;
-        return this;
-    }
+	}
+	withAggregateMapper(mapper: IAggregateMapper<ClassroomAggregateRoot>): CreateClassroomCommand {
+		this.aggregateMapper = mapper;
+		return this;
+	}
 }

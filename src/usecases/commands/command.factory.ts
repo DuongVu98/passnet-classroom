@@ -16,8 +16,8 @@ export class CommandFactory {
 
 	constructor(
 		@Inject("classroom-repository") private classroomRepository: EntityRepository<ClassroomEntity>,
-        @Inject("user-repository") private userRepository: EntityRepository<UserEntity>,
-        @Inject("classroom-aggregate-mapper") private classroomAggregateMapper: IAggregateMapper<ClassroomAggregateRoot>
+		@Inject("user-repository") private userRepository: EntityRepository<UserEntity>,
+		@Inject("classroom-aggregate-mapper") private classroomAggregateMapper: IAggregateMapper<ClassroomAggregateRoot>
 	) {}
 
 	public getCreateClassroomCommand(aggregate: ClassroomAggregateRoot): ICommand<ClassroomAggregateRoot> {
@@ -25,7 +25,7 @@ export class CommandFactory {
 		return new CreateClassroomCommand()
 			.withAggregate(aggregate)
 			.withClassroomRepository(this.classroomRepository)
-            .withUserRepository(this.userRepository)
-            .withAggregateMapper(this.classroomAggregateMapper);
+			.withUserRepository(this.userRepository)
+			.withAggregateMapper(this.classroomAggregateMapper);
 	}
 }

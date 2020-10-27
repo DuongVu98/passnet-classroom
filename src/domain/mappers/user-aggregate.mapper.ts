@@ -13,8 +13,8 @@ export class UserAggregateMapper implements IAggregateMapper<UserAggregate> {
 
 		await this.userRepository.findById(aggregateId).then((userEntity) => {
 			aggregate.withUid(userEntity.uid).withOnlineState(userEntity.onlineState);
-        });
-        
-        return aggregate;
+		});
+
+		return aggregate;
 	}
 }

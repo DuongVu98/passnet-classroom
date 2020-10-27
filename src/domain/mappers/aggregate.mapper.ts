@@ -1,3 +1,3 @@
 export interface IAggregateMapper<AGGREGATE> {
-    toAggregate(aggregateId: string): Promise<AGGREGATE>;
+	toAggregate(aggregateId: string): Promise<AGGREGATE>;
 }
