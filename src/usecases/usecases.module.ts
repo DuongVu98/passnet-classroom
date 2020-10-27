@@ -1,5 +1,7 @@
 import { Module } from "@nestjs/common";
 import { DomainModule } from "src/domain/domain.module";
+import { CommandFactory } from "./commands/command.factory";
+import { DomainEventFactory } from "./events/event.factory";
 import { DomainEventBus } from "./publishers/eventbus.publisher";
 import { SomeService } from "./some.service";
 import { DomainEventHandler } from "./subscribers/domain-event.subscriber";
@@ -9,11 +11,13 @@ import { DomainEventHandler } from "./subscribers/domain-event.subscriber";
 	providers: [
 		SomeService,
 		DomainEventHandler,
+		DomainEventFactory,
+		CommandFactory,
 		{
 			provide: "domain-event-bus",
 			useClass: DomainEventBus,
 		},
 	],
-	exports: [SomeService, "domain-event-bus"],
+	exports: [SomeService, CommandFactory, DomainEventFactory, "domain-event-bus"],
 })
 export class UsecasesModule {}

@@ -1,5 +1,5 @@
 import { Logger } from "@nestjs/common";
-import { ClassroomAggregateRoot } from "../aggregate/classroom.aggregate";
+import { ClassroomAggregateRoot } from "../../domain/aggregate/classroom.aggregate";
 
 export interface IDomainEvent {
 	execute(): void;

@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { ClassroomAggregateRoot } from "../aggregate/classroom.aggregate";
+import { ClassroomAggregateRoot } from "../../domain/aggregate/classroom.aggregate";
 import { ClassroomCreatedEvent, IDomainEvent } from "./event.interface";
 
 @Injectable()
