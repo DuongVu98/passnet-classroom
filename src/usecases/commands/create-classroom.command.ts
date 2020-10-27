@@ -2,32 +2,45 @@ import { Logger } from "@nestjs/common";
 import { ClassroomAggregateRoot } from "src/domain/aggregate/classroom.aggregate";
 import { ClassroomEntity, ClassroomEntityBuilder } from "src/domain/entities/classroom.entity";
 import { UserEntity } from "src/domain/entities/user.entity";
+import { IAggregateMapper } from "src/domain/mappers/aggregate.mapper";
 import { EntityRepository } from "src/domain/repositories/repository.interface";
 import { ICommand } from "./command.factory";
 
-export class CreateClassroomCommand implements ICommand {
+export class CreateClassroomCommand implements ICommand<ClassroomAggregateRoot> {
 	private logger: Logger = new Logger("CreateClassroomCommand");
 
 	private aggregate: ClassroomAggregateRoot;
 	private classroomRepository: EntityRepository<ClassroomEntity>;
 	private userRepository: EntityRepository<UserEntity>;
+	private aggregateMapper: IAggregateMapper<ClassroomAggregateRoot>;
 
-	async execute(): Promise<void> {
+	async execute(): Promise<ClassroomAggregateRoot> {
+		let aggregateToReturn = new ClassroomAggregateRoot();
+
 		const teacherFindingPromise = this.userRepository.findById(this.aggregate.teacherId);
 		const taFindingPromise = this.toEntity(this.aggregate.teacherAssistancesId);
 
-		Promise.all([teacherFindingPromise, taFindingPromise]).then((values) => {
-			const teacher = values[0];
-			const tas = values[1];
+		await Promise.all([teacherFindingPromise, taFindingPromise])
+			.then((values) => {
+				const teacher = values[0];
+				const tas = values[1];
 
-			const newClassroom = new ClassroomEntityBuilder()
-				.withCourseName(this.aggregate.courseName)
-				.withTeacher(teacher)
-				.withTeacherAssistances(tas)
-				.build();
+				const newClassroom = new ClassroomEntityBuilder()
+					.withCourseName(this.aggregate.courseName)
+					.withTeacher(teacher)
+					.withTeacherAssistances(tas)
+					.build();
 
-			this.classroomRepository.insert(newClassroom);
-		});
+				return this.classroomRepository.insert(newClassroom);
+			})
+			.then((entity) => {
+				return this.aggregateMapper.toAggregate(entity.id);
+			})
+			.then((aggregate) => {
+				aggregateToReturn = aggregate;
+			});
+
+		return aggregateToReturn;
 	}
 
 	async toEntity(ids: string[]): Promise<UserEntity[]> {
@@ -50,5 +63,9 @@ export class CreateClassroomCommand implements ICommand {
 	withUserRepository(repository: EntityRepository<UserEntity>): CreateClassroomCommand {
 		this.userRepository = repository;
 		return this;
-	}
+    }
+    withAggregateMapper(mapper: IAggregateMapper<ClassroomAggregateRoot>): CreateClassroomCommand {
+        this.aggregateMapper = mapper;
+        return this;
+    }
 }
