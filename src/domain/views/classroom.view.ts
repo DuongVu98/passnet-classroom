@@ -50,8 +50,8 @@ export class ClassroomViewEditor {
 }
 
 export class ClassroomViewBuilder {
-    private view: ClassroomView = new ClassroomView();
-    
+	private view: ClassroomView = new ClassroomView();
+
 	withClassroomId(id: string): ClassroomViewBuilder {
 		this.view.classroomId = id;
 		this.view._id = id;

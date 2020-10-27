@@ -27,10 +27,8 @@ export class ClassroomCreatedEvent implements IDomainEvent {
 			.withCourseName(this.aggregate.courseName);
 
 		this.userAggregateMapper.toAggregate(this.aggregate.teacherId).then((teacher) => {
-            const teacherView = new TeacherView(teacher);
-            classroomViewBuilder.withTeacher(teacherView);
-
-            
+			const teacherView = new TeacherView(teacher);
+			classroomViewBuilder.withTeacher(teacherView);
 		});
 	}
 }
