@@ -1,6 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { Observer } from "rxjs";
-import { IDomainEvent } from "src/usecases/events/event.interface";
+import { IDomainEvent } from "../events/event.factory";
 
 @Injectable()
 export class DomainEventHandler implements Observer<IDomainEvent> {

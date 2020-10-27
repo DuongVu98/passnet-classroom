@@ -1,7 +1,6 @@
 import { Body, Controller, Inject, Logger, Post } from "@nestjs/common";
 import { ClassroomAggregateRoot } from "src/domain/aggregate/classroom.aggregate";
-import { DomainEventFactory } from "src/usecases/events/event.factory";
-import { IDomainEvent } from "src/usecases/events/event.interface";
+import { DomainEventFactory, IDomainEvent } from "src/usecases/events/event.factory";
 import { CommandFactory } from "src/usecases/commands/command.factory";
 import { IEventBus } from "src/usecases/publishers/eventbus.publisher";
 

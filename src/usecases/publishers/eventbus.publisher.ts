@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { Subject } from "rxjs";
-import { IDomainEvent } from "src/usecases/events/event.interface";
+import { IDomainEvent } from "../events/event.factory";
 import { DomainEventHandler } from "../subscribers/domain-event.subscriber";
 
 export interface IEventBus<EVENT> {

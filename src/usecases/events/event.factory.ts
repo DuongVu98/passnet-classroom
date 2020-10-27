@@ -1,6 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { ClassroomAggregateRoot } from "../../domain/aggregate/classroom.aggregate";
-import { ClassroomCreatedEvent, IDomainEvent } from "./event.interface";
+import { ClassroomCreatedEvent } from "./event.interface";
+
+export interface IDomainEvent {
+    execute(): void;
+}
 
 @Injectable()
 export class DomainEventFactory {

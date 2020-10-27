@@ -1,7 +1,6 @@
 import { Controller, Get, Inject, UseInterceptors } from "@nestjs/common";
 import { LoggingInterceptor } from "src/config/interceptors/logging.interceptor";
-import { DomainEventFactory } from "src/usecases/events/event.factory";
-import { IDomainEvent } from "src/usecases/events/event.interface";
+import { DomainEventFactory, IDomainEvent } from "src/usecases/events/event.factory";
 import { IEventBus } from "src/usecases/publishers/eventbus.publisher";
 import { SomeService } from "src/usecases/some.service";
 

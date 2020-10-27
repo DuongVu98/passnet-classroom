@@ -1,9 +1,6 @@
 import { Logger } from "@nestjs/common";
 import { ClassroomAggregateRoot } from "../../domain/aggregate/classroom.aggregate";
-
-export interface IDomainEvent {
-	execute(): void;
-}
+import { IDomainEvent } from "./event.factory";
 
 export class ClassroomCreatedEvent implements IDomainEvent {
 	logger: Logger = new Logger();
