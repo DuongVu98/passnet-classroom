@@ -17,8 +17,6 @@ export class ClassroomCreatedEvent implements IDomainEvent {
 	constructor(private aggregate: ClassroomAggregateRoot, private aggregateRootIdentifier: string) {}
 
 	async execute(): Promise<void> {
-		this.logger.log(`Event execution --> ${this.aggregate} - ${this.aggregateRootIdentifier}`);
-
 		const teacherAssistanceViewsList: StudentView[] = [];
 		await this.aggregate.teacherAssistancesId.map((id) =>
 			this.userAggregateMapper.toAggregate(id).then((taAggregate) => {
@@ -26,27 +24,21 @@ export class ClassroomCreatedEvent implements IDomainEvent {
 			})
 		);
 
-		this.logger.log(`After getting TA views list`);
-
 		this.userAggregateMapper
 			.toAggregate(this.aggregate.teacherId)
-			.then((teacher) => {
-				this.logger.log(`teacher id from aggregate mapper --> ${teacher.uid}`);
-				const newView = new ClassroomViewDtoBuilder()
-					.withClassroomId(this.aggregate.classroomId)
+			.then((teacher) =>
+				new ClassroomViewDtoBuilder()
+					.withClassroomId(this.aggregateRootIdentifier)
 					.withCourseName(this.aggregate.courseName)
 					.withTeacher(new TeacherView(teacher))
 					.withTeacherAssistances(teacherAssistanceViewsList)
-                    .build();
-                this.logger.log(`new view --> ${newView}`)
-				return newView;
-			})
+					.build()
+			)
 			.then((newView) => {
-				this.logger.log(`log new view --> \n${JSON.stringify(newView, null, 2)}`);
 				this.classroomViewRepository.insert(newView);
 			})
 			.catch((error) => {
-				this.logger.log(`error from promise --> ${error}`);
+				this.logger.log(`promise rejection from execute() --> ${error}`);
 			});
 	}
 
