@@ -12,6 +12,7 @@ import { ClassroomRepository } from "./repositories/classroom.repository";
 import { CommentRepository } from "./repositories/comment.repository";
 import { PostRepository } from "./repositories/post.repository";
 import { UserRepository } from "./repositories/user.repository";
+import { ClassroomViewRepository } from "./view-repo/classroom-view.repository";
 import { ClassroomViewSchema } from "./views/classroom.view";
 
 @Module({
@@ -20,6 +21,7 @@ import { ClassroomViewSchema } from "./views/classroom.view";
 		MongooseModule.forFeature([{ name: "classroom_views", schema: ClassroomViewSchema }]),
 	],
 	providers: [
+		ClassroomViewRepository,
 		{
 			provide: "classroom-repository",
 			useClass: ClassroomRepository,
@@ -50,6 +52,7 @@ import { ClassroomViewSchema } from "./views/classroom.view";
 		},
 	],
 	exports: [
+		ClassroomViewRepository,
 		"classroom-repository",
 		"user-repository",
 		"post-repository",
