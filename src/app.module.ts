@@ -11,7 +11,7 @@ import { MongooseModule } from "@nestjs/mongoose";
 @Module({
 	imports: [
 		TypeOrmModule.forRoot(),
-		MongooseModule.forRoot("mongodb://localhost:27017/passnet_classroom-view"),
+		MongooseModule.forRoot("mongodb://localhost:27017/passnet_classroom_view"),
 		DomainModule,
 		UsecasesModule,
 		AdapterModule,

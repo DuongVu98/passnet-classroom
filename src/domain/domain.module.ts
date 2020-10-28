@@ -18,7 +18,7 @@ import { ClassroomViewSchema } from "./views/classroom.view";
 @Module({
 	imports: [
 		TypeOrmModule.forFeature([ClassroomEntity, PostEntity, UserEntity, CommentEntity]),
-		MongooseModule.forFeature([{ name: "classroom_views", schema: ClassroomViewSchema }]),
+		MongooseModule.forFeature([{ name: "classroom_views", schema: ClassroomViewSchema, collection: "classroom_views" }]),
 	],
 	providers: [
 		ClassroomViewRepository,

@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import { ClassroomView } from "../views/classroom.view";
+import { ClassroomView, ClassroomViewDto } from "../views/classroom.view";
 
 @Injectable()
 export class ClassroomViewRepository {
@@ -11,11 +11,11 @@ export class ClassroomViewRepository {
 		return this.viewModel.findById(id);
 	}
 
-	async insert(view: ClassroomView): Promise<ClassroomView> {
+	async insert(view: ClassroomViewDto): Promise<ClassroomView> {
 		return new this.viewModel(view).save();
 	}
 
-	async update(id: string, newView: ClassroomView): Promise<ClassroomView> {
+	async update(id: string, newView: ClassroomViewDto): Promise<ClassroomView> {
 		return this.viewModel.findByIdAndUpdate(id, newView, { new: true });
 	}
 
