@@ -12,6 +12,7 @@ import { ClassroomRepository } from "./repositories/classroom.repository";
 import { CommentRepository } from "./repositories/comment.repository";
 import { PostRepository } from "./repositories/post.repository";
 import { UserRepository } from "./repositories/user.repository";
+import { ClassroomQueryRepository } from "./view-repo/classroom-query.repository";
 import { ClassroomViewRepository } from "./view-repo/classroom-view.repository";
 import { ClassroomViewSchema } from "./views/classroom.view";
 
@@ -22,6 +23,7 @@ import { ClassroomViewSchema } from "./views/classroom.view";
 	],
 	providers: [
 		ClassroomViewRepository,
+		ClassroomQueryRepository,
 		{
 			provide: "classroom-repository",
 			useClass: ClassroomRepository,
@@ -53,6 +55,7 @@ import { ClassroomViewSchema } from "./views/classroom.view";
 	],
 	exports: [
 		ClassroomViewRepository,
+		ClassroomQueryRepository,
 		"classroom-repository",
 		"user-repository",
 		"post-repository",
