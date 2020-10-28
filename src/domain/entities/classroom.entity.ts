@@ -12,21 +12,21 @@ export class ClassroomEntity {
 
 	@ManyToMany(() => UserEntity)
 	@JoinTable({ name: "classroom_student" })
-	students: UserEntity[] = [];
+	students: UserEntity[];
 
 	@ManyToOne(() => UserEntity, (u) => u.ownClassrooms)
 	teacher: UserEntity;
 
-	@ManyToMany(() => UserEntity)
+	@ManyToMany(() => UserEntity, (u) => u.taClassrooms)
 	@JoinTable({ name: "classroom_ta" })
-	teacherAssistances: UserEntity[] = [];
+	teacherAssistances: UserEntity[];
 
 	@OneToMany(() => PostEntity, (p) => p.classRoom)
-	posts: PostEntity[] = [];
+	posts: PostEntity[];
 }
 
 export class ClassroomEntityBuilder {
-	classroomEntity: ClassroomEntity;
+	classroomEntity: ClassroomEntity = new ClassroomEntity();
 
 	public withId(id: string): ClassroomEntityBuilder {
 		this.classroomEntity.id = id;

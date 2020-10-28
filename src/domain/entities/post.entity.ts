@@ -8,7 +8,7 @@ export class PostEntity {
 	@PrimaryGeneratedColumn("uuid")
 	id: string;
 
-	@ManyToOne(() => ClassroomEntity, (c) => c.id)
+	@ManyToOne(() => ClassroomEntity, (c) => c.posts)
 	classRoom: ClassroomEntity;
 
 	@ManyToOne(() => UserEntity, (u) => u.posts)
@@ -18,7 +18,7 @@ export class PostEntity {
 	content: string;
 
 	@OneToMany(() => CommentEntity, (c) => c.post)
-	comments: CommentEntity[] = [];
+	comments: CommentEntity[];
 }
 
 export class PostEntityBuilder {
