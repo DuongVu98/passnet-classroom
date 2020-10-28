@@ -22,4 +22,8 @@ export class ClassroomViewRepository {
 	async delete(id: string): Promise<any> {
 		return await this.viewModel.findByIdAndRemove(id);
 	}
+
+	queryTest(aggregateRoot: string): ClassroomViewDto {
+		return this.viewModel.aggregate([{ $match: { classroomId: aggregateRoot } }]).exec();
+	}
 }
