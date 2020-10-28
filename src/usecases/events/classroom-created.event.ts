@@ -2,7 +2,7 @@ import { Logger } from "@nestjs/common";
 import { UserAggregate } from "src/domain/aggregate/user.aggregate";
 import { IAggregateMapper } from "src/domain/mappers/aggregate.mapper";
 import { ClassroomViewRepository } from "src/domain/view-repo/classroom-view.repository";
-import { ClassroomViewBuilder, ClassroomViewDtoBuilder } from "src/domain/views/classroom.view";
+import { ClassroomViewDtoBuilder } from "src/domain/views/classroom.view";
 import { StudentView } from "src/domain/views/student.view";
 import { TeacherView } from "src/domain/views/teacher.view";
 import { ClassroomAggregateRoot } from "../../domain/aggregate/classroom.aggregate";

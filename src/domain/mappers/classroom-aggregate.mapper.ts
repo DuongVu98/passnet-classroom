@@ -1,4 +1,4 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, Logger } from "@nestjs/common";
 import { ClassroomAggregateRoot } from "../aggregate/classroom.aggregate";
 import { ClassroomEntity } from "../entities/classroom.entity";
 import { EntityRepository } from "../repositories/repository.interface";
@@ -6,6 +6,8 @@ import { IAggregateMapper } from "./aggregate.mapper";
 
 @Injectable()
 export class ClassroomAggregateMapper implements IAggregateMapper<ClassroomAggregateRoot> {
+	readonly logger: Logger = new Logger("ClassroomAggregateMapper");
+
 	constructor(@Inject("classroom-repository") private classroomRepository: EntityRepository<ClassroomEntity>) {}
 
 	async toAggregate(aggregateId: string): Promise<ClassroomAggregateRoot> {
@@ -29,6 +31,9 @@ export class ClassroomAggregateMapper implements IAggregateMapper<ClassroomAggre
 					.withStudentsId(values[1])
 					.withTeacherAssistancesId(values[2])
 					.withTeacherId(classroomEntity.teacher.uid);
+			})
+			.catch((error) => {
+				this.logger.log(`promise rejection in toAggregate() --> ${error}`);
 			});
 
 		return aggregate;
