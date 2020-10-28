@@ -23,7 +23,7 @@ export class ClassroomViewRepository {
 		return await this.viewModel.findByIdAndRemove(id);
 	}
 
-	queryTest(aggregateRoot: string): ClassroomViewDto {
+	queryTest(aggregateRoot: string): Promise<ClassroomViewDto> {
 		return this.viewModel.aggregate([{ $match: { classroomId: aggregateRoot } }]).exec();
 	}
 }
