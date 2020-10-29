@@ -38,12 +38,12 @@ export class HomeController {
 	}
 
 	@Post("add-student")
-	public addStudentToClassroom(@Param("studentId") studentId: string, @Param("classroomId") classroomId: string): void {
+	public addStudentToClassroom(@Body() {studentId, classroomId}: {studentId: string, classroomId: string}): void {
 		const aggregate = new UserAggregate().withUid(studentId).withOnlineState(false);
 		const command = this.commandFactory.produceAddStudentCommand(aggregate, classroomId);
 
 		command.execute().then((aggregate) => {
-			this.logger.log("command executed");
+			this.logger.log(`command executed --> ${JSON.stringify(aggregate)}`);
 		});
 	}
 
