@@ -12,7 +12,7 @@ export class UserRepository implements EntityRepository<UserEntity> {
 		return this.userRepository.find();
 	}
 	async findById(id: string): Promise<UserEntity> {
-		return this.userRepository.findOne({ where: { uid: id } });
+		return this.userRepository.findOne({ where: { uid: id } }).catch(error => error);
 	}
 	async insert(user: UserEntity): Promise<UserEntity> {
 		return await this.userRepository.save(user);
