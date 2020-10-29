@@ -5,6 +5,7 @@ import { CommandFactory } from "src/usecases/commands/command.factory";
 import { IEventBus } from "src/usecases/publishers/eventbus.publisher";
 import { QueryFactory } from "src/usecases/queries/query.factory";
 import { ClassroomViewDto } from "src/domain/views/classroom.view";
+import { UserAggregate } from "src/domain/aggregate/user.aggregate";
 
 export class HttpResponse {
 	constructor(private message: string) {}
@@ -34,6 +35,16 @@ export class HomeController {
 			this.domainEventBus.publish(event);
 		});
 		return null;
+	}
+
+	@Post("add-student")
+	public addStudentToClassroom(@Param("studentId") studentId: string, @Param("classroomId") classroomId: string): void {
+		const aggregate = new UserAggregate().withUid(studentId).withOnlineState(false);
+		const command = this.commandFactory.produceAddStudentCommand(aggregate, classroomId);
+
+		command.execute().then((aggregate) => {
+			this.logger.log("command executed");
+		});
 	}
 
 	@Get("classroom-view/:aggregateRootId")
