@@ -30,13 +30,13 @@ export class UserEntity {
 export class UserEntityBuilder {
 	private userEntity: UserEntity = new UserEntity();
 
-    constructor(){
-        this.userEntity.classRooms = [];
-        this.userEntity.comments = [];
-        this.userEntity.ownClassrooms = [];
-        this.userEntity.taClassrooms = [];
-        this.userEntity.posts = [];
-    }
+	constructor() {
+		this.userEntity.classRooms = [];
+		this.userEntity.comments = [];
+		this.userEntity.ownClassrooms = [];
+		this.userEntity.taClassrooms = [];
+		this.userEntity.posts = [];
+	}
 
 	withUid(uid: string): UserEntityBuilder {
 		this.userEntity.uid = uid;

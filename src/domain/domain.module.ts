@@ -24,11 +24,11 @@ import { ClassroomViewSchema } from "./views/classroom.view";
 	],
 	providers: [
 		ClassroomViewRepository,
-        ClassroomQueryRepository,
-        {
-            provide: "classroom-entity-mapper",
-            useClass: ClassroomEntityMapper
-        },
+		ClassroomQueryRepository,
+		{
+			provide: "classroom-entity-mapper",
+			useClass: ClassroomEntityMapper,
+		},
 		{
 			provide: "classroom-repository",
 			useClass: ClassroomRepository,
@@ -60,8 +60,8 @@ import { ClassroomViewSchema } from "./views/classroom.view";
 	],
 	exports: [
 		ClassroomViewRepository,
-        ClassroomQueryRepository,
-        "classroom-entity-mapper",
+		ClassroomQueryRepository,
+		"classroom-entity-mapper",
 		"classroom-repository",
 		"user-repository",
 		"post-repository",

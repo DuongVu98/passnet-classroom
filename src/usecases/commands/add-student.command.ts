@@ -82,9 +82,9 @@ export class AddStudentCommand implements ICommand<UserAggregate> {
 	withUserRepository(repository: EntityRepository<UserEntity>): AddStudentCommand {
 		this.userRepository = repository;
 		return this;
-    }
-    withClassroomEntityMapper(mapper: IEntityMapper<ClassroomAggregateRoot, ClassroomEntity>): AddStudentCommand {
-        this.classroomEntityMapper = mapper;
-        return this;
-    }
+	}
+	withClassroomEntityMapper(mapper: IEntityMapper<ClassroomAggregateRoot, ClassroomEntity>): AddStudentCommand {
+		this.classroomEntityMapper = mapper;
+		return this;
+	}
 }

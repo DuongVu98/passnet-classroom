@@ -38,7 +38,7 @@ export class HomeController {
 	}
 
 	@Post("add-student")
-	public addStudentToClassroom(@Body() {studentId, classroomId}: {studentId: string, classroomId: string}): void {
+	public addStudentToClassroom(@Body() { studentId, classroomId }: { studentId: string; classroomId: string }): void {
 		const aggregate = new UserAggregate().withUid(studentId).withOnlineState(false);
 		const command = this.commandFactory.produceAddStudentCommand(aggregate, classroomId);
 

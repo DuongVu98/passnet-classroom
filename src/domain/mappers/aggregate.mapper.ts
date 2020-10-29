@@ -3,5 +3,5 @@ export interface IAggregateMapper<AGGREGATE> {
 }
 
 export interface IEntityMapper<AGGREGATE, ENTITY> {
-    toEntity(aggregate: AGGREGATE): Promise<ENTITY>;
+	toEntity(aggregate: AGGREGATE): Promise<ENTITY>;
 }
