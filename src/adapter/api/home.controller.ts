@@ -26,7 +26,7 @@ export class HomeController {
 	public createClassroom(
 		@Body() { teacherId, courseName, taIds }: { teacherId: string; courseName: string; taIds: string[] }
 	): HttpResponse {
-		this.logger.log(`courseName --> ${courseName}`);
+		this.logger.debug(`courseName --> ${courseName}`);
 		const aggregate = new ClassroomAggregateRoot().withCourseName(courseName).withTeacherId(teacherId).withTeacherAssistancesId(taIds);
 
 		const command = this.commandFactory.produceCreateClassroomCommand(aggregate);
@@ -43,7 +43,7 @@ export class HomeController {
 		const command = this.commandFactory.produceAddStudentCommand(aggregate, classroomId);
 
 		command.execute().then((aggregate) => {
-			this.logger.log(`command executed --> ${JSON.stringify(aggregate)}`);
+			this.logger.debug(`command executed --> ${JSON.stringify(aggregate)}`);
 		});
 	}
 
