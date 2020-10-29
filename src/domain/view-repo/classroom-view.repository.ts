@@ -18,16 +18,20 @@ export class ClassroomViewRepository {
 	}
 
 	async update(id: string, newView: ClassroomViewDto): Promise<ClassroomView> {
-        let view = null;
-        await this.viewModel.findOne({ classroomId: id }).exec().then(view => {
-            if(view){
-                return this.viewModel.findByIdAndUpdate(view._id, newView, { new: true }).exec();
-            }
-        }).then(updatedView => {
-            view = updatedView;
-        });
+		let view = null;
+		await this.viewModel
+			.findOne({ classroomId: id })
+			.exec()
+			.then((view) => {
+				if (view) {
+					return this.viewModel.findByIdAndUpdate(view._id, newView, { new: true }).exec();
+				}
+			})
+			.then((updatedView) => {
+				view = updatedView;
+			});
 
-        return view;
+		return view;
 	}
 
 	async delete(id: string): Promise<any> {
