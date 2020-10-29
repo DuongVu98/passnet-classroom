@@ -17,12 +17,12 @@ export class UserRepository implements EntityRepository<UserEntity> {
 	async insert(user: UserEntity): Promise<UserEntity> {
 		return await this.userRepository.save(user);
 	}
-	async updateById(id: string, data: UserEntity): Promise<void> {
+	async updateById(id: string, data: UserEntity): Promise<UserEntity> {
 		const user = await this.userRepository.findOne({ where: { uid: id } });
 		if (!user) {
 			throw new HttpException("Not found", HttpStatus.NOT_FOUND);
 		}
-		await this.userRepository.update(id, data);
+		return await this.userRepository.save(user);
 	}
 	async deleteById(id: string): Promise<void> {
 		const user = await this.userRepository.findOne({ where: { uid: id } });
