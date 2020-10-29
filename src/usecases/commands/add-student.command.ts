@@ -1,8 +1,10 @@
 import { Logger } from "@nestjs/common";
+import { ClassroomAggregateRoot } from "src/domain/aggregate/classroom.aggregate";
 import { UserAggregate } from "src/domain/aggregate/user.aggregate";
 import { ClassroomEntity } from "src/domain/entities/classroom.entity";
 import { UserEntity, UserEntityBuilder } from "src/domain/entities/user.entity";
-import { IAggregateMapper } from "src/domain/mappers/aggregate.mapper";
+import { IAggregateMapper, IEntityMapper } from "src/domain/mappers/aggregate.mapper";
+import { ClassroomEntityMapper } from "src/domain/mappers/classroom-entity.mapper";
 import { EntityRepository } from "src/domain/repositories/repository.interface";
 import { ICommand } from "./command.factory";
 
@@ -10,6 +12,8 @@ export class AddStudentCommand implements ICommand<UserAggregate> {
 	logger: Logger = new Logger("AddStudentCommand");
 
 	private userAggregateMapper: IAggregateMapper<UserAggregate>;
+	private classroomAggregateMapper: IAggregateMapper<ClassroomAggregateRoot>;
+	private classroomEntityMapper: IEntityMapper<ClassroomAggregateRoot, ClassroomEntity>;
 	private classroomRepository: EntityRepository<ClassroomEntity>;
 	private userRepository: EntityRepository<UserEntity>;
 
@@ -47,24 +51,13 @@ export class AddStudentCommand implements ICommand<UserAggregate> {
 
 	async addAvailableStudent(student: UserEntity): Promise<void> {
 		this.logger.log("available");
-		await this.classroomRepository
-			.findById(this.aggregateIdentifier)
-			.then(async (classroom) => {
-				this.logger.debug(`classroom found --> ${JSON.stringify(classroom)}`);
+		await this.classroomAggregateMapper.toAggregate(this.aggregateIdentifier).then(async (classroom) => {
+			await classroom.studentsId.push(this.studentToAdd.uid);
 
-				await classroom.students.push(student);
-				try {
-					this.classroomRepository.updateById(classroom.id, classroom);
-				} catch (e) {
-					this.logger.error(`error when update by repository --> ${e}`);
-					this.logger.error(e.stack);
-				}
-			})
-			.catch((error) => {
-				this.logger.log(`error when update student in addAvailableStudent() --> ${error}`);
-			});
-
-		this.logger.log("after addAvailableStudent()");
+			this.classroomEntityMapper
+				.toEntity(classroom)
+				.then((classroomEntity) => this.classroomRepository.updateById(classroomEntity.id, classroomEntity));
+		});
 	}
 
 	async addUnAvailbleStudent(): Promise<void> {
@@ -89,5 +82,9 @@ export class AddStudentCommand implements ICommand<UserAggregate> {
 	withUserRepository(repository: EntityRepository<UserEntity>): AddStudentCommand {
 		this.userRepository = repository;
 		return this;
-	}
+    }
+    withClassroomEntityMapper(mapper: IEntityMapper<ClassroomAggregateRoot, ClassroomEntity>): AddStudentCommand {
+        this.classroomEntityMapper = mapper;
+        return this;
+    }
 }

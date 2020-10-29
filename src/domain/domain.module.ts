@@ -6,6 +6,7 @@ import { CommentEntity } from "./entities/comment.entity";
 import { PostEntity } from "./entities/post.entity";
 import { UserEntity } from "./entities/user.entity";
 import { ClassroomAggregateMapper } from "./mappers/classroom-aggregate.mapper";
+import { ClassroomEntityMapper } from "./mappers/classroom-entity.mapper";
 import { PostAggregateMapper } from "./mappers/post-aggregate.mapper";
 import { UserAggregateMapper } from "./mappers/user-aggregate.mapper";
 import { ClassroomRepository } from "./repositories/classroom.repository";
@@ -23,7 +24,11 @@ import { ClassroomViewSchema } from "./views/classroom.view";
 	],
 	providers: [
 		ClassroomViewRepository,
-		ClassroomQueryRepository,
+        ClassroomQueryRepository,
+        {
+            provide: "classroom-entity-mapper",
+            useClass: ClassroomEntityMapper
+        },
 		{
 			provide: "classroom-repository",
 			useClass: ClassroomRepository,
@@ -55,7 +60,8 @@ import { ClassroomViewSchema } from "./views/classroom.view";
 	],
 	exports: [
 		ClassroomViewRepository,
-		ClassroomQueryRepository,
+        ClassroomQueryRepository,
+        "classroom-entity-mapper",
 		"classroom-repository",
 		"user-repository",
 		"post-repository",

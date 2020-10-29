@@ -3,7 +3,7 @@ import { ClassroomAggregateRoot } from "src/domain/aggregate/classroom.aggregate
 import { UserAggregate } from "src/domain/aggregate/user.aggregate";
 import { ClassroomEntity } from "src/domain/entities/classroom.entity";
 import { UserEntity } from "src/domain/entities/user.entity";
-import { IAggregateMapper } from "src/domain/mappers/aggregate.mapper";
+import { IAggregateMapper, IEntityMapper } from "src/domain/mappers/aggregate.mapper";
 import { EntityRepository } from "src/domain/repositories/repository.interface";
 import { AddStudentCommand } from "./add-student.command";
 import { CreateClassroomCommand } from "./create-classroom.command";
@@ -20,7 +20,8 @@ export class CommandFactory {
 		@Inject("classroom-repository") private classroomRepository: EntityRepository<ClassroomEntity>,
 		@Inject("user-repository") private userRepository: EntityRepository<UserEntity>,
 		@Inject("classroom-aggregate-mapper") private classroomAggregateMapper: IAggregateMapper<ClassroomAggregateRoot>,
-		@Inject("user-aggregate-mapper") private userAggregateMapper: IAggregateMapper<UserAggregate>
+		@Inject("user-aggregate-mapper") private userAggregateMapper: IAggregateMapper<UserAggregate>,
+		@Inject("classroom-entity-mapper") private classroomEntityMapper: IEntityMapper<ClassroomAggregateRoot, ClassroomEntity>
 	) {}
 
 	public produceCreateClassroomCommand(aggregate: ClassroomAggregateRoot): ICommand<ClassroomAggregateRoot> {
@@ -36,6 +37,7 @@ export class CommandFactory {
 		return new AddStudentCommand(aggregate, aggregateIdentifier)
 			.withClassroomRepository(this.classroomRepository)
 			.withUserRepository(this.userRepository)
-			.withUserAggregateMapper(this.userAggregateMapper);
+			.withUserAggregateMapper(this.userAggregateMapper)
+			.withClassroomEntityMapper(this.classroomEntityMapper);
 	}
 }
