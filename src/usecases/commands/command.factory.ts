@@ -35,6 +35,7 @@ export class CommandFactory {
 
 	public produceAddStudentCommand(aggregate: UserAggregate, aggregateIdentifier: string): ICommand<UserAggregate> {
 		return new AddStudentCommand(aggregate, aggregateIdentifier)
+			.withClassroomAggregateMapper(this.classroomAggregateMapper)
 			.withClassroomRepository(this.classroomRepository)
 			.withUserRepository(this.userRepository)
 			.withUserAggregateMapper(this.userAggregateMapper)

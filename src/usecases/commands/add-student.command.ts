@@ -70,6 +70,10 @@ export class AddStudentCommand implements ICommand<UserAggregate> {
 		});
 	}
 
+    withClassroomAggregateMapper(mapper: IAggregateMapper<ClassroomAggregateRoot>): AddStudentCommand {
+        this.classroomAggregateMapper = mapper;
+        return this;
+    }
 	withUserAggregateMapper(mapper: IAggregateMapper<UserAggregate>): AddStudentCommand {
 		this.userAggregateMapper = mapper;
 		return this;
