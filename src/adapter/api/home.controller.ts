@@ -28,7 +28,7 @@ export class HomeController {
 		this.logger.log(`courseName --> ${courseName}`);
 		const aggregate = new ClassroomAggregateRoot().withCourseName(courseName).withTeacherId(teacherId).withTeacherAssistancesId(taIds);
 
-		const command = this.commandFactory.getCreateClassroomCommand(aggregate);
+		const command = this.commandFactory.produceCreateClassroomCommand(aggregate);
 		command.execute().then((aggregate) => {
 			const event = this.domainEventFactory.produceClassroomCreatedEvent(aggregate, aggregate.classroomId);
 			this.domainEventBus.publish(event);

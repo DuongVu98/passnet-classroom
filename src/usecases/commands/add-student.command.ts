@@ -43,5 +43,18 @@ export class AddStudentCommand implements ICommand<UserAggregate> {
 			await newStudent.classRooms.push(classroom);
 			this.userRepository.insert(newStudent);
 		});
-	}
+    }
+    
+    withUserAggregateMapper(mapper: IAggregateMapper<UserAggregate>): AddStudentCommand {
+        this.userAggregateMapper = mapper;
+        return this;
+    }
+    withClassroomRepository(repository: EntityRepository<ClassroomEntity>): AddStudentCommand {
+        this.classroomRepository = repository;
+        return this;
+    }
+    withUserRepository(repository: EntityRepository<UserEntity>): AddStudentCommand {
+        this.userRepository = repository;
+        return this;
+    }
 }
