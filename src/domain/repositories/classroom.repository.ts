@@ -27,8 +27,8 @@ export class ClassroomRepository implements EntityRepository<ClassroomEntity> {
 		const classroom = await this.classroomRepository.findOne({ where: { id: id } });
 		if (!classroom) {
 			throw new HttpException("Not found", HttpStatus.NOT_FOUND);
-        }
-        return this.classroomRepository.save(data);
+		}
+		return this.classroomRepository.save(data);
 	}
 
 	async deleteById(id: string): Promise<void> {
