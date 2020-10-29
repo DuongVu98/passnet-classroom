@@ -44,6 +44,8 @@ export class HomeController {
 
 		command.execute().then((aggregate) => {
 			this.logger.debug(`command executed --> ${JSON.stringify(aggregate)}`);
+			const event = this.domainEventFactory.produceStudentAddedEvent(aggregate, classroomId);
+			this.domainEventBus.publish(event);
 		});
 	}
 

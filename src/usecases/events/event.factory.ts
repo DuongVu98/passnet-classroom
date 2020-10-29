@@ -4,6 +4,7 @@ import { IAggregateMapper } from "src/domain/mappers/aggregate.mapper";
 import { ClassroomViewRepository } from "src/domain/view-repo/classroom-view.repository";
 import { ClassroomAggregateRoot } from "../../domain/aggregate/classroom.aggregate";
 import { ClassroomCreatedEvent } from "./classroom-created.event";
+import { StudentAddedEvent } from "./student-added.event";
 
 export interface IDomainEvent {
 	execute(): void;
@@ -20,5 +21,9 @@ export class DomainEventFactory {
 		return new ClassroomCreatedEvent(aggregate, aggregateRootIdentifier)
 			.withViewRepository(this.viewRepository)
 			.withUserAggregateMapper(this.userAggregateMapper);
+	}
+
+	public produceStudentAddedEvent(aggregate: UserAggregate, aggregateRootIdentifier: string): IDomainEvent {
+		return new StudentAddedEvent(aggregate, aggregateRootIdentifier).withClassroomViewRepository(this.viewRepository);
 	}
 }
