@@ -4,7 +4,6 @@ import { UserAggregate } from "src/domain/aggregate/user.aggregate";
 import { ClassroomEntity } from "src/domain/entities/classroom.entity";
 import { UserEntity, UserEntityBuilder } from "src/domain/entities/user.entity";
 import { IAggregateMapper, IEntityMapper } from "src/domain/mappers/aggregate.mapper";
-import { ClassroomEntityMapper } from "src/domain/mappers/classroom-entity.mapper";
 import { EntityRepository } from "src/domain/repositories/repository.interface";
 import { ICommand } from "./command.factory";
 
