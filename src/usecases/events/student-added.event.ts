@@ -15,7 +15,7 @@ export class StudentAddedEvent implements IDomainEvent {
 		this.classroomViewRepository
 			.findById(this.aggregateRootIdentifier)
 			.then(async (classroomView) => {
-                this.logger.debug(`view after findById() --> ${JSON.stringify(classroomView)}`)
+				this.logger.debug(`view after findById() --> ${JSON.stringify(classroomView)}`);
 				await classroomView.students.push(new StudentView(this.aggregate));
 				return this.classroomViewRepository.update(this.aggregateRootIdentifier, classroomView);
 			})
