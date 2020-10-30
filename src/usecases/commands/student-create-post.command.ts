@@ -13,11 +13,11 @@ export class StudentCreatePostCommand implements ICommand<PostAggregate> {
 	private classroomRepository: EntityRepository<ClassroomEntity>;
 	private postAggregateMapper: IAggregateMapper<PostAggregate>;
 
-	constructor(private aggregate: PostAggregate, private aggregateIdentifier: string) {}
+	constructor(private aggregate: PostAggregate, private aggregateRootIdentifier: string) {}
 
 	async execute(): Promise<PostAggregate> {
 		const findPostOwnerPromise = this.userRepository.findById(this.aggregate.postId);
-		const findClassroomPromise = this.classroomRepository.findById(this.aggregateIdentifier);
+		const findClassroomPromise = this.classroomRepository.findById(this.aggregateRootIdentifier);
 
 		return Promise.all([findPostOwnerPromise, findClassroomPromise])
 			.then((values) => {
