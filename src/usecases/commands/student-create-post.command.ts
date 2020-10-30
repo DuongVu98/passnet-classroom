@@ -1,3 +1,4 @@
+import { MapOperator } from "rxjs/internal/operators/map";
 import { PostAggregate } from "src/domain/aggregate/post.aggregate";
 import { ClassroomEntity } from "src/domain/entities/classroom.entity";
 import { PostEntity, PostEntityBuilder } from "src/domain/entities/post.entity";
@@ -31,5 +32,22 @@ export class StudentCreatePostCommand implements ICommand<PostAggregate> {
 			})
 			.then((entity) => this.postRepository.insert(entity))
             .then((insertedEntity) => this.postAggregateMapper.toAggregate(insertedEntity.id))
-	}
+    }
+    
+    withPostRepository(repository: EntityRepository<PostEntity>): StudentCreatePostCommand {
+        this.postRepository = repository;
+        return this;
+    }
+    withUserRepository(repository: EntityRepository<UserEntity>): StudentCreatePostCommand {
+        this.userRepository = repository;
+        return this;
+    }
+    withClassroomRepository(repository: EntityRepository<ClassroomEntity>): StudentCreatePostCommand {
+        this.classroomRepository = repository;
+        return this;
+    }
+    withPostAggregateMapper(mapper: IAggregateMapper<PostAggregate>): StudentCreatePostCommand {
+        this.postAggregateMapper = mapper;
+        return this;
+    }
 }
