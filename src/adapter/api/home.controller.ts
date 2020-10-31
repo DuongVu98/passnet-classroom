@@ -48,11 +48,13 @@ export class HomeController {
 			this.logger.debug(`command executed --> ${JSON.stringify(aggregate)}`);
 			const event = this.domainEventFactory.produceStudentAddedEvent(aggregate, classroomId);
 			this.domainEventBus.publish(event);
-		});
+		}).catch(error => {
+            this.logger.error(`catch error --> ${error}`)
+            throw error;
+        });
 	}
 
     @Post("create-post")
-    @UseInterceptors(new CheckStudentExistanceInterceptor())
 	public studentCreatePost(
 		@Body() { content, classroomId, postOwnerId }: { content: string; classroomId: string; postOwnerId: string }
 	): void {
@@ -62,7 +64,9 @@ export class HomeController {
 		command.execute().then((aggregate) => {
 			const event = this.domainEventFactory.producePostCreatedEvent(aggregate, classroomId);
 			this.domainEventBus.publish(event);
-		});
+		}).catch(error => {
+            throw error;
+        });
 	}
 
 	@Get("classroom-view/:aggregateRootId")
