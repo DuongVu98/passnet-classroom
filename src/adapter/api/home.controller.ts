@@ -50,11 +50,11 @@ export class HomeController {
 		});
 	}
 
-    @Post("creat-post")
+    @Post("create-post")
 	public studentCreatePost(
-		@Body() { content, classroomId, postOnwerId }: { content: string; classroomId: string; postOnwerId: string }
+		@Body() { content, classroomId, postOwnerId }: { content: string; classroomId: string; postOwnerId: string }
 	): void {
-		const newPostAggregate = new PostAggregate().withContent(content).withPostOwnerId(postOnwerId).withComments([]);
+		const newPostAggregate = new PostAggregate().withContent(content).withPostOwnerId(postOwnerId).withComments([]);
 		const command = this.commandFactory.produceStudentCreatePostCommand(newPostAggregate, classroomId);
 
 		command.execute().then((aggregate) => {

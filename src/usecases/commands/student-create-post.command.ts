@@ -1,3 +1,4 @@
+import { Logger } from "@nestjs/common";
 import { MapOperator } from "rxjs/internal/operators/map";
 import { PostAggregate } from "src/domain/aggregate/post.aggregate";
 import { ClassroomEntity } from "src/domain/entities/classroom.entity";
@@ -8,6 +9,8 @@ import { EntityRepository } from "src/domain/repositories/repository.interface";
 import { ICommand } from "./command.factory";
 
 export class StudentCreatePostCommand implements ICommand<PostAggregate> {
+	logger: Logger = new Logger("StudentCreatePostCommand");
+
 	private postRepository: EntityRepository<PostEntity>;
 	private userRepository: EntityRepository<UserEntity>;
 	private classroomRepository: EntityRepository<ClassroomEntity>;
@@ -30,24 +33,27 @@ export class StudentCreatePostCommand implements ICommand<PostAggregate> {
 					.withComments([])
 					.build();
 			})
-			.then((entity) => this.postRepository.insert(entity))
-            .then((insertedEntity) => this.postAggregateMapper.toAggregate(insertedEntity.id))
-    }
-    
-    withPostRepository(repository: EntityRepository<PostEntity>): StudentCreatePostCommand {
-        this.postRepository = repository;
-        return this;
-    }
-    withUserRepository(repository: EntityRepository<UserEntity>): StudentCreatePostCommand {
-        this.userRepository = repository;
-        return this;
-    }
-    withClassroomRepository(repository: EntityRepository<ClassroomEntity>): StudentCreatePostCommand {
-        this.classroomRepository = repository;
-        return this;
-    }
-    withPostAggregateMapper(mapper: IAggregateMapper<PostAggregate>): StudentCreatePostCommand {
-        this.postAggregateMapper = mapper;
-        return this;
-    }
+			.then((entity) => {
+				this.logger.debug(`debug entity before inserting --> ${JSON.stringify(entity)}`);
+				return this.postRepository.insert(entity);
+			})
+			.then((insertedEntity) => this.postAggregateMapper.toAggregate(insertedEntity.id));
+	}
+
+	withPostRepository(repository: EntityRepository<PostEntity>): StudentCreatePostCommand {
+		this.postRepository = repository;
+		return this;
+	}
+	withUserRepository(repository: EntityRepository<UserEntity>): StudentCreatePostCommand {
+		this.userRepository = repository;
+		return this;
+	}
+	withClassroomRepository(repository: EntityRepository<ClassroomEntity>): StudentCreatePostCommand {
+		this.classroomRepository = repository;
+		return this;
+	}
+	withPostAggregateMapper(mapper: IAggregateMapper<PostAggregate>): StudentCreatePostCommand {
+		this.postAggregateMapper = mapper;
+		return this;
+	}
 }
