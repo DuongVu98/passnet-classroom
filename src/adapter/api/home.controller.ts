@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Logger, Param, Post } from "@nestjs/common";
+import { Body, Controller, Get, Inject, Logger, Param, Post, UseInterceptors } from "@nestjs/common";
 import { ClassroomAggregateRoot } from "src/domain/aggregate/classroom.aggregate";
 import { DomainEventFactory, IDomainEvent } from "src/usecases/events/event.factory";
 import { CommandFactory } from "src/usecases/commands/command.factory";
@@ -7,6 +7,7 @@ import { QueryFactory } from "src/usecases/queries/query.factory";
 import { ClassroomViewDto } from "src/domain/views/classroom.view";
 import { UserAggregate } from "src/domain/aggregate/user.aggregate";
 import { PostAggregate } from "src/domain/aggregate/post.aggregate";
+import { CheckStudentExistanceInterceptor } from "../interceptors/check-student-existance.interceptor";
 
 export class HttpResponse {
 	constructor(private message: string) {}
@@ -51,6 +52,7 @@ export class HomeController {
 	}
 
     @Post("create-post")
+    @UseInterceptors(new CheckStudentExistanceInterceptor())
 	public studentCreatePost(
 		@Body() { content, classroomId, postOwnerId }: { content: string; classroomId: string; postOwnerId: string }
 	): void {

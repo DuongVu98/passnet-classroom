@@ -1,5 +1,4 @@
 import { Logger } from "@nestjs/common";
-import { MapOperator } from "rxjs/internal/operators/map";
 import { PostAggregate } from "src/domain/aggregate/post.aggregate";
 import { ClassroomEntity } from "src/domain/entities/classroom.entity";
 import { PostEntity, PostEntityBuilder } from "src/domain/entities/post.entity";
