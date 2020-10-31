@@ -1,6 +1,5 @@
 import { Inject, Injectable, Logger } from "@nestjs/common";
 import { PostAggregate } from "../aggregate/post.aggregate";
-import { UserAggregate } from "../aggregate/user.aggregate";
 import { PostEntity } from "../entities/post.entity";
 import { EntityRepository } from "../repositories/repository.interface";
 import { IAggregateMapper } from "./aggregate.mapper";
