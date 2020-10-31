@@ -12,7 +12,7 @@ export class PostRepository implements EntityRepository<PostEntity> {
 		return this.postRepository.find();
 	}
 	async findById(id: string): Promise<PostEntity> {
-		return this.postRepository.findOne({ where: { id: id } });
+		return this.postRepository.findOne({ where: { id: id }, relations: ["postOwner", "comments"] });
 	}
 	async insert(post: PostEntity): Promise<PostEntity> {
 		return await this.postRepository.save(post);

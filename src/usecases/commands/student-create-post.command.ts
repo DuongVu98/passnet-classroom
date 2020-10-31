@@ -19,7 +19,7 @@ export class StudentCreatePostCommand implements ICommand<PostAggregate> {
 	constructor(private aggregate: PostAggregate, private aggregateRootIdentifier: string) {}
 
 	async execute(): Promise<PostAggregate> {
-		const findPostOwnerPromise = this.userRepository.findById(this.aggregate.postId);
+		const findPostOwnerPromise = this.userRepository.findById(this.aggregate.postOwnerId);
 		const findClassroomPromise = this.classroomRepository.findById(this.aggregateRootIdentifier);
 
 		return Promise.all([findPostOwnerPromise, findClassroomPromise])
