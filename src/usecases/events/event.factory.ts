@@ -1,9 +1,11 @@
 import { Inject, Injectable } from "@nestjs/common";
+import { PostAggregate } from "src/domain/aggregate/post.aggregate";
 import { UserAggregate } from "src/domain/aggregate/user.aggregate";
 import { IAggregateMapper } from "src/domain/mappers/aggregate.mapper";
 import { ClassroomViewRepository } from "src/domain/view-repo/classroom-view.repository";
 import { ClassroomAggregateRoot } from "../../domain/aggregate/classroom.aggregate";
 import { ClassroomCreatedEvent } from "./classroom-created.event";
+import { PostCreatedEvent } from "./post-created.event";
 import { StudentAddedEvent } from "./student-added.event";
 
 export interface IDomainEvent {
@@ -25,5 +27,9 @@ export class DomainEventFactory {
 
 	public produceStudentAddedEvent(aggregate: UserAggregate, aggregateRootIdentifier: string): IDomainEvent {
 		return new StudentAddedEvent(aggregate, aggregateRootIdentifier).withClassroomViewRepository(this.viewRepository);
-	}
+    }
+
+    public producePostCreatedEvent(aggregate: PostAggregate, aggregateRootIdentifier: string): IDomainEvent {
+        return new PostCreatedEvent(aggregate, aggregateRootIdentifier).withClassroomViewRepository(this.viewRepository);
+    }
 }

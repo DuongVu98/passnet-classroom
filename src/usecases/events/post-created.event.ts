@@ -1,13 +1,10 @@
 import { PostAggregate } from "src/domain/aggregate/post.aggregate";
-import { CommentEntity } from "src/domain/entities/comment.entity";
-import { IAggregateMapper } from "src/domain/mappers/aggregate.mapper";
 import { ClassroomViewRepository } from "src/domain/view-repo/classroom-view.repository";
 import { PostView } from "src/domain/views/post.view";
 import { IDomainEvent } from "./event.factory";
 
 export class PostCreatedEvent implements IDomainEvent {
 	private classroomViewRepository: ClassroomViewRepository;
-	private commentAggregateMapper: IAggregateMapper<CommentEntity>;
 
 	constructor(private aggregate: PostAggregate, private aggregateRootIdentifier: string) {}
 
@@ -22,5 +19,10 @@ export class PostCreatedEvent implements IDomainEvent {
 
 			this.classroomViewRepository.update(this.aggregateRootIdentifier, view);
 		});
-	}
+    }
+    
+    withClassroomViewRepository(repository: ClassroomViewRepository): PostCreatedEvent {
+        this.classroomViewRepository = repository;
+        return this;
+    }
 }

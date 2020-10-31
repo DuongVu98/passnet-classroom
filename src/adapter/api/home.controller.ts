@@ -6,6 +6,7 @@ import { IEventBus } from "src/usecases/publishers/eventbus.publisher";
 import { QueryFactory } from "src/usecases/queries/query.factory";
 import { ClassroomViewDto } from "src/domain/views/classroom.view";
 import { UserAggregate } from "src/domain/aggregate/user.aggregate";
+import { PostAggregate } from "src/domain/aggregate/post.aggregate";
 
 export class HttpResponse {
 	constructor(private message: string) {}
@@ -45,6 +46,19 @@ export class HomeController {
 		command.execute().then((aggregate) => {
 			this.logger.debug(`command executed --> ${JSON.stringify(aggregate)}`);
 			const event = this.domainEventFactory.produceStudentAddedEvent(aggregate, classroomId);
+			this.domainEventBus.publish(event);
+		});
+	}
+
+    @Post("creat-post")
+	public studentCreatePost(
+		@Body() { content, classroomId, postOnwerId }: { content: string; classroomId: string; postOnwerId: string }
+	): void {
+		const newPostAggregate = new PostAggregate().withContent(content).withPostOwnerId(postOnwerId).withComments([]);
+		const command = this.commandFactory.produceStudentCreatePostCommand(newPostAggregate, classroomId);
+
+		command.execute().then((aggregate) => {
+			const event = this.domainEventFactory.producePostCreatedEvent(aggregate, classroomId);
 			this.domainEventBus.publish(event);
 		});
 	}
