@@ -36,13 +36,8 @@ export class StudentCreatePostCommand implements ICommand<PostAggregate> {
 					.withComments([])
 					.build();
 			})
-			.then((entity) => {
-				this.logger.debug(`debug entity before inserting --> ${JSON.stringify(entity)}`);
-				return this.postRepository.insert(entity);
-			})
-			.then((insertedEntity) => {
-				return this.postAggregateMapper.toAggregate(insertedEntity.id);
-			})
+			.then((entity) => this.postRepository.insert(entity))
+			.then((insertedEntity) => this.postAggregateMapper.toAggregate(insertedEntity.id))
 			.catch((error) => {
 				this.logger.error(`catch error --> ${error}`);
 				throw error;
