@@ -19,12 +19,12 @@ export class UserRepository implements EntityRepository<UserEntity> {
 			.findOne({ where: { uid: id } })
 			.then((foundUser) => {
 				user = foundUser;
-			})
-			.catch((error) => error);
+			}).catch(error => Promise.reject(error))
 		if (user) {
 			return user;
 		} else {
-			throw new HttpException("Not Found", HttpStatus.NOT_FOUND);
+			const exception = new HttpException("Not Found", HttpStatus.NOT_FOUND);
+			return Promise.reject(exception);
 		}
 	}
 	async insert(user: UserEntity): Promise<UserEntity> {

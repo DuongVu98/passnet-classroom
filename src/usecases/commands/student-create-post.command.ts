@@ -19,8 +19,6 @@ export class StudentCreatePostCommand implements ICommand<PostAggregate> {
 	constructor(private aggregate: PostAggregate, private aggregateRootIdentifier: string) {}
 
 	async execute(): Promise<PostAggregate> {
-		// let returnValue;
-
 		const findPostOwnerPromise = this.userRepository.findById(this.aggregate.postOwnerId);
 		const findClassroomPromise = this.classroomRepository.findById(this.aggregateRootIdentifier);
 
@@ -38,10 +36,7 @@ export class StudentCreatePostCommand implements ICommand<PostAggregate> {
 			})
 			.then((entity) => this.postRepository.insert(entity))
 			.then((insertedEntity) => this.postAggregateMapper.toAggregate(insertedEntity.id))
-			.catch((error) => {
-				this.logger.error(`catch error --> ${error}`);
-				throw error;
-			});
+			.catch((error) => Promise.reject(error));
 	}
 
 	withPostRepository(repository: EntityRepository<PostEntity>): StudentCreatePostCommand {

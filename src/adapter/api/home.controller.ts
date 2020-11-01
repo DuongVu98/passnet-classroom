@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Logger, Param, Post, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Get, Inject, Logger, Param, Post } from "@nestjs/common";
 import { ClassroomAggregateRoot } from "src/domain/aggregate/classroom.aggregate";
 import { DomainEventFactory, IDomainEvent } from "src/usecases/events/event.factory";
 import { CommandFactory } from "src/usecases/commands/command.factory";
@@ -7,10 +7,9 @@ import { QueryFactory } from "src/usecases/queries/query.factory";
 import { ClassroomViewDto } from "src/domain/views/classroom.view";
 import { UserAggregate } from "src/domain/aggregate/user.aggregate";
 import { PostAggregate } from "src/domain/aggregate/post.aggregate";
-import { CheckStudentExistanceInterceptor } from "../interceptors/check-student-existance.interceptor";
 
 export class HttpResponse {
-	constructor(private message: string) {}
+	constructor(private message: any) {}
 }
 
 @Controller("home")
@@ -55,18 +54,27 @@ export class HomeController {
 	}
 
     @Post("create-post")
-	public studentCreatePost(
+	public async studentCreatePost(
 		@Body() { content, classroomId, postOwnerId }: { content: string; classroomId: string; postOwnerId: string }
-	): void {
+	): Promise<any> {
 		const newPostAggregate = new PostAggregate().withContent(content).withPostOwnerId(postOwnerId).withComments([]);
 		const command = this.commandFactory.produceStudentCreatePostCommand(newPostAggregate, classroomId);
 
-		command.execute().then((aggregate) => {
+        let response;
+		await command.execute().then((aggregate) => {
+            this.logger.debug(`command executed --> ${JSON.stringify(aggregate)}`);
 			const event = this.domainEventFactory.producePostCreatedEvent(aggregate, classroomId);
 			this.domainEventBus.publish(event);
 		}).catch(error => {
-            throw error;
+            this.logger.error(`catch error in studentCreatePost() --> ${error}`)
+            response = new HttpResponse(error);
         });
+
+        if(response){
+            return response
+        } else {
+            return new HttpResponse("execute");
+        }
 	}
 
 	@Get("classroom-view/:aggregateRootId")
