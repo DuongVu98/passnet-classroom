@@ -91,6 +91,7 @@ export class HomeController {
         await command.execute().then(commentAggregate => {
             this.logger.debug(`command executed produce aggregate --> ${commentAggregate}`)
             const event = this.domainEventFactory.produceCommentAddedEvent(commentAggregate);
+            this.domainEventBus.publish(event);
         }).catch(exception => {
             this.logger.error(`catch error in userAddComment() --> ${exception}`)
             response = new HttpResponse(exception);
