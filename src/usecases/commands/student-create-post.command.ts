@@ -1,5 +1,5 @@
-import { Logger } from "@nestjs/common";
-import { MapOperator } from "rxjs/internal/operators/map";
+import { HttpException, Logger } from "@nestjs/common";
+import e from "express";
 import { PostAggregate } from "src/domain/aggregate/post.aggregate";
 import { ClassroomEntity } from "src/domain/entities/classroom.entity";
 import { PostEntity, PostEntityBuilder } from "src/domain/entities/post.entity";
@@ -26,6 +26,7 @@ export class StudentCreatePostCommand implements ICommand<PostAggregate> {
 			.then((values) => {
 				const postOwner = values[0];
 				const classroom = values[1];
+
 				return new PostEntityBuilder()
 					.withContent(this.aggregate.content)
 					.withClassroom(classroom)
@@ -33,11 +34,9 @@ export class StudentCreatePostCommand implements ICommand<PostAggregate> {
 					.withComments([])
 					.build();
 			})
-			.then((entity) => {
-				this.logger.debug(`debug entity before inserting --> ${JSON.stringify(entity)}`);
-				return this.postRepository.insert(entity);
-			})
-			.then((insertedEntity) => this.postAggregateMapper.toAggregate(insertedEntity.id));
+			.then((entity) => this.postRepository.insert(entity))
+			.then((insertedEntity) => this.postAggregateMapper.toAggregate(insertedEntity.id))
+			.catch((error) => Promise.reject(error));
 	}
 
 	withPostRepository(repository: EntityRepository<PostEntity>): StudentCreatePostCommand {

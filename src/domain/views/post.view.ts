@@ -1,4 +1,3 @@
-import { PostAggregate } from "../aggregate/post.aggregate";
 import { CommentView } from "./comment.view";
 import { StudentView } from "./student.view";
 

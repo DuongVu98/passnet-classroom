@@ -9,7 +9,7 @@ import { UserAggregate } from "src/domain/aggregate/user.aggregate";
 import { PostAggregate } from "src/domain/aggregate/post.aggregate";
 
 export class HttpResponse {
-	constructor(private message: string) {}
+	constructor(private message: any) {}
 }
 
 @Controller("home")
@@ -47,20 +47,34 @@ export class HomeController {
 			this.logger.debug(`command executed --> ${JSON.stringify(aggregate)}`);
 			const event = this.domainEventFactory.produceStudentAddedEvent(aggregate, classroomId);
 			this.domainEventBus.publish(event);
-		});
+		}).catch(error => {
+            this.logger.error(`catch error --> ${error}`)
+            throw error;
+        });
 	}
 
-	@Post("create-post")
-	public studentCreatePost(
+    @Post("create-post")
+	public async studentCreatePost(
 		@Body() { content, classroomId, postOwnerId }: { content: string; classroomId: string; postOwnerId: string }
-	): void {
+	): Promise<any> {
 		const newPostAggregate = new PostAggregate().withContent(content).withPostOwnerId(postOwnerId).withComments([]);
 		const command = this.commandFactory.produceStudentCreatePostCommand(newPostAggregate, classroomId);
 
-		command.execute().then((aggregate) => {
+        let response;
+		await command.execute().then((aggregate) => {
+            this.logger.debug(`command executed --> ${JSON.stringify(aggregate)}`);
 			const event = this.domainEventFactory.producePostCreatedEvent(aggregate, classroomId);
 			this.domainEventBus.publish(event);
-		});
+		}).catch(error => {
+            this.logger.error(`catch error in studentCreatePost() --> ${error}`)
+            response = new HttpResponse(error);
+        });
+
+        if(response){
+            return response
+        } else {
+            return new HttpResponse("executed");
+        }
 	}
 
 	@Get("classroom-view/:aggregateRootId")
