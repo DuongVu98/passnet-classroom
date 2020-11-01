@@ -22,27 +22,31 @@ export class UserAddCommentCommand implements ICommand<CommentAgregate> {
 			.then((values) => {
 				const commentOwner = values[0];
 				const post = values[1];
+				const aggregateRootIdentifier = post.classRoom.id;
 
 				const commentEntity = new CommentEntityBuilder().withCommentOwner(commentOwner).withPost(post).build();
-				return this.commentRepository.insert(commentEntity);
+				return Promise.all([aggregateRootIdentifier, this.commentRepository.insert(commentEntity)]);
 			})
-			.then((insertedEntity) => this.commentAggregateMapper.toAggregate(insertedEntity.id));
-    }
-    
-    withUserRepository(repository: EntityRepository<UserEntity>): UserAddCommentCommand {
-        this.userRepository = repository;
-        return this;
-    }
-    withPostRepository(repository: EntityRepository<PostEntity>): UserAddCommentCommand {
-        this.postRepository = repository;
-        return this;
-    }
-    withCommentRepository(repository: EntityRepository<CommentEntity>): UserAddCommentCommand {
-        this.commentRepository = repository;
-        return this;
-    }
-    withCommentAggregateMapper(mapper: IAggregateMapper<CommentAgregate>): UserAddCommentCommand {
-        this.commentAggregateMapper = mapper;
-        return this;
-    }
+			.then((values) => {
+				return Promise.all([values[0], this.commentAggregateMapper.toAggregate(values[1].id)]);
+			})
+			.then((values) => values[1].withAggregateRooTidentifier(values[0]));
+	}
+
+	withUserRepository(repository: EntityRepository<UserEntity>): UserAddCommentCommand {
+		this.userRepository = repository;
+		return this;
+	}
+	withPostRepository(repository: EntityRepository<PostEntity>): UserAddCommentCommand {
+		this.postRepository = repository;
+		return this;
+	}
+	withCommentRepository(repository: EntityRepository<CommentEntity>): UserAddCommentCommand {
+		this.commentRepository = repository;
+		return this;
+	}
+	withCommentAggregateMapper(mapper: IAggregateMapper<CommentAgregate>): UserAddCommentCommand {
+		this.commentAggregateMapper = mapper;
+		return this;
+	}
 }

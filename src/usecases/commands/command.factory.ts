@@ -60,8 +60,8 @@ export class CommandFactory {
 			.withPostAggregateMapper(this.postAggregateMapper);
 	}
 
-	public produceUserAddCommentCommand(aggregate: CommentAgregate, aggregateRootIdentifier: string): ICommand<CommentAgregate> {
-		return new UserAddCommentCommand(aggregate, aggregateRootIdentifier)
+	public produceUserAddCommentCommand(aggregate: CommentAgregate): ICommand<CommentAgregate> {
+		return new UserAddCommentCommand(aggregate)
 			.withUserRepository(this.userRepository)
 			.withPostRepository(this.postRepository)
 			.withCommentRepository(this.commentRepsitory)

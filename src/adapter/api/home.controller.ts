@@ -7,6 +7,7 @@ import { QueryFactory } from "src/usecases/queries/query.factory";
 import { ClassroomViewDto } from "src/domain/views/classroom.view";
 import { UserAggregate } from "src/domain/aggregate/user.aggregate";
 import { PostAggregate } from "src/domain/aggregate/post.aggregate";
+import { CommentAgregate } from "src/domain/aggregate/comment.aggregate";
 
 export class HttpResponse {
 	constructor(private message: any) {}
@@ -75,7 +76,32 @@ export class HomeController {
         } else {
             return new HttpResponse("executed");
         }
-	}
+    }
+    
+    @Post("add-comment")
+    public async userAddComment(@Body() {ownerId, postId, content}: {ownerId: string, postId: string, content: string}): Promise<any>{
+        
+        const aggregate = new CommentAgregate()
+            .withCommentOwnerId(ownerId)
+            .withContent(content)
+            .withPostId(postId)
+        const command = this.commandFactory.produceUserAddCommentCommand(aggregate)
+
+        let response
+        await command.execute().then(commentAggregate => {
+            this.logger.debug(`command executed produce aggregate --> ${commentAggregate}`)
+            const event = this.domainEventFactory.produceCommentAddedEvent(commentAggregate);
+        }).catch(exception => {
+            this.logger.error(`catch error in userAddComment() --> ${exception}`)
+            response = new HttpResponse(exception);
+        })
+
+        if(response){
+            return response
+        } else {
+            return new HttpResponse("executed");
+        }
+    }
 
 	@Get("classroom-view/:aggregateRootId")
 	public getClassroomView(@Param("aggregateRootId") aggregateRootId: string): Promise<ClassroomViewDto> {

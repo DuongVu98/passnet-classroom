@@ -16,7 +16,7 @@ export class CommentAggregateMapper implements IAggregateMapper<CommentAgregate>
 					.withCommentId(commentEntity.id)
 					.withContent(commentEntity.content)
 					.withPostId(commentEntity.post.id)
-					.withCommentOwnerId(commentEntity.commentOwner.uid)
+                    .withCommentOwnerId(commentEntity.commentOwner.uid)
 			);
 	}
 }
