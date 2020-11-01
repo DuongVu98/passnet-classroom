@@ -50,7 +50,7 @@ export class HomeController {
 		});
 	}
 
-    @Post("create-post")
+	@Post("create-post")
 	public studentCreatePost(
 		@Body() { content, classroomId, postOwnerId }: { content: string; classroomId: string; postOwnerId: string }
 	): void {

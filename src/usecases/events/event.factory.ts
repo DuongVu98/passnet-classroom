@@ -27,9 +27,9 @@ export class DomainEventFactory {
 
 	public produceStudentAddedEvent(aggregate: UserAggregate, aggregateRootIdentifier: string): IDomainEvent {
 		return new StudentAddedEvent(aggregate, aggregateRootIdentifier).withClassroomViewRepository(this.viewRepository);
-    }
+	}
 
-    public producePostCreatedEvent(aggregate: PostAggregate, aggregateRootIdentifier: string): IDomainEvent {
-        return new PostCreatedEvent(aggregate, aggregateRootIdentifier).withClassroomViewRepository(this.viewRepository);
-    }
+	public producePostCreatedEvent(aggregate: PostAggregate, aggregateRootIdentifier: string): IDomainEvent {
+		return new PostCreatedEvent(aggregate, aggregateRootIdentifier).withClassroomViewRepository(this.viewRepository);
+	}
 }

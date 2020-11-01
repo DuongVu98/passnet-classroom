@@ -21,11 +21,11 @@ export class CommandFactory {
 
 	constructor(
 		@Inject("classroom-repository") private classroomRepository: EntityRepository<ClassroomEntity>,
-        @Inject("user-repository") private userRepository: EntityRepository<UserEntity>,
-        @Inject("post-repository") private postRepository: EntityRepository<PostEntity>,
+		@Inject("user-repository") private userRepository: EntityRepository<UserEntity>,
+		@Inject("post-repository") private postRepository: EntityRepository<PostEntity>,
 		@Inject("classroom-aggregate-mapper") private classroomAggregateMapper: IAggregateMapper<ClassroomAggregateRoot>,
-        @Inject("user-aggregate-mapper") private userAggregateMapper: IAggregateMapper<UserAggregate>,
-        @Inject("post-aggregate-mapper") private postAggregateMapper: IAggregateMapper<PostAggregate>,
+		@Inject("user-aggregate-mapper") private userAggregateMapper: IAggregateMapper<UserAggregate>,
+		@Inject("post-aggregate-mapper") private postAggregateMapper: IAggregateMapper<PostAggregate>,
 		@Inject("classroom-entity-mapper") private classroomEntityMapper: IEntityMapper<ClassroomAggregateRoot, ClassroomEntity>
 	) {}
 
@@ -45,13 +45,13 @@ export class CommandFactory {
 			.withUserRepository(this.userRepository)
 			.withUserAggregateMapper(this.userAggregateMapper)
 			.withClassroomEntityMapper(this.classroomEntityMapper);
-    }
-    
-    public produceStudentCreatePostCommand(aggregate: PostAggregate, aggregateIdentifier: string): ICommand<PostAggregate> {
-        return new StudentCreatePostCommand(aggregate, aggregateIdentifier)
-            .withClassroomRepository(this.classroomRepository)
-            .withUserRepository(this.userRepository)
-            .withPostRepository(this.postRepository)
-            .withPostAggregateMapper(this.postAggregateMapper)
-    }
+	}
+
+	public produceStudentCreatePostCommand(aggregate: PostAggregate, aggregateIdentifier: string): ICommand<PostAggregate> {
+		return new StudentCreatePostCommand(aggregate, aggregateIdentifier)
+			.withClassroomRepository(this.classroomRepository)
+			.withUserRepository(this.userRepository)
+			.withPostRepository(this.postRepository)
+			.withPostAggregateMapper(this.postAggregateMapper);
+	}
 }
