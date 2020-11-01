@@ -16,7 +16,7 @@ export class ClassroomViewRepository {
     async findByPostId(id: string): Promise<ClassroomView> {
         return this.viewModel.aggregate([
             {
-                $unwind: "posts"
+                $unwind: "$posts"
             },
             {
                 $match: {
