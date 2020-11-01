@@ -12,7 +12,7 @@ export class UserAddCommentCommand implements ICommand<CommentAgregate> {
 	private commentRepository: EntityRepository<CommentEntity>;
 	private commentAggregateMapper: IAggregateMapper<CommentAgregate>;
 
-	constructor(private aggregate: CommentAgregate, aggregateRootIdentifier: string) {}
+	constructor(private aggregate: CommentAgregate) {}
 
 	async execute(): Promise<CommentAgregate> {
 		const findCommentOwnerPromise = this.userRepository.findById(this.aggregate.commentOwnerId);
@@ -27,5 +27,22 @@ export class UserAddCommentCommand implements ICommand<CommentAgregate> {
 				return this.commentRepository.insert(commentEntity);
 			})
 			.then((insertedEntity) => this.commentAggregateMapper.toAggregate(insertedEntity.id));
-	}
+    }
+    
+    withUserRepository(repository: EntityRepository<UserEntity>): UserAddCommentCommand {
+        this.userRepository = repository;
+        return this;
+    }
+    withPostRepository(repository: EntityRepository<PostEntity>): UserAddCommentCommand {
+        this.postRepository = repository;
+        return this;
+    }
+    withCommentRepository(repository: EntityRepository<CommentEntity>): UserAddCommentCommand {
+        this.commentRepository = repository;
+        return this;
+    }
+    withCommentAggregateMapper(mapper: IAggregateMapper<CommentAgregate>): UserAddCommentCommand {
+        this.commentAggregateMapper = mapper;
+        return this;
+    }
 }
