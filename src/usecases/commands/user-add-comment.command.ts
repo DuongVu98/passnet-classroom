@@ -1,3 +1,4 @@
+import { Logger } from "@nestjs/common";
 import { CommentAgregate } from "src/domain/aggregate/comment.aggregate";
 import { CommentEntity, CommentEntityBuilder } from "src/domain/entities/comment.entity";
 import { PostEntity } from "src/domain/entities/post.entity";
@@ -7,6 +8,8 @@ import { EntityRepository } from "src/domain/repositories/repository.interface";
 import { ICommand } from "./command.factory";
 
 export class UserAddCommentCommand implements ICommand<CommentAgregate> {
+	logger: Logger = new Logger("UserAddCommentCommand");
+
 	private userRepository: EntityRepository<UserEntity>;
 	private postRepository: EntityRepository<PostEntity>;
 	private commentRepository: EntityRepository<CommentEntity>;
@@ -24,7 +27,11 @@ export class UserAddCommentCommand implements ICommand<CommentAgregate> {
 				const post = values[1];
 				const aggregateRootIdentifier = post.classRoom.id;
 
-				const commentEntity = new CommentEntityBuilder().withCommentOwner(commentOwner).withPost(post).build();
+				const commentEntity = new CommentEntityBuilder()
+					.withCommentOwner(commentOwner)
+					.withPost(post)
+					.withContent(this.aggregate.content)
+					.build();
 				return Promise.all([aggregateRootIdentifier, this.commentRepository.insert(commentEntity)]);
 			})
 			.then((values) => {
