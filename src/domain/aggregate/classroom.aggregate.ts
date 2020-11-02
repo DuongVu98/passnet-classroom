@@ -6,6 +6,10 @@ export class ClassroomAggregateRoot {
 	teacherAssistancesId: string[];
 	postsId: string[];
 
+    addStudent(): void {
+        
+    }
+
 	withClassroomId(classroomId: string): ClassroomAggregateRoot {
 		this.classroomId = classroomId;
 		return this;
