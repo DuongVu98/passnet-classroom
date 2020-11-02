@@ -19,7 +19,8 @@ export class UserRepository implements EntityRepository<UserEntity> {
 			.findOne({ where: { uid: id } })
 			.then((foundUser) => {
 				user = foundUser;
-			}).catch(error => Promise.reject(error))
+			})
+			.catch((error) => Promise.reject(error));
 		if (user) {
 			return user;
 		} else {

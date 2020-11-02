@@ -43,38 +43,44 @@ export class HomeController {
 		const aggregate = new UserAggregate().withUid(studentId).withOnlineState(false);
 		const command = this.commandFactory.produceAddStudentCommand(aggregate, classroomId);
 
-		command.execute().then((aggregate) => {
-			this.logger.debug(`command executed --> ${JSON.stringify(aggregate)}`);
-			const event = this.domainEventFactory.produceStudentAddedEvent(aggregate, classroomId);
-			this.domainEventBus.publish(event);
-		}).catch(error => {
-            this.logger.error(`catch error --> ${error}`)
-            throw error;
-        });
+		command
+			.execute()
+			.then((aggregate) => {
+				this.logger.debug(`command executed --> ${JSON.stringify(aggregate)}`);
+				const event = this.domainEventFactory.produceStudentAddedEvent(aggregate, classroomId);
+				this.domainEventBus.publish(event);
+			})
+			.catch((error) => {
+				this.logger.error(`catch error --> ${error}`);
+				throw error;
+			});
 	}
 
-    @Post("create-post")
+	@Post("create-post")
 	public async studentCreatePost(
 		@Body() { content, classroomId, postOwnerId }: { content: string; classroomId: string; postOwnerId: string }
 	): Promise<any> {
 		const newPostAggregate = new PostAggregate().withContent(content).withPostOwnerId(postOwnerId).withComments([]);
 		const command = this.commandFactory.produceStudentCreatePostCommand(newPostAggregate, classroomId);
 
-        let response;
-		await command.execute().then((aggregate) => {
-            this.logger.debug(`command executed --> ${JSON.stringify(aggregate)}`);
-			const event = this.domainEventFactory.producePostCreatedEvent(aggregate, classroomId);
-			this.domainEventBus.publish(event);
-		}).catch(error => {
-            this.logger.error(`catch error in studentCreatePost() --> ${error}`)
-            response = new HttpResponse(error);
-        });
+		let response;
+		await command
+			.execute()
+			.then((aggregate) => {
+				this.logger.debug(`command executed --> ${JSON.stringify(aggregate)}`);
+				const event = this.domainEventFactory.producePostCreatedEvent(aggregate, classroomId);
+				this.domainEventBus.publish(event);
+			})
+			.catch((error) => {
+				this.logger.error(`catch error in studentCreatePost() --> ${error}`);
+				response = new HttpResponse(error);
+			});
 
-        if(response){
-            return response
-        } else {
-            return new HttpResponse("executed");
-        }
+		if (response) {
+			return response;
+		} else {
+			return new HttpResponse("executed");
+		}
 	}
 
 	@Get("classroom-view/:aggregateRootId")
