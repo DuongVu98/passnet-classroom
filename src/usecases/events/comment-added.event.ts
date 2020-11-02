@@ -14,13 +14,17 @@ export class CommentAddedEvent implements IDomainEvent {
 	execute(): void {
 		this.viewRepository.findById(this.aggregate.aggregateRootIdentifier).then(async (view) => {
 			const ownerView = view.students.find((user) => user.studentId === this.aggregate.commentOwnerId);
-			const post = view.posts.filter((postView) => postView.postId === this.aggregate.postId)[0];
+			const post = view.posts.find((postView) => postView.postId === this.aggregate.postId);
 
 			const newComment = new CommentView()
 				.withId(this.aggregate.commentId)
 				.withContent(this.aggregate.content)
 				.withCommentOwner(ownerView);
-			await post.comments.push(newComment);
+			if(post.comments){
+                await post.comments.push(newComment);
+            }else {
+                post.comments = [newComment];
+            }
 
 			await view.posts.map((currentPost) => {
 				if (currentPost.postId === post.postId) {
