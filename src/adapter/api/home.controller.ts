@@ -5,9 +5,12 @@ import { CommandFactory } from "src/usecases/commands/command.factory";
 import { IEventBus } from "src/usecases/publishers/eventbus.publisher";
 import { QueryFactory } from "src/usecases/queries/query.factory";
 import { ClassroomViewDto } from "src/domain/views/classroom.view";
+import { UserAggregate } from "src/domain/aggregate/user.aggregate";
+import { PostAggregate } from "src/domain/aggregate/post.aggregate";
+import { CommentAgregate } from "src/domain/aggregate/comment.aggregate";
 
 export class HttpResponse {
-	constructor(private message: string) {}
+	constructor(private message: any) {}
 }
 
 @Controller("home")
@@ -25,15 +28,85 @@ export class HomeController {
 	public createClassroom(
 		@Body() { teacherId, courseName, taIds }: { teacherId: string; courseName: string; taIds: string[] }
 	): HttpResponse {
-		this.logger.log(`courseName --> ${courseName}`);
+		this.logger.debug(`courseName --> ${courseName}`);
 		const aggregate = new ClassroomAggregateRoot().withCourseName(courseName).withTeacherId(teacherId).withTeacherAssistancesId(taIds);
 
-		const command = this.commandFactory.getCreateClassroomCommand(aggregate);
+		const command = this.commandFactory.produceCreateClassroomCommand(aggregate);
 		command.execute().then((aggregate) => {
 			const event = this.domainEventFactory.produceClassroomCreatedEvent(aggregate, aggregate.classroomId);
 			this.domainEventBus.publish(event);
 		});
 		return null;
+	}
+
+	@Post("add-student")
+	public addStudentToClassroom(@Body() { studentId, classroomId }: { studentId: string; classroomId: string }): void {
+		const aggregate = new UserAggregate().withUid(studentId).withOnlineState(false);
+		const command = this.commandFactory.produceAddStudentCommand(aggregate, classroomId);
+
+		command
+			.execute()
+			.then((aggregate) => {
+				this.logger.debug(`command executed --> ${JSON.stringify(aggregate)}`);
+				const event = this.domainEventFactory.produceStudentAddedEvent(aggregate, classroomId);
+				this.domainEventBus.publish(event);
+			})
+			.catch((error) => {
+				this.logger.error(`catch error --> ${error}`);
+				throw error;
+			});
+	}
+
+	@Post("create-post")
+	public async studentCreatePost(
+		@Body() { content, classroomId, postOwnerId }: { content: string; classroomId: string; postOwnerId: string }
+	): Promise<any> {
+		const newPostAggregate = new PostAggregate().withContent(content).withPostOwnerId(postOwnerId).withComments([]);
+		const command = this.commandFactory.produceStudentCreatePostCommand(newPostAggregate, classroomId);
+
+		let response;
+		await command
+			.execute()
+			.then((aggregate) => {
+				this.logger.debug(`command executed --> ${JSON.stringify(aggregate)}`);
+				const event = this.domainEventFactory.producePostCreatedEvent(aggregate, classroomId);
+				this.domainEventBus.publish(event);
+			})
+			.catch((error) => {
+				this.logger.error(`catch error in studentCreatePost() --> ${error}`);
+				response = new HttpResponse(error);
+			});
+
+		if (response) {
+			return response;
+		} else {
+			return new HttpResponse("executed");
+		}
+	}
+
+	@Post("add-comment")
+	public async userAddComment(@Body() { ownerId, postId, content }: { ownerId: string; postId: string; content: string }): Promise<any> {
+		const aggregate = new CommentAgregate().withCommentOwnerId(ownerId).withContent(content).withPostId(postId);
+		const command = this.commandFactory.produceUserAddCommentCommand(aggregate);
+
+		let response;
+		await command
+			.execute()
+			.then((commentAggregate) => {
+				this.logger.debug(`command executed produce aggregate --> ${commentAggregate}`);
+				const event = this.domainEventFactory.produceCommentAddedEvent(commentAggregate);
+				this.domainEventBus.publish(event);
+			})
+			// .catch((exception) => {
+			// 	this.logger.error(`catch error in userAddComment() --> ${exception}`);
+			// 	response = new HttpResponse(exception);
+			// });
+
+		if (response) {
+			return response;
+		} else {
+			return new HttpResponse("executed");
+		}
 	}
 
 	@Get("classroom-view/:aggregateRootId")

@@ -12,17 +12,17 @@ export class CommentRepository implements EntityRepository<CommentEntity> {
 		return await this.commentRepository.find();
 	}
 	async findById(id: string): Promise<CommentEntity> {
-		return await this.commentRepository.findOne({ where: { id: id } });
+		return await this.commentRepository.findOne({ where: { id: id }, relations: ["post", "commentOwner"] });
 	}
 	async insert(comment: CommentEntity): Promise<CommentEntity> {
 		return await this.commentRepository.save(comment);
 	}
-	async updateById(id: string, data: CommentEntity): Promise<void> {
+	async updateById(id: string, data: CommentEntity): Promise<CommentEntity> {
 		const comment = await this.commentRepository.findOne({ where: { id: id } });
 		if (!comment) {
 			throw new HttpException("Not found", HttpStatus.NOT_FOUND);
 		}
-		await this.commentRepository.update(id, data);
+		return this.commentRepository.save(data);
 	}
 	async deleteById(id: string): Promise<void> {
 		const comment = await this.commentRepository.findOne({ where: { id: id } });

@@ -10,7 +10,7 @@ export class ClassroomEntity {
 	@Column({ type: "text", name: "course_name" })
 	courseName: string;
 
-	@ManyToMany(() => UserEntity)
+	@ManyToMany(() => UserEntity, (u) => u.classRooms)
 	@JoinTable({ name: "classroom_student" })
 	students: UserEntity[];
 

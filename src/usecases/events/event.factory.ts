@@ -1,9 +1,14 @@
 import { Inject, Injectable } from "@nestjs/common";
+import { CommentAgregate } from "src/domain/aggregate/comment.aggregate";
+import { PostAggregate } from "src/domain/aggregate/post.aggregate";
 import { UserAggregate } from "src/domain/aggregate/user.aggregate";
 import { IAggregateMapper } from "src/domain/mappers/aggregate.mapper";
 import { ClassroomViewRepository } from "src/domain/view-repo/classroom-view.repository";
 import { ClassroomAggregateRoot } from "../../domain/aggregate/classroom.aggregate";
 import { ClassroomCreatedEvent } from "./classroom-created.event";
+import { CommentAddedEvent } from "./comment-added.event";
+import { PostCreatedEvent } from "./post-created.event";
+import { StudentAddedEvent } from "./student-added.event";
 
 export interface IDomainEvent {
 	execute(): void;
@@ -20,5 +25,17 @@ export class DomainEventFactory {
 		return new ClassroomCreatedEvent(aggregate, aggregateRootIdentifier)
 			.withViewRepository(this.viewRepository)
 			.withUserAggregateMapper(this.userAggregateMapper);
+	}
+
+	public produceStudentAddedEvent(aggregate: UserAggregate, aggregateRootIdentifier: string): IDomainEvent {
+		return new StudentAddedEvent(aggregate, aggregateRootIdentifier).withClassroomViewRepository(this.viewRepository);
+	}
+
+	public producePostCreatedEvent(aggregate: PostAggregate, aggregateRootIdentifier: string): IDomainEvent {
+		return new PostCreatedEvent(aggregate, aggregateRootIdentifier).withClassroomViewRepository(this.viewRepository);
+	}
+
+	public produceCommentAddedEvent(aggregate: CommentAgregate): IDomainEvent {
+		return new CommentAddedEvent(aggregate).withViewRepository(this.viewRepository);
 	}
 }

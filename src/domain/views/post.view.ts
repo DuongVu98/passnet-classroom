@@ -6,4 +6,21 @@ export class PostView {
 	postOwner: StudentView;
 	content: string;
 	comments: CommentView[];
+
+	withPostId(id: string): PostView {
+		this.postId = id;
+		return this;
+	}
+	withPostOwner(postOwner: StudentView): PostView {
+		this.postOwner = postOwner;
+		return this;
+	}
+	withContent(content: string): PostView {
+		this.content = content;
+		return this;
+	}
+	withComments(comments: CommentView[]): PostView {
+		this.comments = comments;
+		return this;
+	}
 }
