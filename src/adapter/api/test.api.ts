@@ -20,9 +20,4 @@ export class TestApi {
 	test2(): void {
 		return null;
     }
-    
-    @Get("test3")
-    public getView(): any {
-        return this.viewRepository.findByPostId("0a2ccf91-c01e-4694-a8b0-537287b5c138")
-    }
 }
