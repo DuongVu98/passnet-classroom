@@ -15,7 +15,7 @@ export class HomeController {
 	private logger: Logger = new Logger("HomeController");
 
 	constructor(
-        private queryFactory: QueryFactory,
+		private queryFactory: QueryFactory,
 		private commandFactory: CommandFactory,
 		private domainEventFactory: DomainEventFactory,
 		@Inject("domain-event-bus") private domainEventBus: IEventBus<IDomainEvent>
@@ -34,10 +34,10 @@ export class HomeController {
 			this.domainEventBus.publish(event);
 		});
 		return null;
-    }
+	}
 
-    @Get("classroom-view/:aggregateRootId")
-    public getClassroomView(@Param("aggregateRootId") aggregateRootId: string): Promise<ClassroomViewDto> {
-        return this.queryFactory.produceClassroomViewQuery(aggregateRootId).get();
-    }
+	@Get("classroom-view/:aggregateRootId")
+	public getClassroomView(@Param("aggregateRootId") aggregateRootId: string): Promise<ClassroomViewDto> {
+		return this.queryFactory.produceClassroomViewQuery(aggregateRootId).get();
+	}
 }

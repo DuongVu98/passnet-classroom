@@ -7,13 +7,13 @@ export class ClassroomViewQuery implements IQuery<ClassroomViewDto> {
 
 	constructor(private aggregateRootIdentifier: string) {}
 
-    async get(): Promise<ClassroomViewDto> {
-        let view: ClassroomViewDto = null;
-        await this.classroomViewRepository.getClassroomAggregateRoot(this.aggregateRootIdentifier).then(result => {
-            view = result;
-        })
-        return view;
-    }
+	async get(): Promise<ClassroomViewDto> {
+		let view: ClassroomViewDto = null;
+		await this.classroomViewRepository.getClassroomAggregateRoot(this.aggregateRootIdentifier).then((result) => {
+			view = result;
+		});
+		return view;
+	}
 	withClassroomRepostiory(repository: ClassroomQueryRepository): ClassroomViewQuery {
 		this.classroomViewRepository = repository;
 		return this;
