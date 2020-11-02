@@ -1,15 +1,13 @@
-import { Controller, Get, Inject, UseInterceptors } from "@nestjs/common";
+import { Controller, Get, UseInterceptors } from "@nestjs/common";
 import { LoggingInterceptor } from "src/config/interceptors/logging.interceptor";
-import { DomainEventFactory, IDomainEvent } from "src/usecases/events/event.factory";
-import { IEventBus } from "src/usecases/publishers/eventbus.publisher";
+import { ClassroomViewRepository } from "src/domain/view-repo/classroom-view.repository";
 import { SomeService } from "src/usecases/some.service";
 
 @Controller("test")
 export class TestApi {
 	constructor(
 		private someService: SomeService,
-		private domainEventFactory: DomainEventFactory,
-		@Inject("domain-event-bus") private domainEventBus: IEventBus<IDomainEvent>
+        private viewRepository: ClassroomViewRepository,
 	) {}
 
 	@Get()
@@ -21,5 +19,5 @@ export class TestApi {
 	@Get("test2")
 	test2(): void {
 		return null;
-	}
+    }
 }
