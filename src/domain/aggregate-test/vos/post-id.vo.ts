@@ -1,9 +1,10 @@
-import { EntityId } from "./root-id";
+import { EntityId } from "../aggregate.root";
 
-export class PostId implements EntityId{
-    constructor(private id: string){}
-
-    equals(idType: PostId): boolean {
-        return this.id === idType.id
-    }
+export class PostId extends EntityId<string> {
+	constructor(id: string) {
+		super(id);
+	}
+	equals(idType: EntityId<string>): boolean {
+		return this.id === idType.id;
+	}
 }

@@ -1,3 +1,3 @@
 export class UserDisplayName {
-    constructor(private name: string){}
+	constructor(private name: string) {}
 }

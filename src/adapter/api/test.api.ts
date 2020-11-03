@@ -5,10 +5,7 @@ import { SomeService } from "src/usecases/some.service";
 
 @Controller("test")
 export class TestApi {
-	constructor(
-		private someService: SomeService,
-        private viewRepository: ClassroomViewRepository,
-	) {}
+	constructor(private someService: SomeService, private viewRepository: ClassroomViewRepository) {}
 
 	@Get()
 	test(): void {
@@ -19,5 +16,5 @@ export class TestApi {
 	@Get("test2")
 	test2(): void {
 		return null;
-    }
+	}
 }

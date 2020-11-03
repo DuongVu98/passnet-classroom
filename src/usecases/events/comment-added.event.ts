@@ -20,11 +20,11 @@ export class CommentAddedEvent implements IDomainEvent {
 				.withId(this.aggregate.commentId)
 				.withContent(this.aggregate.content)
 				.withCommentOwner(ownerView);
-			if(post.comments){
-                await post.comments.push(newComment);
-            }else {
-                post.comments = [newComment];
-            }
+			if (post.comments) {
+				await post.comments.push(newComment);
+			} else {
+				post.comments = [newComment];
+			}
 
 			await view.posts.map((currentPost) => {
 				if (currentPost.postId === post.postId) {

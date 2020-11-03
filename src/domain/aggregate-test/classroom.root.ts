@@ -6,7 +6,7 @@ import { ClassroomId } from "./vos/classroom-id.vo";
 import { CourseName } from "./vos/course-name.vo";
 
 export class ClassroomAggregateRoot extends Entity {
-    id: ClassroomId;
+	id: ClassroomId;
 	courseName: CourseName;
 	students: Student[];
 	teacherId: Teacher;
@@ -27,6 +27,6 @@ export class ClassroomAggregateRoot extends Entity {
 	}
 
 	public addStudentToClass(student: Student): void {
-        this.students.push(student);
+		this.students.push(student);
 	}
 }

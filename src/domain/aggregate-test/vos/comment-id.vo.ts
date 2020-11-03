@@ -1,9 +1,11 @@
-import { EntityId } from "./root-id";
+import { EntityId } from "../aggregate.root";
 
-export class CommentId implements EntityId{
-    constructor(private id: string){}
+export class CommentId extends EntityId<string> {
+	constructor(id: string) {
+		super(id);
+	}
 
-    equals(idType: CommentId): boolean {
-        return this.id === idType.id;
-    }
+	equals(idType: EntityId<string>): boolean {
+		return this.id === idType.id;
+	}
 }

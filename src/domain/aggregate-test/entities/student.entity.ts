@@ -3,8 +3,8 @@ import { UserOnlineState } from "../vos/online-state.o";
 import { UserId } from "../vos/user-id.vos";
 import { UserDisplayName } from "../vos/user-name.vo";
 
-export class Student extends Entity{
-    uid: UserId
+export class Student extends Entity {
+	uid: UserId;
 	name: UserDisplayName;
 	onlineState: UserOnlineState;
 }
