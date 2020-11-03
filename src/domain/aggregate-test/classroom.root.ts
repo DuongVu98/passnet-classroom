@@ -4,7 +4,7 @@ import { Teacher } from "./entities/teacher.entity";
 import { ClassroomId } from "./vos/classroom-id.vo";
 import { CourseName } from "./vos/course-name.vo";
 
-export class Classroom {
+export class ClassroomAggregateRoot {
 	classroomId: ClassroomId;
 	courseName: CourseName;
 	students: Student[];
