@@ -54,6 +54,7 @@
         "eslint-config-prettier": "^6.10.0",
         "eslint-plugin-import": "^2.20.1",
         "jest": "26.0.1",
+        "pm2": "^4.5.0",
         "prettier": "^2.1.1",
         "supertest": "^4.0.2",
         "ts-jest": "26.1.0",
