@@ -1,13 +1,9 @@
 import { Body, Controller, Get, Inject, Logger, Param, Post } from "@nestjs/common";
-import { ClassroomAggregateRoot } from "src/domain/aggregate/classroom.aggregate";
 import { DomainEventFactory, IDomainEvent } from "src/usecases/events/event.factory";
-import { CommandFactory } from "src/usecases/commands/command.factory";
 import { IEventBus } from "src/usecases/publishers/eventbus.publisher";
 import { QueryFactory } from "src/usecases/queries/query.factory";
 import { ClassroomViewDto } from "src/domain/views/classroom.view";
-import { UserAggregate } from "src/domain/aggregate/user.aggregate";
-import { PostAggregate } from "src/domain/aggregate/post.aggregate";
-import { CommentAgregate } from "src/domain/aggregate/comment.aggregate";
+import { ClassroomAggregateRoot } from "src/domain/aggregate/classroom.root";
 
 export class HttpResponse {
 	constructor(private message: any) {}
@@ -19,7 +15,6 @@ export class HomeController {
 
 	constructor(
 		private queryFactory: QueryFactory,
-		private commandFactory: CommandFactory,
 		private domainEventFactory: DomainEventFactory,
 		@Inject("domain-event-bus") private domainEventBus: IEventBus<IDomainEvent>
 	) {}
