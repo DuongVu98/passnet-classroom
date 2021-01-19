@@ -3,7 +3,7 @@ import { Entity } from "./aggregate.root";
 import { Post } from "./entities/post.entity";
 import { ClassroomId } from "./vos/classroom-id.vo";
 import { CourseName } from "./vos/course-name.vo";
-import { UserId } from "src/domain/aggregate-test/vos/user-id.vos";
+import { UserId } from "src/domain/aggregate/vos/user-id.vos";
 import {Comment} from "./entities/comment.entity";
 
 @Schema()

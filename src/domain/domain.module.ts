@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { ClassroomSchema } from "./aggregate-test/classroom.root";
+import { ClassroomSchema } from "./aggregate/classroom.root";
 import { ClassroomEntity } from "./entities/classroom.entity";
 import { CommentEntity } from "./entities/comment.entity";
 import { PostEntity } from "./entities/post.entity";

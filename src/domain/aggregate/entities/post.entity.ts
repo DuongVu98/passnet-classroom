@@ -1,7 +1,7 @@
 import { Content } from "../vos/content.vo";
-import { UserId } from "src/domain/aggregate-test/vos/user-id.vos";
+import { UserId } from "src/domain/aggregate/vos/user-id.vos";
 import {Comment} from "./comment.entity";
-import { PostId } from "src/domain/aggregate-test/vos/post-id.vo";
+import { PostId } from "src/domain/aggregate/vos/post-id.vo";
 
 export class Post {
 	postId: PostId

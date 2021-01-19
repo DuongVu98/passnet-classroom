@@ -1,20 +1,13 @@
 import { AbstractCommandExecutor } from "src/usecases/executors/command.executor";
-import { BaseCommand } from "src/domain/commands/command.abstract";
-import { ClassroomAggregateRootRepository } from "src/domain/repostiories-test/classroom.repository";
-import { ClassroomId } from "src/domain/aggregate-test/vos/classroom-id.vo";
-import { PostId } from "src/domain/aggregate-test/vos/post-id.vo";
+import { BaseCommand, UserAddCommentCommand } from "src/domain/commands/commands";
+import { ClassroomAggregateRootRepository } from "src/domain/repositories/classroom.repository";
+import { ClassroomId } from "src/domain/aggregate/vos/classroom-id.vo";
+import { PostId } from "src/domain/aggregate/vos/post-id.vo";
 import { Builder } from "builder-pattern";
-import { Comment } from "src/domain/aggregate-test/entities/comment.entity";
-import { Content } from "src/domain/aggregate-test/vos/content.vo";
-import { CommentId } from "src/domain/aggregate-test/vos/comment-id.vo";
-import { UserId } from "src/domain/aggregate-test/vos/user-id.vos";
-
-export class UserAddCommentCommand extends BaseCommand{
-	commentOwnerId: string;
-	aggregateId: string;
-	postId: string;
-	content: string;
-}
+import { Comment } from "src/domain/aggregate/entities/comment.entity";
+import { Content } from "src/domain/aggregate/vos/content.vo";
+import { CommentId } from "src/domain/aggregate/vos/comment-id.vo";
+import { UserId } from "src/domain/aggregate/vos/user-id.vos";
 
 export class UserAddCommentCommandExecutor extends AbstractCommandExecutor<UserAddCommentCommand, void>{
 
@@ -28,7 +21,7 @@ export class UserAddCommentCommandExecutor extends AbstractCommandExecutor<UserA
 				.commentId(new CommentId("comment1"))
 				.commentOwner(new UserId(this.command.commentOwnerId))
 				.build();
-			
+
 			classroom.addCommentToPost(newComment, post);
 		})
 	}

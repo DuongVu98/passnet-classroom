@@ -1,16 +1,11 @@
 import { AbstractCommandExecutor } from "src/usecases/executors/command.executor";
-import { BaseCommand } from "src/domain/commands/command.abstract";
-import { ClassroomAggregateRootRepository } from "src/domain/repostiories-test/classroom.repository";
-import { ClassroomAggregateRoot } from "src/domain/aggregate-test/classroom.root";
-import { CourseName } from "src/domain/aggregate-test/vos/course-name.vo";
-import { UserId } from "src/domain/aggregate-test/vos/user-id.vos";
+import { BaseCommand, CreateClassroomCommand } from "src/domain/commands/commands";
+import { ClassroomAggregateRootRepository } from "src/domain/repositories/classroom.repository";
+import { ClassroomAggregateRoot } from "src/domain/aggregate/classroom.root";
+import { CourseName } from "src/domain/aggregate/vos/course-name.vo";
+import { UserId } from "src/domain/aggregate/vos/user-id.vos";
 import { Logger } from "@nestjs/common";
 import { Builder } from "builder-pattern";
-
-export class CreateClassroomCommand extends BaseCommand {
-	teacherId: string;
-	courseName: string;
-}
 
 export class CreateClassroomCommandExecutor extends AbstractCommandExecutor<CreateClassroomCommand, void> {
 

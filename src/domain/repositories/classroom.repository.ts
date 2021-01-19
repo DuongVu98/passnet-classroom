@@ -1,41 +1,32 @@
-import { HttpException, HttpStatus, Injectable, Logger } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import { ClassroomEntity } from "../entities/classroom.entity";
-import { EntityRepository } from "./repository.interface";
+import { Logger } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model } from "mongoose";
+import { ClassroomAggregateRoot } from "../aggregate/classroom.root";
+import { ClassroomId } from "../aggregate/vos/classroom-id.vo";
+import { PostId } from "src/domain/aggregate/vos/post-id.vo";
 
-@Injectable()
-export class ClassroomRepository implements EntityRepository<ClassroomEntity> {
-	logger: Logger = new Logger("ClassroomRepository");
+export class ClassroomAggregateRootRepository {
+    logger: Logger = new Logger("ClassroomRepository");
 
-	constructor(@InjectRepository(ClassroomEntity) private classroomRepository: Repository<ClassroomEntity>) {}
+    constructor(@InjectModel("classroom_aggregate_repository") private classroomModel: Model<ClassroomAggregateRoot>){}
 
-	async findAll(): Promise<ClassroomEntity[]> {
-		return this.classroomRepository.find();
-	}
+    async findAll(): Promise<ClassroomAggregateRoot[]>{
+        return this.classroomModel.find();
+    }
 
-	async findById(id: string): Promise<ClassroomEntity> {
-		return this.classroomRepository.findOne({
-			where: { id: id },
-			relations: ["posts", "teacher", "students", "teacherAssistances"],
-		});
-	}
-	async insert(data: ClassroomEntity): Promise<ClassroomEntity> {
-		return this.classroomRepository.save(data);
-	}
-	async updateById(id: string, data: ClassroomEntity): Promise<ClassroomEntity> {
-		const classroom = await this.classroomRepository.findOne({ where: { id: id } });
-		if (!classroom) {
-			throw new HttpException("Not found", HttpStatus.NOT_FOUND);
-		}
-		return this.classroomRepository.save(data);
-	}
+    async findById(id: ClassroomId): Promise<ClassroomAggregateRoot> {
+        return this.classroomModel.findById(id);
+    }
 
-	async deleteById(id: string): Promise<void> {
-		const classroom = await this.classroomRepository.findOne({ where: { id: id } });
-		if (!classroom) {
-			throw new HttpException("Not found", HttpStatus.NOT_FOUND);
-		}
-		this.classroomRepository.delete(id);
-	}
+    async insert(data: ClassroomAggregateRoot): Promise<ClassroomAggregateRoot> {
+        return this.classroomModel.create(data);
+    }
+
+    async updateById(data: ClassroomAggregateRoot, id: ClassroomId): Promise<ClassroomAggregateRoot> {
+        return this.classroomModel.findByIdAndUpdate(id, data);
+    }
+
+    async removeById(id: ClassroomId): Promise<void> {
+        this.classroomModel.findByIdAndRemove(id);
+    }
 }

@@ -1,13 +1,8 @@
 import { AbstractCommandExecutor } from "src/usecases/executors/command.executor";
-import { BaseCommand } from "src/domain/commands/command.abstract";
-import { ClassroomAggregateRootRepository } from "src/domain/repostiories-test/classroom.repository";
-import { ClassroomId } from "src/domain/aggregate-test/vos/classroom-id.vo";
-import { UserId } from "src/domain/aggregate-test/vos/user-id.vos";
-
-export class AddStudentCommand extends BaseCommand{
-	studentId: string;
-	aggregateId: string;
-}
+import { AddStudentCommand, BaseCommand } from "src/domain/commands/commands";
+import { ClassroomAggregateRootRepository } from "src/domain/repositories/classroom.repository";
+import { ClassroomId } from "src/domain/aggregate/vos/classroom-id.vo";
+import { UserId } from "src/domain/aggregate/vos/user-id.vos";
 
 export class AddStudentCommandExecutor extends AbstractCommandExecutor<AddStudentCommand, void> {
 
