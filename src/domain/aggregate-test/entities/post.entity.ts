@@ -1,14 +1,15 @@
-import { Entity } from "../aggregate.root";
 import { Content } from "../vos/content.vo";
-import { PostId } from "../vos/post-id.vo";
-import { Student } from "./student.entity";
-import { Teacher } from "./teacher.entity";
+import { UserId } from "src/domain/aggregate-test/vos/user-id.vos";
+import {Comment} from "./comment.entity";
+import { PostId } from "src/domain/aggregate-test/vos/post-id.vo";
 
-export class Post extends Entity {
-	postId: PostId;
+export class Post {
+	postId: PostId
 	content: Content;
-	postOwner: Student | Teacher;
+	postOwner: UserId;
 	comments: Comment[];
+
+	// public static builder: PostBuilder = new PostBuilder();
 
 	addComment(comment: Comment): void {
 		this.comments.push(comment);

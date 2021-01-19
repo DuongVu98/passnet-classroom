@@ -1,10 +1,10 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Entity } from "./aggregate.root";
 import { Post } from "./entities/post.entity";
-import { Student } from "./entities/student.entity";
-import { Teacher } from "./entities/teacher.entity";
 import { ClassroomId } from "./vos/classroom-id.vo";
 import { CourseName } from "./vos/course-name.vo";
+import { UserId } from "src/domain/aggregate-test/vos/user-id.vos";
+import {Comment} from "./entities/comment.entity";
 
 @Schema()
 export class ClassroomAggregateRoot extends Entity {
@@ -15,13 +15,13 @@ export class ClassroomAggregateRoot extends Entity {
     courseName: CourseName;
 
     @Prop({name: "students"})
-    students: Student[];
+    students: UserId[];
 
     @Prop({name: "teacher_id"})
-    teacherId: Teacher;
+    teacherId: UserId;
 
-    @Prop({name: "teacher_assistances"})
-    teacherAssistances: Student[];
+    @Prop({name: "teacher_assistance_list"})
+    teacherAssistanceList: UserId[];
 
     @Prop({name: "posts"})
 	posts: Post[];
@@ -32,14 +32,14 @@ export class ClassroomAggregateRoot extends Entity {
 
 	public addCommentToPost(comment: Comment, post: Post): void {
 		this.posts.map((currentPost) => {
-			if (currentPost.equals(post)) {
+			if (currentPost.postId.equals(post.postId)) {
 				currentPost.addComment(comment);
 			}
 			return currentPost;
 		});
 	}
 
-	public addStudentToClass(student: Student): void {
+	public addStudentToClass(student: UserId): void {
 		this.students.push(student);
 	}
 }

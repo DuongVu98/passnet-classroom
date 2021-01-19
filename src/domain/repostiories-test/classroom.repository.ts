@@ -3,6 +3,7 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { ClassroomAggregateRoot } from "../aggregate-test/classroom.root";
 import { ClassroomId } from "../aggregate-test/vos/classroom-id.vo";
+import { PostId } from "src/domain/aggregate-test/vos/post-id.vo";
 
 export class ClassroomAggregateRootRepository {
     logger: Logger = new Logger("ClassroomRepository");
@@ -27,5 +28,5 @@ export class ClassroomAggregateRootRepository {
 
     async removeById(id: ClassroomId): Promise<void> {
         this.classroomModel.findByIdAndRemove(id);
-    } 
+    }
 }
