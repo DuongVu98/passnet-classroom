@@ -1,6 +1,5 @@
 import { AbstractCommandExecutor } from "src/usecases/executors/command.executor";
-import { BaseCommand, CreateClassroomCommand } from "src/domain/commands/commands";
-import { ClassroomAggregateRootRepository } from "src/domain/repositories/classroom.repository";
+import { CreateClassroomCommand } from "src/domain/commands/commands";
 import { ClassroomAggregateRoot } from "src/domain/aggregate/classroom.root";
 import { CourseName } from "src/domain/aggregate/vos/course-name.vo";
 import { UserId } from "src/domain/aggregate/vos/user-id.vos";
@@ -9,9 +8,7 @@ import { Builder } from "builder-pattern";
 
 export class CreateClassroomCommandExecutor extends AbstractCommandExecutor<CreateClassroomCommand, void> {
 
-	logger: Logger = new Logger("StudentCreatePostCommand");
-
-	aggregateRepository: ClassroomAggregateRootRepository
+	logger: Logger = new Logger("CreateClassroomCommandExecutor");
 
 	execute(): Promise<void> {
 		const classroom: ClassroomAggregateRoot = Builder<ClassroomAggregateRoot>()
