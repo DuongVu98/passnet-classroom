@@ -4,12 +4,7 @@ import { IEventBus } from "src/usecases/publishers/eventbus.publisher";
 import { QueryFactory } from "src/usecases/queries/query.factory";
 import { ClassroomViewDto } from "src/domain/views/classroom.view";
 import { CommandFactory } from "src/usecases/factories/command.factory";
-import {
-	AddStudentCommand,
-	CreateClassroomCommand,
-	UserAddCommentCommand,
-	UserCreatePostCommand
-} from "src/domain/commands/commands";
+import { AddStudentCommand, CreateClassroomCommand, UserAddCommentCommand, UserCreatePostCommand } from "src/domain/commands/commands";
 import { Builder } from "builder-pattern";
 
 export class HttpResponse {
@@ -31,14 +26,10 @@ export class HomeController {
 	public createClassroom(
 		@Body() { teacherId, courseName, taIds }: { teacherId: string; courseName: string; taIds: string[] }
 	): Promise<any> {
-		const command = Builder<CreateClassroomCommand>()
-			.teacherId(teacherId)
-			.courseName(courseName)
-			.taIds(taIds)
-			.build();
+		const command = Builder<CreateClassroomCommand>().teacherId(teacherId).courseName(courseName).taIds(taIds).build();
 		const commandExecutor = this.commandFactory.produceCommandExecutor(command);
 
-		return commandExecutor.execute().then(result => {
+		return commandExecutor.execute().then((result) => {
 			return new HttpResponse(result, HttpStatus.OK.toString());
 		});
 	}
@@ -48,9 +39,9 @@ export class HomeController {
 		const command = Builder<AddStudentCommand>().aggregateId(classroomId).studentId(studentId).build();
 		const commandExecutor = this.commandFactory.produceCommandExecutor(command);
 
-		return commandExecutor.execute().then(result => {
+		return commandExecutor.execute().then((result) => {
 			return new HttpResponse(result, HttpStatus.OK.toString());
-		})
+		});
 	}
 
 	@Post("create-post")
@@ -60,17 +51,24 @@ export class HomeController {
 		const command = Builder<UserCreatePostCommand>().userId(postOwnerId).aggregateId(classroomId).postContent(content).build();
 		const commandExecutor = this.commandFactory.produceCommandExecutor(command);
 
-		return commandExecutor.execute().then(result => {
+		return commandExecutor.execute().then((result) => {
 			return new HttpResponse(result, HttpStatus.OK.toString());
 		});
 	}
 
 	@Post("add-comment")
-	public async userAddComment(@Body() { ownerId, postId, content, classroomId }: { ownerId: string; postId: string; content: string, classroomId: string }): Promise<any> {
-		const command = Builder<UserAddCommentCommand>().commentOwnerId(ownerId).postId(postId).content(content).aggregateId(classroomId).build();
+	public async userAddComment(
+		@Body() { ownerId, postId, content, classroomId }: { ownerId: string; postId: string; content: string; classroomId: string }
+	): Promise<any> {
+		const command = Builder<UserAddCommentCommand>()
+			.commentOwnerId(ownerId)
+			.postId(postId)
+			.content(content)
+			.aggregateId(classroomId)
+			.build();
 		const commandExecutor = this.commandFactory.produceCommandExecutor(command);
 
-		return commandExecutor.execute().then(result => {
+		return commandExecutor.execute().then((result) => {
 			return new HttpResponse(result, HttpStatus.OK.toString());
 		});
 	}
