@@ -19,7 +19,7 @@ export class UserCreatePostCommandExecutor extends AbstractCommandExecutor<UserC
 					.postId(new PostId("post1"))
 					.comments([])
 					.content(new Content(this.command.postContent))
-					.postOwner(new UserId(this.command.studentId))
+					.postOwner(new UserId(this.command.userId))
 					.build();
 
 				classroom.addPost(post);

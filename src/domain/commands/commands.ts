@@ -3,6 +3,7 @@ export class BaseCommand {}
 export class CreateClassroomCommand extends BaseCommand {
 	teacherId: string;
 	courseName: string;
+	taIds: string[];
 }
 
 export class AddStudentCommand extends BaseCommand {
@@ -11,7 +12,7 @@ export class AddStudentCommand extends BaseCommand {
 }
 
 export class UserCreatePostCommand extends BaseCommand {
-	studentId: string;
+	userId: string;
 	postContent: string;
 	aggregateId: string;
 }

@@ -3,7 +3,6 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { ClassroomAggregateRoot } from "../aggregate/classroom.root";
 import { ClassroomId } from "../aggregate/vos/classroom-id.vo";
-import { PostId } from "src/domain/aggregate/vos/post-id.vo";
 
 export class ClassroomAggregateRootRepository {
 	logger: Logger = new Logger("ClassroomRepository");

@@ -10,9 +10,11 @@ export class CreateClassroomCommandExecutor extends AbstractCommandExecutor<Crea
 	logger: Logger = new Logger("CreateClassroomCommandExecutor");
 
 	execute(): Promise<void> {
+		const teacherAssistanceList = this.command.taIds.map(id => new UserId(id));
+
 		const classroom: ClassroomAggregateRoot = Builder<ClassroomAggregateRoot>()
 			.students([])
-			.teacherAssistanceList([])
+			.teacherAssistanceList(teacherAssistanceList)
 			.teacherId(new UserId(this.command.teacherId))
 			.courseName(new CourseName(this.command.courseName))
 			.posts([])

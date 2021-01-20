@@ -5,11 +5,13 @@ import { DomainEventBus } from "./publishers/eventbus.publisher";
 import { QueryFactory } from "./queries/query.factory";
 import { SomeService } from "./some.service";
 import { DomainEventHandler } from "./subscribers/domain-event.subscriber";
+import { CommandFactory } from "src/usecases/factories/command.factory";
 
 @Module({
 	imports: [DomainModule],
 	providers: [
 		SomeService,
+		CommandFactory,
 		DomainEventHandler,
 		DomainEventFactory,
 		QueryFactory,
@@ -18,6 +20,6 @@ import { DomainEventHandler } from "./subscribers/domain-event.subscriber";
 			useClass: DomainEventBus,
 		},
 	],
-	exports: [SomeService, QueryFactory, DomainEventFactory, "domain-event-bus"],
+	exports: [SomeService, CommandFactory, QueryFactory, DomainEventFactory, "domain-event-bus"],
 })
 export class UsecasesModule {}
