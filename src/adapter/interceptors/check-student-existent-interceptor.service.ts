@@ -1,7 +1,8 @@
 import { CallHandler, ExecutionContext, Injectable, Logger, NestInterceptor } from "@nestjs/common";
 import { Observable } from "rxjs";
+
 @Injectable()
-export class CheckStudentExistanceInterceptor implements NestInterceptor {
+export class CheckStudentExistentInterceptor implements NestInterceptor {
 	logger: Logger = new Logger("CheckStudentExistanceInterceptor");
 
 	intercept(context: ExecutionContext, next: CallHandler<any>): Observable<any> | Promise<Observable<any>> {

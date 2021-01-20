@@ -1,8 +1,6 @@
 import { Body, Controller, Get, HttpStatus, Inject, Logger, Param, Post } from "@nestjs/common";
 import { DomainEventFactory, IDomainEvent } from "src/usecases/events/event.factory";
 import { IEventBus } from "src/usecases/publishers/eventbus.publisher";
-import { QueryFactory } from "src/usecases/queries/query.factory";
-import { ClassroomViewDto } from "src/domain/views/classroom.view";
 import { CommandFactory } from "src/usecases/factories/command.factory";
 import { AddStudentCommand, CreateClassroomCommand, UserAddCommentCommand, UserCreatePostCommand } from "src/domain/commands/commands";
 import { Builder } from "builder-pattern";
@@ -17,7 +15,6 @@ export class HomeController {
 
 	constructor(
 		private commandFactory: CommandFactory,
-		private queryFactory: QueryFactory,
 		private domainEventFactory: DomainEventFactory,
 		@Inject("domain-event-bus") private domainEventBus: IEventBus<IDomainEvent>
 	) {}
@@ -71,10 +68,5 @@ export class HomeController {
 		return commandExecutor.execute().then((result) => {
 			return new HttpResponse(result, HttpStatus.OK.toString());
 		});
-	}
-
-	@Get("classroom-view/:aggregateRootId")
-	public getClassroomView(@Param("aggregateRootId") aggregateRootId: string): Promise<ClassroomViewDto> {
-		return this.queryFactory.produceClassroomViewQuery(aggregateRootId).get();
 	}
 }
