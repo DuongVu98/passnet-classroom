@@ -7,7 +7,6 @@ import { Logger } from "@nestjs/common";
 import { Builder } from "builder-pattern";
 
 export class CreateClassroomCommandExecutor extends AbstractCommandExecutor<CreateClassroomCommand, void> {
-
 	logger: Logger = new Logger("CreateClassroomCommandExecutor");
 
 	execute(): Promise<void> {
@@ -19,9 +18,8 @@ export class CreateClassroomCommandExecutor extends AbstractCommandExecutor<Crea
 			.posts([])
 			.build();
 
-		return this.aggregateRepository.insert(classroom).then(result => {
-			this.logger.log(`Result: ${result}`)
+		return this.aggregateRepository.insert(classroom).then((result) => {
+			this.logger.log(`Result: ${result}`);
 		});
 	}
-
 }

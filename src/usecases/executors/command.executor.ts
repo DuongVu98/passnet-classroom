@@ -2,7 +2,7 @@ import { ClassroomAggregateRootRepository } from "src/domain/repositories/classr
 
 export abstract class AbstractCommandExecutor<COMMAND, RETURN> {
 	command: COMMAND;
-	aggregateRepository: ClassroomAggregateRootRepository
+	aggregateRepository: ClassroomAggregateRootRepository;
 
 	abstract execute(): Promise<RETURN>;
 

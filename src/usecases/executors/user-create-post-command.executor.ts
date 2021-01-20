@@ -9,23 +9,24 @@ import { PostId } from "src/domain/aggregate/vos/post-id.vo";
 import { Logger } from "@nestjs/common";
 
 export class UserCreatePostCommandExecutor extends AbstractCommandExecutor<UserCreatePostCommand, void> {
-
 	logger: Logger = new Logger("CreateClassroomCommandExecutor");
 
 	execute(): Promise<void> {
-		return this.aggregateRepository.findById(new ClassroomId(this.command.aggregateId)).then(classroom => {
-			const post: Post = Builder<Post>()
-				.postId(new PostId("post1"))
-				.comments([])
-				.content(new Content(this.command.postContent))
-				.postOwner(new UserId(this.command.studentId))
-				.build();
+		return this.aggregateRepository
+			.findById(new ClassroomId(this.command.aggregateId))
+			.then((classroom) => {
+				const post: Post = Builder<Post>()
+					.postId(new PostId("post1"))
+					.comments([])
+					.content(new Content(this.command.postContent))
+					.postOwner(new UserId(this.command.studentId))
+					.build();
 
-			classroom.addPost(post);
-			return this.aggregateRepository.insert(classroom);
-		}).then(aggregate => {
-			this.logger.log(`created new post to aggregate ${aggregate}`)
-		})
+				classroom.addPost(post);
+				return this.aggregateRepository.insert(classroom);
+			})
+			.then((aggregate) => {
+				this.logger.log(`created new post to aggregate ${aggregate}`);
+			});
 	}
-
 }

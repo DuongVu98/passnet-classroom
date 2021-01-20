@@ -4,26 +4,26 @@ import { Post } from "./entities/post.entity";
 import { ClassroomId } from "./vos/classroom-id.vo";
 import { CourseName } from "./vos/course-name.vo";
 import { UserId } from "src/domain/aggregate/vos/user-id.vos";
-import {Comment} from "./entities/comment.entity";
+import { Comment } from "./entities/comment.entity";
 
 @Schema()
 export class ClassroomAggregateRoot extends Entity {
-    @Prop({name: "classroom_id"})
-    id: ClassroomId;
+	@Prop({ name: "classroom_id" })
+	id: ClassroomId;
 
-    @Prop({name: "course_name"})
-    courseName: CourseName;
+	@Prop({ name: "course_name" })
+	courseName: CourseName;
 
-    @Prop({name: "students"})
-    students: UserId[];
+	@Prop({ name: "students" })
+	students: UserId[];
 
-    @Prop({name: "teacher_id"})
-    teacherId: UserId;
+	@Prop({ name: "teacher_id" })
+	teacherId: UserId;
 
-    @Prop({name: "teacher_assistance_list"})
-    teacherAssistanceList: UserId[];
+	@Prop({ name: "teacher_assistance_list" })
+	teacherAssistanceList: UserId[];
 
-    @Prop({name: "posts"})
+	@Prop({ name: "posts" })
 	posts: Post[];
 
 	public addPost(post: Post): void {

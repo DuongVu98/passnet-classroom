@@ -9,25 +9,26 @@ import { CommentId } from "src/domain/aggregate/vos/comment-id.vo";
 import { UserId } from "src/domain/aggregate/vos/user-id.vos";
 import { Logger } from "@nestjs/common";
 
-export class UserAddCommentCommandExecutor extends AbstractCommandExecutor<UserAddCommentCommand, void>{
-
+export class UserAddCommentCommandExecutor extends AbstractCommandExecutor<UserAddCommentCommand, void> {
 	logger: Logger = new Logger("UserAddCommentCommandExecutor");
 
 	execute(): Promise<void> {
-		return this.aggregateRepository.findById(new ClassroomId(this.command.aggregateId)).then(classroom => {
-			const post = classroom.posts.filter(p => p.postId.equals(new PostId(this.command.postId)))[0];
-			const newComment = Builder<Comment>()
-				.content(new Content(this.command.content))
-				.commentId(new CommentId("comment1"))
-				.commentOwner(new UserId(this.command.commentOwnerId))
-				.build();
+		return this.aggregateRepository
+			.findById(new ClassroomId(this.command.aggregateId))
+			.then((classroom) => {
+				const post = classroom.posts.filter((p) => p.postId.equals(new PostId(this.command.postId)))[0];
+				const newComment = Builder<Comment>()
+					.content(new Content(this.command.content))
+					.commentId(new CommentId("comment1"))
+					.commentOwner(new UserId(this.command.commentOwnerId))
+					.build();
 
-			classroom.addCommentToPost(newComment, post);
+				classroom.addCommentToPost(newComment, post);
 
-			return this.aggregateRepository.updateById(classroom, classroom.id);
-		}).then(aggregate => {
-			this.logger.log(`added new comment to aggregate ${aggregate}`);
-		});
+				return this.aggregateRepository.updateById(classroom, classroom.id);
+			})
+			.then((aggregate) => {
+				this.logger.log(`added new comment to aggregate ${aggregate}`);
+			});
 	}
-
 }

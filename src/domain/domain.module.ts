@@ -12,13 +12,7 @@ import { ClassroomViewSchema } from "./views/classroom.view";
 			{ name: "c", schema: ClassroomSchema, collection: "classrooms" },
 		]),
 	],
-	providers: [
-		ClassroomViewRepository,
-		ClassroomQueryRepository,
-	],
-	exports: [
-		ClassroomViewRepository,
-		ClassroomQueryRepository,
-	],
+	providers: [ClassroomViewRepository, ClassroomQueryRepository],
+	exports: [ClassroomViewRepository, ClassroomQueryRepository],
 })
 export class DomainModule {}

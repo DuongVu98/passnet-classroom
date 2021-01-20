@@ -4,7 +4,7 @@ export abstract class Entity extends Document {
 	id: EntityId<any>;
 
 	equals(object: Entity): boolean {
-        return this.id.equals(object.id);
+		return this.id.equals(object.id);
 	}
 }
 
