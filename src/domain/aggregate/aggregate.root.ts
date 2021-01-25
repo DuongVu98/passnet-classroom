@@ -1,6 +1,4 @@
-import { Document } from "mongoose";
-
-export abstract class Entity extends Document {
+export abstract class Entity {
 	id: EntityId<any>;
 
 	equals(object: Entity): boolean {

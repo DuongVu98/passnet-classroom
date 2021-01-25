@@ -21,7 +21,6 @@ export class HomeController {
 		const command = Builder(CreateClassroomCommand).teacherId(teacherId).courseName(courseName).taIds(taIds).build();
 		const commandExecutor = this.commandFactory.produceCreateClassroomCommandExecutor(command);
 
-        commandExecutor.setCommand(command);
 		return commandExecutor.execute().then((result) => {
             return new HttpResponse(result, HttpStatus.OK.toString());
         });
