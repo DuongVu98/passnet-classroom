@@ -4,9 +4,9 @@ export abstract class AbstractCommandExecutor<COMMAND, RETURN> {
 	command: COMMAND;
 	aggregateRepository: ClassroomAggregateRootRepository;
 
-	abstract execute(): Promise<RETURN>;
+	public abstract execute(): Promise<RETURN>;
 
-	setCommand(command: COMMAND): void {
+	public setCommand(command: COMMAND): void {
 		this.command = command;
 	}
 }

@@ -15,7 +15,7 @@ export class UserCreatePostCommandExecutor extends AbstractCommandExecutor<UserC
 		return this.aggregateRepository
 			.findById(new ClassroomId(this.command.aggregateId))
 			.then((classroom) => {
-				const post: Post = Builder<Post>()
+				const post: Post = Builder(Post)
 					.postId(new PostId("post1"))
 					.comments([])
 					.content(new Content(this.command.postContent))

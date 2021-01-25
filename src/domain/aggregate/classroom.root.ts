@@ -5,25 +5,28 @@ import { ClassroomId } from "./vos/classroom-id.vo";
 import { CourseName } from "./vos/course-name.vo";
 import { UserId } from "src/domain/aggregate/vos/user-id.vos";
 import { Comment } from "./entities/comment.entity";
+import * as mongoose from "mongoose";
+
+export type ClassroomAggregateDocument = ClassroomAggregateRoot & mongoose.Document
 
 @Schema()
 export class ClassroomAggregateRoot extends Entity {
-	@Prop({ name: "classroom_id" })
+	@Prop({ type: mongoose.Schema.Types.ObjectId })
 	id: ClassroomId;
 
-	@Prop({ name: "course_name" })
+	@Prop()
 	courseName: CourseName;
 
-	@Prop({ name: "students" })
+	@Prop()
 	students: UserId[];
 
-	@Prop({ name: "teacher_id" })
+	@Prop()
 	teacherId: UserId;
 
-	@Prop({ name: "teacher_assistance_list" })
+	@Prop()
 	teacherAssistanceList: UserId[];
 
-	@Prop({ name: "posts" })
+	@Prop()
 	posts: Post[];
 
 	public addPost(post: Post): void {

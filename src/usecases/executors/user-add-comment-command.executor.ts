@@ -17,7 +17,7 @@ export class UserAddCommentCommandExecutor extends AbstractCommandExecutor<UserA
 			.findById(new ClassroomId(this.command.aggregateId))
 			.then((classroom) => {
 				const post = classroom.posts.filter((p) => p.postId.equals(new PostId(this.command.postId)))[0];
-				const newComment = Builder<Comment>()
+				const newComment = Builder(Comment)
 					.content(new Content(this.command.content))
 					.commentId(new CommentId("comment1"))
 					.commentOwner(new UserId(this.command.commentOwnerId))

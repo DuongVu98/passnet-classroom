@@ -1,13 +1,14 @@
-import { Logger } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import { ClassroomAggregateRoot } from "../aggregate/classroom.root";
+import { ClassroomAggregateDocument, ClassroomAggregateRoot } from "../aggregate/classroom.root";
 import { ClassroomId } from "../aggregate/vos/classroom-id.vo";
 
+@Injectable()
 export class ClassroomAggregateRootRepository {
 	logger: Logger = new Logger("ClassroomRepository");
 
-	constructor(@InjectModel("classroom_aggregate_repository") private classroomModel: Model<ClassroomAggregateRoot>) {}
+	constructor(@InjectModel("classrooms-repository") private classroomModel: Model<ClassroomAggregateDocument>) {}
 
 	async findAll(): Promise<ClassroomAggregateRoot[]> {
 		return this.classroomModel.find();

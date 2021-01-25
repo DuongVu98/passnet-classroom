@@ -1,3 +1,3 @@
 export class Content {
-	constructor(private content: string) {}
+    constructor(public content: string) {}
 }
