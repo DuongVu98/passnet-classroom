@@ -6,6 +6,6 @@ export class CommentId extends EntityId<string> {
 	}
 
 	equals(idType: EntityId<string>): boolean {
-		return this.id === idType.id;
+		return this._id === idType._id;
 	}
 }

@@ -11,7 +11,7 @@ export type ClassroomAggregateDocument = ClassroomAggregateRoot & mongoose.Docum
 
 @Schema()
 export class ClassroomAggregateRoot extends Entity {
-	@Prop({ type: mongoose.Schema.Types.ObjectId })
+	@Prop({ type: mongoose.Types.ObjectId })
 	id: ClassroomId;
 
 	@Prop()

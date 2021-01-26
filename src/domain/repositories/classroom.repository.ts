@@ -15,8 +15,7 @@ export class ClassroomAggregateRootRepository {
 	}
 
 	async findById(id: ClassroomId): Promise<ClassroomAggregateRoot> {
-		this.logger.debug(JSON.stringify(id));
-		return this.classroomModel.findById(id.id);
+		return this.classroomModel.findById(id);
 	}
 
 	async insert(data: ClassroomAggregateRoot): Promise<ClassroomAggregateRoot> {

@@ -5,6 +5,6 @@ export class PostId extends EntityId<string> {
 		super(id);
 	}
 	equals(idType: EntityId<string>): boolean {
-		return this.id === idType.id;
+		return this._id === idType._id;
 	}
 }

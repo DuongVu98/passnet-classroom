@@ -14,14 +14,13 @@ export class ViewProjector {
     @CacheTTL(10)
     @CacheKey("classroom_view")
 	queryClassroomView(aggregateId: string): Promise<ClassroomView> {
-        // TODO: why null?
         const idToFind = new ClassroomId(aggregateId);
-        this.logger.debug(JSON.stringify(idToFind));
 
 		return this.aggregateRepository.findById(idToFind).then((aggregate) => {
+            this.logger.debug(`id from query: ${JSON.stringify(aggregate.id)}`)
 			return Builder(ClassroomView)
 				.classroomId(aggregateId)
-				.courseName(aggregate.id.id)
+				.courseName(aggregate.courseName.name)
 				.students(aggregate.students.map((s) => s.id))
 				.teacher(aggregate.teacherId.id)
 				.teacherAssistanceList(aggregate.teacherAssistanceList.map((ta) => ta.id))
@@ -45,5 +44,11 @@ export class ViewProjector {
 				)
 				.build();
 		});
-	}
+    }
+    
+    queryForCacheTest(): {field: string} {
+        return {
+            field: "hello"
+        }
+    }
 }
