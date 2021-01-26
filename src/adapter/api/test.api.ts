@@ -1,8 +1,10 @@
-import { Controller, Get, UseInterceptors } from "@nestjs/common";
+import { Controller, Get, Logger, Param, UseInterceptors } from "@nestjs/common";
 import { LoggingInterceptor } from "src/config/interceptors/logging.interceptor";
 
 @Controller("test")
 export class TestApi {
+	private logger: Logger = new Logger("HomeController");
+
 	constructor() {}
 
 	@UseInterceptors(LoggingInterceptor)

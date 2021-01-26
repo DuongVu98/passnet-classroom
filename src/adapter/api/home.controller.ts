@@ -1,4 +1,4 @@
-import { Body, CacheKey, CacheTTL, Controller, Get, HttpStatus, Inject, Logger, Param, Post } from "@nestjs/common";
+import { Body, CacheKey, CacheTTL, Controller, Get, HttpStatus, Logger, Param, Post } from "@nestjs/common";
 import { Builder } from "builder-pattern";
 import { AddStudentCommand, CreateClassroomCommand, UserAddCommentCommand, UserCreatePostCommand } from "src/domain/commands/commands";
 import { CommandFactory } from "src/usecases/factories/command.factory";
@@ -65,17 +65,10 @@ export class HomeController {
 		});
     }
     
-    @CacheTTL(10)
+    @CacheTTL(60)
     @CacheKey("classroom_view")
     @Get("classroom-view/:classroomId")
     public getClassroomView(@Param("classroomId") classroomId: string): Promise<any>{
         return this.viewProjector.queryClassroomView(classroomId);
-    }
-
-    @CacheTTL(10)
-    @CacheKey("cache_test")
-    @Get("cache-test")
-    public cacheTest(): any {
-        return this.viewProjector.queryForCacheTest();
     }
 }

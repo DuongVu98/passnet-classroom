@@ -11,13 +11,10 @@ export class ViewProjector {
     
 	constructor(private aggregateRepository: ClassroomAggregateRootRepository) {}
 
-    @CacheTTL(10)
-    @CacheKey("classroom_view")
 	queryClassroomView(aggregateId: string): Promise<ClassroomView> {
         const idToFind = new ClassroomId(aggregateId);
 
 		return this.aggregateRepository.findById(idToFind).then((aggregate) => {
-            this.logger.debug(`id from query: ${JSON.stringify(aggregate.id)}`)
 			return Builder(ClassroomView)
 				.classroomId(aggregateId)
 				.courseName(aggregate.courseName.name)
@@ -44,11 +41,5 @@ export class ViewProjector {
 				)
 				.build();
 		});
-    }
-    
-    queryForCacheTest(): {field: string} {
-        return {
-            field: "hello"
-        }
     }
 }
