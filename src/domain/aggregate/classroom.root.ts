@@ -7,7 +7,7 @@ import { UserId } from "src/domain/aggregate/vos/user-id.vos";
 import { Comment } from "./entities/comment.entity";
 import * as mongoose from "mongoose";
 
-export type ClassroomAggregateDocument = ClassroomAggregateRoot & mongoose.Document
+export type ClassroomAggregateDocument = ClassroomAggregateRoot & mongoose.Document;
 
 @Schema()
 export class ClassroomAggregateRoot extends Entity {

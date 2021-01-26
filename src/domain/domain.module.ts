@@ -4,11 +4,7 @@ import { ClassroomSchema } from "./aggregate/classroom.root";
 import { ClassroomAggregateRootRepository } from "./repositories/classroom.repository";
 
 @Module({
-	imports: [
-		MongooseModule.forFeature([
-			{ name: "classrooms-repository", schema: ClassroomSchema, collection: "classrooms" }
-		]),
-	],
+	imports: [MongooseModule.forFeature([{ name: "classrooms-repository", schema: ClassroomSchema, collection: "classrooms" }])],
 	providers: [ClassroomAggregateRootRepository],
 	exports: [ClassroomAggregateRootRepository],
 })
