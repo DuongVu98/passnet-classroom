@@ -21,11 +21,11 @@ export class TestApi {
 	@Get("test2")
 	test2(): void {
 		return null;
-    }
-    
-    @Get("test-cache")
-    @Cacheable({ cacheKey: "numbers", client: clientAdapter })
+	}
+
+	@Get("test-cache")
+	@Cacheable({ cacheKey: "numbers", client: clientAdapter })
 	getValues(): Promise<number[]> {
-		return Promise.resolve([1,2,3,4]);
+		return Promise.resolve([1, 2, 3, 4]);
 	}
 }

@@ -5,10 +5,7 @@ import { HomeController } from "./api/home.controller";
 import { TestApi } from "./api/test.api";
 
 @Module({
-	imports: [
-		UsecasesModule,
-		DomainModule,
-	],
+	imports: [UsecasesModule, DomainModule],
 	controllers: [TestApi, HomeController],
 	providers: [],
 })

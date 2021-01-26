@@ -20,7 +20,7 @@ const clientAdapter = useAdapter(userClient);
 
 @Controller("home")
 export class HomeController {
-    static setCacheKey = (args) => args[0];
+	static setCacheKey = (args) => args[0];
 
 	private logger: Logger = new Logger("HomeController");
 

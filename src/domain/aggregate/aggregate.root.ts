@@ -7,14 +7,14 @@ export abstract class Entity {
 }
 
 export abstract class EntityId<T> {
-    _id: T;
-    
+	_id: T;
+
 	constructor(id: T) {
 		this._id = id;
 	}
-    abstract equals(idType: EntityId<T>): boolean;
+	abstract equals(idType: EntityId<T>): boolean;
 
-    get id(): T {
-        return this._id;
-    }
+	get id(): T {
+		return this._id;
+	}
 }

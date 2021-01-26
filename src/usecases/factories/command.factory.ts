@@ -21,8 +21,8 @@ export class CommandFactory {
 	constructor(private aggregateRepository: ClassroomAggregateRootRepository) {}
 
 	produceCreateClassroomCommandExecutor(command: CreateClassroomCommand): AbstractCommandExecutor<CreateClassroomCommand, void> {
-        this.logger.debug(`create-class-command`);
-        return Builder(CreateClassroomCommandExecutor).command(command).aggregateRepository(this.aggregateRepository).build();
+		this.logger.debug(`create-class-command`);
+		return Builder(CreateClassroomCommandExecutor).command(command).aggregateRepository(this.aggregateRepository).build();
 	}
 	produceAddStudentCommandExecutor(command: AddStudentCommand): AbstractCommandExecutor<AddStudentCommand, void> {
 		return Builder(AddStudentCommandExecutor).command(command).aggregateRepository(this.aggregateRepository).build();
