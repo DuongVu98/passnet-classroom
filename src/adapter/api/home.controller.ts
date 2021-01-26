@@ -1,15 +1,27 @@
-import { Body, CacheKey, CacheTTL, Controller, Get, HttpStatus, Logger, Param, Post } from "@nestjs/common";
+import { Body, Controller, Get, HttpStatus, Logger, Param, Post } from "@nestjs/common";
 import { Builder } from "builder-pattern";
 import { AddStudentCommand, CreateClassroomCommand, UserAddCommentCommand, UserCreatePostCommand } from "src/domain/commands/commands";
 import { CommandFactory } from "src/usecases/factories/command.factory";
 import { ViewProjector } from "src/usecases/queries/view.projector";
+import { Cacheable } from "@type-cacheable/core";
+import * as IoRedis from "ioredis";
+import { useAdapter } from "@type-cacheable/redis-adapter";
 
 export class HttpResponse {
 	constructor(message: any, status: string) {}
 }
 
+const userClient = new IoRedis({
+	lazyConnect: true,
+	host: "192.168.99.100",
+	port: 6379,
+});
+const clientAdapter = useAdapter(userClient);
+
 @Controller("home")
 export class HomeController {
+    static setCacheKey = (args) => args[0];
+
 	private logger: Logger = new Logger("HomeController");
 
 	constructor(private commandFactory: CommandFactory, private viewProjector: ViewProjector) {}
@@ -22,8 +34,8 @@ export class HomeController {
 		const commandExecutor = this.commandFactory.produceCreateClassroomCommandExecutor(command);
 
 		return commandExecutor.execute().then((result) => {
-            return new HttpResponse(result, HttpStatus.OK.toString());
-        });
+			return new HttpResponse(result, HttpStatus.OK.toString());
+		});
 	}
 
 	@Post("add-student")
@@ -63,12 +75,11 @@ export class HomeController {
 		return commandExecutor.execute().then((result) => {
 			return new HttpResponse(result, HttpStatus.OK.toString());
 		});
-    }
-    
-    @CacheTTL(60)
-    @CacheKey("classroom_view")
-    @Get("classroom-view/:classroomId")
-    public getClassroomView(@Param("classroomId") classroomId: string): Promise<any>{
-        return this.viewProjector.queryClassroomView(classroomId);
-    }
+	}
+
+	@Get("classroom-view/:classroomId")
+	@Cacheable({ cacheKey: HomeController.setCacheKey, hashKey: "classroom_view", client: clientAdapter, ttlSeconds: 10 })
+	public getClassroomView(@Param("classroomId") classroomId: string): Promise<any> {
+		return this.viewProjector.queryClassroomView(classroomId);
+	}
 }
