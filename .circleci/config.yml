@@ -3,7 +3,7 @@ version: 2.1
 defaults: &defaults
   working_directory: ~/repo
   docker:
-    - image: circleci/node:latest
+    - image: circleci/node
 
 jobs:
   test:
@@ -13,7 +13,7 @@ jobs:
       - restore_cache:
             keys:
             - v1-dependencies-{{ checksum "package.json" }}
-      # fallback to using the latest cache if no exact match is found
+            # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
       - run: npm install
@@ -27,4 +27,8 @@ jobs:
 workflows:
   app-testing:
     jobs:
-      - test
+      - test:
+        filters:
+          branches:
+            only:
+              - develop
