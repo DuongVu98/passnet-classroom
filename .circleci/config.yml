@@ -9,6 +9,7 @@ jobs:
   test:
     <<: *defaults
     steps:
+      - checkout
       - restore_cache:
             keys:
             - v1-dependencies-{{ checksum "package.json" }}
