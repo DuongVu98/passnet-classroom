@@ -3,7 +3,7 @@ import { Builder } from "builder-pattern";
 import { AddStudentCommand, CreateClassroomCommand, UserAddCommentCommand, UserCreatePostCommand } from "src/domain/commands/commands";
 import { CommandFactory } from "src/usecases/factories/command.factory";
 import { ViewProjector } from "src/usecases/queries/view.projector";
-import { Cacheable } from "@type-cacheable/core";
+import { Cacheable, CacheClear } from "@type-cacheable/core";
 import * as IoRedis from "ioredis";
 import { useAdapter } from "@type-cacheable/redis-adapter";
 
@@ -20,8 +20,6 @@ const clientAdapter = useAdapter(userClient);
 
 @Controller("home")
 export class HomeController {
-	static setCacheKey = (args) => args[0];
-
 	private logger: Logger = new Logger("HomeController");
 
 	constructor(private commandFactory: CommandFactory, private viewProjector: ViewProjector) {}
@@ -39,7 +37,10 @@ export class HomeController {
 	}
 
 	@Post("add-student")
+	@CacheClear({ cacheKey: (args: any[]) => args[0].classroomId, client: clientAdapter })
 	public addStudentToClassroom(@Body() { studentId, classroomId }: { studentId: string; classroomId: string }): Promise<any> {
+		this.logger.debug(`body received: ${classroomId}`);
+
 		const command = Builder(AddStudentCommand).aggregateId(classroomId).studentId(studentId).build();
 		const commandExecutor = this.commandFactory.produceAddStudentCommandExecutor(command);
 
@@ -78,7 +79,7 @@ export class HomeController {
 	}
 
 	@Get("classroom-view/:classroomId")
-	@Cacheable({ cacheKey: HomeController.setCacheKey, hashKey: "classroom_view", client: clientAdapter, ttlSeconds: 10 })
+	@Cacheable({ cacheKey: (args: any[]) => args[0], client: clientAdapter, ttlSeconds: 60 })
 	public getClassroomView(@Param("classroomId") classroomId: string): Promise<any> {
 		return this.viewProjector.queryClassroomView(classroomId);
 	}

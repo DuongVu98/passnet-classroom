@@ -20,7 +20,6 @@ export class ViewProjector {
 
 	constructor(private aggregateRepository: ClassroomAggregateRootRepository) {}
 
-	// @Cacheable({ cacheKey: (args: any[]) => args[0], hashKey: "classroom_view", client: clientAdapter })
 	public async queryClassroomView(aggregateId: string): Promise<ClassroomView> {
 		const idToFind = new ClassroomId(aggregateId);
 
@@ -28,20 +27,20 @@ export class ViewProjector {
 			return Builder(ClassroomView)
 				.classroomId(aggregateId)
 				.courseName(aggregate.courseName.name)
-				.students(aggregate.students.map((s) => s.id))
-				.teacher(aggregate.teacherId.id)
-				.teacherAssistanceList(aggregate.teacherAssistanceList.map((ta) => ta.id))
+				.students(aggregate.students.map((s) => s._id))
+				.teacher(aggregate.teacherId.getId)
+				.teacherAssistanceList(aggregate.teacherAssistanceList.map((ta) => ta._id))
 				.posts(
 					aggregate.posts.map((post) =>
 						Builder(PostView)
-							.postId(post.postId.id)
-							.postOwner(post.postOwner.id)
+							.postId(post.postId._id)
+							.postOwner(post.postOwner._id)
 							.content(post.content.content)
 							.comments(
 								post.comments.map((comment) =>
 									Builder(CommentView)
-										.commentId(comment.id.id)
-										.commentOwner(comment.commentOwner.id)
+										.commentId(comment.id._id)
+										.commentOwner(comment.commentOwner._id)
 										.content(comment.content.content)
 										.build()
 								)

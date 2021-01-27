@@ -14,7 +14,7 @@ export abstract class EntityId<T> {
 	}
 	abstract equals(idType: EntityId<T>): boolean;
 
-	get id(): T {
+    public get getId(): T {
 		return this._id;
 	}
 }

@@ -28,23 +28,35 @@ export class ClassroomAggregateRoot extends Entity {
 
 	@Prop()
 	posts: Post[];
+}
 
-	public addPost(post: Post): void {
-		this.posts.push(post);
+export class ClassroomAggregateDomain {
+
+    constructor(private _aggregate: ClassroomAggregateRoot){}
+
+    public addPost(post: Post): ClassroomAggregateRoot {
+        this._aggregate.posts.push(post);
+        return this._aggregate;
 	}
 
-	public addCommentToPost(comment: Comment, post: Post): void {
-		this.posts.map((currentPost) => {
+	public addCommentToPost(comment: Comment, post: Post): ClassroomAggregateRoot {
+		this._aggregate.posts.map((currentPost) => {
 			if (currentPost.postId.equals(post.postId)) {
 				currentPost.addComment(comment);
 			}
 			return currentPost;
-		});
+        });
+        return this._aggregate;
 	}
 
-	public addStudentToClass(student: UserId): void {
-		this.students.push(student);
-	}
+	public addStudentToClass(student: UserId): ClassroomAggregateRoot {
+		this._aggregate.students.push(student);
+        return this._aggregate;
+    }
+    
+    get aggregate(): ClassroomAggregateRoot {
+        return this._aggregate;
+    }
 }
 
 export const ClassroomSchema = SchemaFactory.createForClass(ClassroomAggregateRoot);
