@@ -7,6 +7,7 @@ import { Content } from "src/domain/aggregate/vos/content.vo";
 import { UserId } from "src/domain/aggregate/vos/user-id.vos";
 import { PostId } from "src/domain/aggregate/vos/post-id.vo";
 import { Logger } from "@nestjs/common";
+import { ClassroomAggregateDomain } from "src/domain/aggregate/classroom.root";
 
 export class UserCreatePostCommandExecutor extends AbstractCommandExecutor<UserCreatePostCommand, void> {
 	logger: Logger = new Logger("CreateClassroomCommandExecutor");
@@ -22,8 +23,8 @@ export class UserCreatePostCommandExecutor extends AbstractCommandExecutor<UserC
 					.postOwner(new UserId(this.command.userId))
 					.build();
 
-				classroom.addPost(post);
-				return this.aggregateRepository.insert(classroom);
+				const aggregate = new ClassroomAggregateDomain(classroom).addPost(post);
+				return this.aggregateRepository.insert(aggregate);
 			})
 			.then((aggregate) => {
 				this.logger.log(`created new post to aggregate ${aggregate}`);

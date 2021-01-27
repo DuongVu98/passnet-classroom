@@ -8,6 +8,7 @@ import { CommentId } from "src/domain/aggregate/vos/comment-id.vo";
 import { UserId } from "src/domain/aggregate/vos/user-id.vos";
 import { Logger } from "@nestjs/common";
 import { Builder } from "builder-pattern";
+import { ClassroomAggregateDomain } from "src/domain/aggregate/classroom.root";
 
 export class UserAddCommentCommandExecutor extends AbstractCommandExecutor<UserAddCommentCommand, void> {
 	logger: Logger = new Logger("UserAddCommentCommandExecutor");
@@ -23,9 +24,9 @@ export class UserAddCommentCommandExecutor extends AbstractCommandExecutor<UserA
 					.commentOwner(new UserId(this.command.commentOwnerId))
 					.build();
 
-				classroom.addCommentToPost(newComment, post);
+				const aggregate = new ClassroomAggregateDomain(classroom).addCommentToPost(newComment, post);
 
-				return this.aggregateRepository.updateById(classroom, classroom.id);
+				return this.aggregateRepository.updateById(aggregate, new ClassroomId(this.command.aggregateId));
 			})
 			.then((aggregate) => {
 				this.logger.log(`added new comment to aggregate ${aggregate}`);
