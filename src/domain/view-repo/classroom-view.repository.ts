@@ -11,7 +11,7 @@ export class ClassroomViewRepository {
 
 	async findById(id: string): Promise<ClassroomView> {
 		return this.viewModel.findOne({ classroomId: id }).exec();
-    }
+	}
 
 	async insert(view: ClassroomViewDto): Promise<ClassroomView> {
 		return new this.viewModel(view).save();
