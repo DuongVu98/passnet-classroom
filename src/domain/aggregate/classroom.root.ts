@@ -31,12 +31,11 @@ export class ClassroomAggregateRoot extends Entity {
 }
 
 export class ClassroomAggregateDomain {
+	constructor(private _aggregate: ClassroomAggregateRoot) {}
 
-    constructor(private _aggregate: ClassroomAggregateRoot){}
-
-    public addPost(post: Post): ClassroomAggregateRoot {
-        this._aggregate.posts.push(post);
-        return this._aggregate;
+	public addPost(post: Post): ClassroomAggregateRoot {
+		this._aggregate.posts.push(post);
+		return this._aggregate;
 	}
 
 	public addCommentToPost(comment: Comment, post: Post): ClassroomAggregateRoot {
@@ -45,18 +44,18 @@ export class ClassroomAggregateDomain {
 				currentPost.addComment(comment);
 			}
 			return currentPost;
-        });
-        return this._aggregate;
+		});
+		return this._aggregate;
 	}
 
 	public addStudentToClass(student: UserId): ClassroomAggregateRoot {
 		this._aggregate.students.push(student);
-        return this._aggregate;
-    }
-    
-    get aggregate(): ClassroomAggregateRoot {
-        return this._aggregate;
-    }
+		return this._aggregate;
+	}
+
+	get aggregate(): ClassroomAggregateRoot {
+		return this._aggregate;
+	}
 }
 
 export const ClassroomSchema = SchemaFactory.createForClass(ClassroomAggregateRoot);
