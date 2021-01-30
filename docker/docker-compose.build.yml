@@ -1,0 +1,8 @@
+version: "3.7"
+
+services: 
+  passnetclassroom:
+    image: tony16019/passnet-classroom
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile

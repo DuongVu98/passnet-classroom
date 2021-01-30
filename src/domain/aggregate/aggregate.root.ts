@@ -1,6 +1,4 @@
-import { Document } from "mongoose";
-
-export abstract class Entity extends Document {
+export abstract class Entity {
 	id: EntityId<any>;
 
 	equals(object: Entity): boolean {
@@ -9,9 +7,14 @@ export abstract class Entity extends Document {
 }
 
 export abstract class EntityId<T> {
-	id: T;
+	_id: T;
+
 	constructor(id: T) {
-		this.id = id;
+		this._id = id;
 	}
 	abstract equals(idType: EntityId<T>): boolean;
+
+	public get getId(): T {
+		return this._id;
+	}
 }

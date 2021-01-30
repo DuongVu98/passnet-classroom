@@ -5,42 +5,56 @@ import { ClassroomId } from "./vos/classroom-id.vo";
 import { CourseName } from "./vos/course-name.vo";
 import { UserId } from "src/domain/aggregate/vos/user-id.vos";
 import { Comment } from "./entities/comment.entity";
+import * as mongoose from "mongoose";
+
+export type ClassroomAggregateDocument = ClassroomAggregateRoot & mongoose.Document;
 
 @Schema()
 export class ClassroomAggregateRoot extends Entity {
-	@Prop({ name: "classroom_id" })
+	@Prop({ type: mongoose.Types.ObjectId })
 	id: ClassroomId;
 
-	@Prop({ name: "course_name" })
+	@Prop()
 	courseName: CourseName;
 
-	@Prop({ name: "students" })
+	@Prop()
 	students: UserId[];
 
-	@Prop({ name: "teacher_id" })
+	@Prop()
 	teacherId: UserId;
 
-	@Prop({ name: "teacher_assistance_list" })
+	@Prop()
 	teacherAssistanceList: UserId[];
 
-	@Prop({ name: "posts" })
+	@Prop()
 	posts: Post[];
+}
 
-	public addPost(post: Post): void {
-		this.posts.push(post);
+export class ClassroomAggregateDomain {
+	constructor(private _aggregate: ClassroomAggregateRoot) {}
+
+	public addPost(post: Post): ClassroomAggregateRoot {
+		this._aggregate.posts.push(post);
+		return this._aggregate;
 	}
 
-	public addCommentToPost(comment: Comment, post: Post): void {
-		this.posts.map((currentPost) => {
+	public addCommentToPost(comment: Comment, post: Post): ClassroomAggregateRoot {
+		this._aggregate.posts.map((currentPost) => {
 			if (currentPost.postId.equals(post.postId)) {
 				currentPost.addComment(comment);
 			}
 			return currentPost;
 		});
+		return this._aggregate;
 	}
 
-	public addStudentToClass(student: UserId): void {
-		this.students.push(student);
+	public addStudentToClass(student: UserId): ClassroomAggregateRoot {
+		this._aggregate.students.push(student);
+		return this._aggregate;
+	}
+
+	get aggregate(): ClassroomAggregateRoot {
+		return this._aggregate;
 	}
 }
 

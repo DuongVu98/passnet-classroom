@@ -6,13 +6,13 @@ import { UserId } from "src/domain/aggregate/vos/user-id.vos";
 import { Logger } from "@nestjs/common";
 import { Builder } from "builder-pattern";
 
-export class CreateClassroomCommandExecutor extends AbstractCommandExecutor<CreateClassroomCommand, void> {
+export class CreateClassroomCommandExecutor extends AbstractCommandExecutor<CreateClassroomCommand, any> {
 	logger: Logger = new Logger("CreateClassroomCommandExecutor");
 
-	execute(): Promise<void> {
+	public async execute(): Promise<any> {
 		const teacherAssistanceList = this.command.taIds.map((id) => new UserId(id));
 
-		const classroom: ClassroomAggregateRoot = Builder<ClassroomAggregateRoot>()
+		const classroom: ClassroomAggregateRoot = Builder(ClassroomAggregateRoot)
 			.students([])
 			.teacherAssistanceList(teacherAssistanceList)
 			.teacherId(new UserId(this.command.teacherId))

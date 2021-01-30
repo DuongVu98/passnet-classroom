@@ -1,4 +1,4 @@
-import { CacheModule, Module } from "@nestjs/common";
+import { CacheInterceptor, CacheModule, Module } from "@nestjs/common";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { DomainModule } from "./domain/domain.module";
@@ -10,17 +10,23 @@ import * as redisStore from "cache-manager-redis-store";
 @Module({
 	imports: [
 		MongooseModule.forRoot("mongodb://localhost:27017/passnet_classroom_db"),
-		CacheModule.register({
-			store: redisStore,
-			host: "localhost",
-			port: 6379,
-		}),
+		// CacheModule.register({
+		// 	store: redisStore,
+		// 	host: "192.168.99.100",
+		// 	port: 6379,
+		// }),
 		DomainModule,
 		UsecasesModule,
 		AdapterModule,
 		AppConfigModule,
 	],
 	controllers: [AppController],
-	providers: [AppService],
+	providers: [
+		AppService,
+		// {
+		// 	provide: APP_INTERCEPTOR,
+		// 	useClass: CacheInterceptor,
+		// },
+	],
 })
 export class AppModule {}

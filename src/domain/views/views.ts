@@ -1,4 +1,4 @@
-export class ClassroomView extends Document {
+export class ClassroomView {
 	classroomId: string;
 	courseName: string;
 	students: string[];

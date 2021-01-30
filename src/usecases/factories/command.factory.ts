@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import {
 	AddStudentCommand,
 	BaseCommand,
@@ -12,22 +12,25 @@ import { ClassroomAggregateRootRepository } from "src/domain/repositories/classr
 import { AddStudentCommandExecutor } from "src/usecases/executors/add-student-command.executor";
 import { UserCreatePostCommandExecutor } from "src/usecases/executors/user-create-post-command.executor";
 import { UserAddCommentCommandExecutor } from "src/usecases/executors/user-add-comment-command.executor";
-
 import { Builder } from "builder-pattern";
 
 @Injectable()
 export class CommandFactory {
+	private logger: Logger = new Logger("CommandFactory");
+
 	constructor(private aggregateRepository: ClassroomAggregateRootRepository) {}
 
-	produceCommandExecutor(command: BaseCommand): AbstractCommandExecutor<any, any> {
-		if (command instanceof CreateClassroomCommand) {
-			return Builder<CreateClassroomCommandExecutor>().command(command).aggregateRepository(this.aggregateRepository).build();
-		} else if (command instanceof AddStudentCommand) {
-			return Builder<AddStudentCommandExecutor>().command(command).aggregateRepository(this.aggregateRepository).build();
-		} else if (command instanceof UserCreatePostCommand) {
-			return Builder<UserCreatePostCommandExecutor>().command(command).aggregateRepository(this.aggregateRepository).build();
-		} else if (command instanceof UserAddCommentCommand) {
-			return Builder<UserAddCommentCommandExecutor>().command(command).aggregateRepository(this.aggregateRepository).build();
-		}
+	produceCreateClassroomCommandExecutor(command: CreateClassroomCommand): AbstractCommandExecutor<CreateClassroomCommand, void> {
+		this.logger.debug(`create-class-command`);
+		return Builder(CreateClassroomCommandExecutor).command(command).aggregateRepository(this.aggregateRepository).build();
+	}
+	produceAddStudentCommandExecutor(command: AddStudentCommand): AbstractCommandExecutor<AddStudentCommand, void> {
+		return Builder(AddStudentCommandExecutor).command(command).aggregateRepository(this.aggregateRepository).build();
+	}
+	produceUserCreatePostCommandExecutor(command: UserCreatePostCommand): AbstractCommandExecutor<UserCreatePostCommand, void> {
+		return Builder(UserCreatePostCommandExecutor).command(command).aggregateRepository(this.aggregateRepository).build();
+	}
+	produceUserAddCommentCommandExecutor(command: UserAddCommentCommand): AbstractCommandExecutor<UserAddCommentCommand, void> {
+		return Builder(UserAddCommentCommandExecutor).command(command).aggregateRepository(this.aggregateRepository).build();
 	}
 }
