@@ -50,6 +50,7 @@ export class HomeController {
 	}
 
 	@Post("create-post")
+	@CacheClear({ cacheKey: (args: any[]) => args[0].classroomId, client: clientAdapter })
 	public async studentCreatePost(
 		@Body() { content, classroomId, postOwnerId }: { content: string; classroomId: string; postOwnerId: string }
 	): Promise<any> {
@@ -62,6 +63,7 @@ export class HomeController {
 	}
 
 	@Post("add-comment")
+	@CacheClear({ cacheKey: (args: any[]) => args[0].classroomId, client: clientAdapter })
 	public userAddComment(
 		@Body() { ownerId, postId, content, classroomId }: { ownerId: string; postId: string; content: string; classroomId: string }
 	): Promise<any> {
