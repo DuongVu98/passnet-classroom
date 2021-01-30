@@ -40,7 +40,6 @@ export class ClassroomAggregateDomain {
 
 	public addCommentToPost(comment: Comment, post: Post): ClassroomAggregateRoot {
 		this._aggregate.posts.map((currentPost) => {
-
 			if (currentPost.postId === post.postId) {
 				currentPost = new PostDomainFunction(currentPost).addComment(comment);
 			}

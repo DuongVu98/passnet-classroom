@@ -29,9 +29,17 @@ export class CommandFactory {
 		return Builder(AddStudentCommandExecutor).command(command).aggregateRepository(this.aggregateRepository).build();
 	}
 	produceUserCreatePostCommandExecutor(command: UserCreatePostCommand): AbstractCommandExecutor<UserCreatePostCommand, void> {
-		return Builder(UserCreatePostCommandExecutor).command(command).aggregateRepository(this.aggregateRepository).uuidGenerateService(this.uuidGenerateService).build();
+		return Builder(UserCreatePostCommandExecutor)
+			.command(command)
+			.aggregateRepository(this.aggregateRepository)
+			.uuidGenerateService(this.uuidGenerateService)
+			.build();
 	}
 	produceUserAddCommentCommandExecutor(command: UserAddCommentCommand): AbstractCommandExecutor<UserAddCommentCommand, void> {
-		return Builder(UserAddCommentCommandExecutor).command(command).aggregateRepository(this.aggregateRepository).uuidGenerateService(this.uuidGenerateService).build();
+		return Builder(UserAddCommentCommandExecutor)
+			.command(command)
+			.aggregateRepository(this.aggregateRepository)
+			.uuidGenerateService(this.uuidGenerateService)
+			.build();
 	}
 }

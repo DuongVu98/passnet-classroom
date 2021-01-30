@@ -13,7 +13,7 @@ export class HttpResponse {
 
 const userClient = new IoRedis({
 	lazyConnect: true,
-	host: "192.168.99.100",
+	host: "localhost",
 	port: 6379,
 });
 const clientAdapter = useAdapter(userClient);

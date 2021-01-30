@@ -11,13 +11,11 @@ export class Post {
 }
 
 export class PostDomainFunction {
-	constructor(private post: Post) {
-
-	}
+	constructor(private post: Post) {}
 
 	addComment(comment: Comment): Post {
 		this.post.comments.push(comment);
-		return this.post
+		return this.post;
 	}
 
 	editContent(newContent: Content): Post {

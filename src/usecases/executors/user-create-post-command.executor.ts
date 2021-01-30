@@ -13,7 +13,7 @@ import { UuidGenerateService } from "src/usecases/services/uuid-generate.service
 export class UserCreatePostCommandExecutor extends AbstractCommandExecutor<UserCreatePostCommand, void> {
 	logger: Logger = new Logger("CreateClassroomCommandExecutor");
 
-	uuidGenerateService: UuidGenerateService
+	uuidGenerateService: UuidGenerateService;
 
 	execute(): Promise<void> {
 		return this.aggregateRepository

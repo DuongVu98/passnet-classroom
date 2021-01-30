@@ -15,8 +15,6 @@ import { MongooseModule } from "@nestjs/mongoose";
 		AppConfigModule,
 	],
 	controllers: [AppController],
-	providers: [
-		AppService,
-	],
+	providers: [AppService],
 })
 export class AppModule {}
