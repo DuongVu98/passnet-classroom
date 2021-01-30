@@ -8,14 +8,20 @@ export class Post {
 	content: Content;
 	postOwner: UserId;
 	comments: Comment[];
+}
 
-	// public static builder: PostBuilder = new PostBuilder();
+export class PostDomainFunction {
+	constructor(private post: Post) {
 
-	addComment(comment: Comment): void {
-		this.comments.push(comment);
 	}
 
-	editContent(newContent: Content): void {
-		this.content = newContent;
+	addComment(comment: Comment): Post {
+		this.post.comments.push(comment);
+		return this.post
+	}
+
+	editContent(newContent: Content): Post {
+		this.post.content = newContent;
+		return this.post;
 	}
 }

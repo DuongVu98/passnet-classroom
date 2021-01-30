@@ -8,16 +8,19 @@ import { UserId } from "src/domain/aggregate/vos/user-id.vos";
 import { PostId } from "src/domain/aggregate/vos/post-id.vo";
 import { Logger } from "@nestjs/common";
 import { ClassroomAggregateDomain } from "src/domain/aggregate/classroom.root";
+import { UuidGenerateService } from "src/usecases/services/uuid-generate.service";
 
 export class UserCreatePostCommandExecutor extends AbstractCommandExecutor<UserCreatePostCommand, void> {
 	logger: Logger = new Logger("CreateClassroomCommandExecutor");
+
+	uuidGenerateService: UuidGenerateService
 
 	execute(): Promise<void> {
 		return this.aggregateRepository
 			.findById(new ClassroomId(this.command.aggregateId))
 			.then((classroom) => {
 				const post: Post = Builder(Post)
-					.postId(new PostId("post1"))
+					.postId(new PostId(this.uuidGenerateService.generateUUID()))
 					.comments([])
 					.content(new Content(this.command.postContent))
 					.postOwner(new UserId(this.command.userId))

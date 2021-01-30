@@ -27,13 +27,14 @@ export class ViewProjector {
 							.postOwner(post.postOwner._id)
 							.content(post.content.content)
 							.comments(
-								post.comments.map((comment) =>
-									Builder(CommentView)
+								post.comments.map((comment) =>{
+									this.logger.debug(JSON.stringify(comment))
+									return Builder(CommentView)
 										.commentId(comment.id._id)
 										.commentOwner(comment.commentOwner._id)
 										.content(comment.content.content)
 										.build()
-								)
+								})
 							)
 							.build()
 					)

@@ -13,12 +13,13 @@ import { AddStudentCommandExecutor } from "src/usecases/executors/add-student-co
 import { UserCreatePostCommandExecutor } from "src/usecases/executors/user-create-post-command.executor";
 import { UserAddCommentCommandExecutor } from "src/usecases/executors/user-add-comment-command.executor";
 import { Builder } from "builder-pattern";
+import { UuidGenerateService } from "src/usecases/services/uuid-generate.service";
 
 @Injectable()
 export class CommandFactory {
 	private logger: Logger = new Logger("CommandFactory");
 
-	constructor(private aggregateRepository: ClassroomAggregateRootRepository) {}
+	constructor(private aggregateRepository: ClassroomAggregateRootRepository, private uuidGenerateService: UuidGenerateService) {}
 
 	produceCreateClassroomCommandExecutor(command: CreateClassroomCommand): AbstractCommandExecutor<CreateClassroomCommand, void> {
 		this.logger.debug(`create-class-command`);
@@ -28,9 +29,9 @@ export class CommandFactory {
 		return Builder(AddStudentCommandExecutor).command(command).aggregateRepository(this.aggregateRepository).build();
 	}
 	produceUserCreatePostCommandExecutor(command: UserCreatePostCommand): AbstractCommandExecutor<UserCreatePostCommand, void> {
-		return Builder(UserCreatePostCommandExecutor).command(command).aggregateRepository(this.aggregateRepository).build();
+		return Builder(UserCreatePostCommandExecutor).command(command).aggregateRepository(this.aggregateRepository).uuidGenerateService(this.uuidGenerateService).build();
 	}
 	produceUserAddCommentCommandExecutor(command: UserAddCommentCommand): AbstractCommandExecutor<UserAddCommentCommand, void> {
-		return Builder(UserAddCommentCommandExecutor).command(command).aggregateRepository(this.aggregateRepository).build();
+		return Builder(UserAddCommentCommandExecutor).command(command).aggregateRepository(this.aggregateRepository).uuidGenerateService(this.uuidGenerateService).build();
 	}
 }

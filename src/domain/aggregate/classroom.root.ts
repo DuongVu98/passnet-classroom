@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Entity } from "./aggregate.root";
-import { Post } from "./entities/post.entity";
+import { Post, PostDomainFunction } from "./entities/post.entity";
 import { ClassroomId } from "./vos/classroom-id.vo";
 import { CourseName } from "./vos/course-name.vo";
 import { UserId } from "src/domain/aggregate/vos/user-id.vos";
@@ -40,8 +40,9 @@ export class ClassroomAggregateDomain {
 
 	public addCommentToPost(comment: Comment, post: Post): ClassroomAggregateRoot {
 		this._aggregate.posts.map((currentPost) => {
-			if (currentPost.postId.equals(post.postId)) {
-				currentPost.addComment(comment);
+
+			if (currentPost.postId === post.postId) {
+				currentPost = new PostDomainFunction(currentPost).addComment(comment);
 			}
 			return currentPost;
 		});
