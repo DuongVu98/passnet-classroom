@@ -4,9 +4,7 @@ import { CommandFactory } from "src/usecases/factories/command.factory";
 
 @Module({
 	imports: [DomainModule],
-	providers: [
-		CommandFactory,
-	],
-	exports: [ CommandFactory],
+	providers: [CommandFactory],
+	exports: [CommandFactory],
 })
 export class UsecasesModule {}
