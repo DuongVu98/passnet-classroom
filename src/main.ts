@@ -1,4 +1,6 @@
 import { NestFactory } from "@nestjs/core";
+import { Transport } from "@nestjs/microservices";
+import { join } from "path";
 import { AppModule } from "./app.module";
 
 // process.on("unhandledRejection", (reason, promise) => {
@@ -8,11 +10,22 @@ import { AppModule } from "./app.module";
 // 	});
 // });
 
+const configurationOptions = {
+	transport: Transport.GRPC,
+	options: {
+		url: "localhost:9090",
+		package: "consumeEvents",
+		protoPath: join(__dirname, "proto/consume-events.proto"),
+	},
+};
+
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule);
-
-	console.log(`env --> ${process.env.NODE_ENV}`);
+	const grpcApp = await NestFactory.createMicroservice(AppModule, configurationOptions);
 
 	await app.listen(3000);
+	grpcApp.listen(() => {
+		console.log(`env --> ${process.env.NODE_ENV}`);
+	});
 }
 bootstrap();
