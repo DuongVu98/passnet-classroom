@@ -1,4 +1,4 @@
-import { Injectable, Logger } from "@nestjs/common";
+import { Controller, Logger } from "@nestjs/common";
 import { GrpcMethod } from "@nestjs/microservices";
 
 interface MainServiceResponse {
@@ -24,7 +24,7 @@ interface DeleteJobEvent {
 	jobId: string;
 }
 
-@Injectable()
+@Controller()
 export class EventConsumerGrpcGateway {
 	private logger = new Logger("GrpcEventConsumer");
 

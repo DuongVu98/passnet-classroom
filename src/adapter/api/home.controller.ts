@@ -13,7 +13,7 @@ export class HttpResponse {
 
 const userClient = new IoRedis({
 	lazyConnect: true,
-	host: "localhost",
+	host: "192.168.99.100",
 	port: 6379,
 });
 const clientAdapter = useAdapter(userClient);
@@ -37,7 +37,7 @@ export class HomeController {
 	}
 
 	@Post("add-student")
-	@CacheClear({ cacheKey: (args: any[]) => args[0].classroomId, client: clientAdapter })
+	// @CacheClear({ cacheKey: (args: any[]) => args[0].classroomId, client: clientAdapter })
 	public addStudentToClassroom(@Body() { studentId, classroomId }: { studentId: string; classroomId: string }): Promise<any> {
 		this.logger.debug(`body received: ${classroomId}`);
 
@@ -50,7 +50,7 @@ export class HomeController {
 	}
 
 	@Post("create-post")
-	@CacheClear({ cacheKey: (args: any[]) => args[0].classroomId, client: clientAdapter })
+	// @CacheClear({ cacheKey: (args: any[]) => args[0].classroomId, client: clientAdapter })
 	public async studentCreatePost(
 		@Body() { content, classroomId, postOwnerId }: { content: string; classroomId: string; postOwnerId: string }
 	): Promise<any> {
@@ -63,7 +63,7 @@ export class HomeController {
 	}
 
 	@Post("add-comment")
-	@CacheClear({ cacheKey: (args: any[]) => args[0].classroomId, client: clientAdapter })
+	// @CacheClear({ cacheKey: (args: any[]) => args[0].classroomId, client: clientAdapter })
 	public userAddComment(
 		@Body() { ownerId, postId, content, classroomId }: { ownerId: string; postId: string; content: string; classroomId: string }
 	): Promise<any> {
@@ -81,7 +81,7 @@ export class HomeController {
 	}
 
 	@Get("classroom-view/:classroomId")
-	@Cacheable({ cacheKey: (args: any[]) => args[0], client: clientAdapter, ttlSeconds: 60 })
+	// @Cacheable({ cacheKey: (args: any[]) => args[0], client: clientAdapter, ttlSeconds: 60 })
 	public getClassroomView(@Param("classroomId") classroomId: string): Promise<any> {
 		return this.viewProjector.queryClassroomView(classroomId);
 	}

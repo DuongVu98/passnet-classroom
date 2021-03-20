@@ -13,7 +13,7 @@ import { AppModule } from "./app.module";
 const configurationOptions = {
 	transport: Transport.GRPC,
 	options: {
-		url: "localhost:9090",
+        url: 'localhost:50051',
 		package: "consumeEvents",
 		protoPath: join(__dirname, "proto/consume-events.proto"),
 	},
