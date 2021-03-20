@@ -4,6 +4,7 @@ export class CreateClassroomCommand extends BaseCommand {
 	teacherId: string;
 	courseName: string;
 	taIds: string[];
+    jobId: string;
 }
 
 export class AddStudentCommand extends BaseCommand {
