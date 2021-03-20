@@ -30,8 +30,8 @@ export class ClassroomAggregateRoot extends Entity {
 	@Prop()
 	posts: Post[];
 
-    @Prop()
-    jobId: JobId;
+	@Prop()
+	jobId: JobId;
 }
 
 export class ClassroomAggregateDomain {

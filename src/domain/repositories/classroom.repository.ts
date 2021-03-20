@@ -19,9 +19,9 @@ export class ClassroomAggregateRootRepository {
 		return this.classroomModel.findById(id);
 	}
 
-    async findByJobId(jobId: JobId): Promise<ClassroomAggregateRoot> {
-        return this.classroomModel.findOne({jobId: jobId});
-    }
+	async findByJobId(jobId: JobId): Promise<ClassroomAggregateRoot> {
+		return this.classroomModel.findOne({ jobId: jobId });
+	}
 
 	async insert(data: ClassroomAggregateRoot): Promise<ClassroomAggregateRoot> {
 		return this.classroomModel.create(data);

@@ -19,7 +19,7 @@ export class CreateClassroomCommandExecutor extends AbstractCommandExecutor<Crea
 			.teacherId(new UserId(this.command.teacherId))
 			.courseName(new CourseName(this.command.courseName))
 			.posts([])
-            .jobId(new JobId(this.command.jobId))
+			.jobId(new JobId(this.command.jobId))
 			.build();
 
 		return this.aggregateRepository.insert(classroom).then((result) => {

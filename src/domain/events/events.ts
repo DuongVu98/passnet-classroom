@@ -1,9 +1,9 @@
-export class AcceptStudentApplicationEvent {
-    studentId: string;
-    jobId: string;
+export class AcceptStudentApplicationExternalEvent {
+	studentId: string;
+	jobId: string;
 }
 
-export class RemoveStudentApplicationEvent {
-    studentId: string;
-    jobId: string;
+export class RemoveStudentApplicationExternalEvent {
+	studentId: string;
+	jobId: string;
 }

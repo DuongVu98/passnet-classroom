@@ -26,7 +26,7 @@ export class HomeController {
 
 	@Post("create-classroom")
 	public createClassroom(
-		@Body() { teacherId, courseName, taIds, jobId }: { teacherId: string; courseName: string; taIds: string[], jobId: string }
+		@Body() { teacherId, courseName, taIds, jobId }: { teacherId: string; courseName: string; taIds: string[]; jobId: string }
 	): Promise<any> {
 		const command = Builder(CreateClassroomCommand).teacherId(teacherId).courseName(courseName).taIds(taIds).jobId(jobId).build();
 		const commandExecutor = this.commandFactory.produceCreateClassroomCommandExecutor(command);
