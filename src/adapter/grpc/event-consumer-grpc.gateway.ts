@@ -2,7 +2,7 @@ import { Controller, Logger } from "@nestjs/common";
 import { GrpcMethod } from "@nestjs/microservices";
 import { Builder } from "builder-pattern";
 import { AcceptStudentApplicationExternalEvent, RemoveStudentApplicationExternalEvent } from "src/domain/events/events";
-import { EventHandlerFacde } from "../facades/event.facade";
+import { EventHandlerFacde } from "../facades/event-handler.facade";
 
 interface MainServiceResponse {
 	message: string;
@@ -43,7 +43,8 @@ export class EventConsumerGrpcGateway {
 	consumeAcceptStudentApplicationEvent(event: AcceptStudentApplicationEvent): MainServiceResponse {
 		this.logger.log(JSON.stringify(event));
 
-		this.eventHandlerFacade.apply(Builder(AcceptStudentApplicationExternalEvent).jobId(event.jobId).studentId(event.taId).build());
+        const externalEvent = Builder(AcceptStudentApplicationExternalEvent).jobId(event.jobId).studentId(event.taId).build();
+		this.eventHandlerFacade.apply(externalEvent);
 
 		return { message: "success" };
 	}
@@ -52,7 +53,8 @@ export class EventConsumerGrpcGateway {
 	consumeRemoveStudentApplicationEvent(event: RemoveStudentApplicationEvent): MainServiceResponse {
 		this.logger.log(JSON.stringify(event));
 
-		this.eventHandlerFacade.apply(Builder(RemoveStudentApplicationExternalEvent).jobId(event.jobId).studentId(event.taId).build());
+        const externalEvent = Builder(RemoveStudentApplicationExternalEvent).jobId(event.jobId).studentId(event.taId).build();
+		this.eventHandlerFacade.apply(externalEvent);
 
 		return { message: "success" };
 	}

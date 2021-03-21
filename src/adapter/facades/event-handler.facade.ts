@@ -4,7 +4,7 @@ import { EventHandlerFactory } from "src/usecases/factories/event-handler.factor
 
 @Injectable()
 export class EventHandlerFacde {
-	logger: Logger = new Logger("EventFacde");
+	logger: Logger = new Logger("EventHandlerFacde");
 
 	constructor(private eventHandlerFactory: EventHandlerFactory) {}
 
