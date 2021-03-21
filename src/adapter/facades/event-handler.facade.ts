@@ -3,7 +3,7 @@ import { AcceptStudentApplicationExternalEvent, RemoveStudentApplicationExternal
 import { EventHandlerFactory } from "src/usecases/factories/event-handler.factory";
 
 @Injectable()
-export class EventHandlerFacde {
+export class EventHandlerFacade {
 	logger: Logger = new Logger("EventHandlerFacde");
 
 	constructor(private eventHandlerFactory: EventHandlerFactory) {}

@@ -2,7 +2,7 @@ import { Controller, Logger } from "@nestjs/common";
 import { GrpcMethod } from "@nestjs/microservices";
 import { Builder } from "builder-pattern";
 import { AcceptStudentApplicationExternalEvent, RemoveStudentApplicationExternalEvent } from "src/domain/events/events";
-import { EventHandlerFacde } from "../facades/event-handler.facade";
+import { EventHandlerFacade } from "../facades/event-handler.facade";
 
 interface MainServiceResponse {
 	message: string;
@@ -31,7 +31,7 @@ interface DeleteJobEvent {
 export class EventConsumerGrpcGateway {
 	private logger = new Logger("GrpcEventConsumer");
 
-	constructor(private eventHandlerFacade: EventHandlerFacde) {}
+	constructor(private eventHandlerFacade: EventHandlerFacade) {}
 
 	@GrpcMethod("EventConsumer", "ConsumePostNewJobEvent")
 	consumePostNewJobEvent(event: PostNewJobEvent): MainServiceResponse {

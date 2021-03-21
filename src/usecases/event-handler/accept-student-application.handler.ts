@@ -11,11 +11,15 @@ export class AcceptStudentApplicationEventHandler extends AbstractEventHandler<A
 		return this.aggregateRepository
 			.findByJobId(new JobId(this.event.jobId))
 			.then((classroom) => {
-				classroom.teacherAssistanceList.push(new UserId(this.event.studentId));
-				return this.aggregateRepository.updateById(classroom, classroom.id);
+				if(classroom != null) {
+                    classroom.teacherAssistanceList.push(new UserId(this.event.studentId));
+				    return this.aggregateRepository.updateById(classroom, classroom.id);
+                }
 			})
 			.then((aggregate) => {
-				this.logger.log(`handle accept-student-application-event for aggregate ${aggregate}`);
-			});
+                if(aggregate != null) {
+                    this.logger.log(`handle accept-student-application-event for aggregate ${aggregate}`);
+                }
+			})
 	}
 }

@@ -11,13 +11,17 @@ export class RemoveStudentApplicationEventHandler extends AbstractEventHandler<R
 		return this.aggregateRepository
 			.findByJobId(new JobId(this.event.jobId))
 			.then((classroom) => {
-				const newTaList = classroom.teacherAssistanceList.filter((taId) => !taId.equals(new UserId(this.event.studentId)));
-				classroom.teacherAssistanceList = newTaList;
-
-				return this.aggregateRepository.updateById(classroom, classroom.id);
+                if(classroom != null) {
+                    const newTaList = classroom.teacherAssistanceList.filter((taId) => !taId.equals(new UserId(this.event.studentId)));
+                    classroom.teacherAssistanceList = newTaList;
+    
+                    return this.aggregateRepository.updateById(classroom, classroom.id);
+                }
 			})
 			.then((aggregate) => {
-				this.logger.log(`handle remove-student-application-event for aggregate ${aggregate}`);
+                if(aggregate != null) {
+                    this.logger.log(`handle remove-student-application-event for aggregate ${aggregate}`);
+                }
 			});
 	}
 }
