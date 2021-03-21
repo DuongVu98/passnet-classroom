@@ -1,3 +1,4 @@
+import { ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { Transport } from "@nestjs/microservices";
 import { join } from "path";
@@ -23,6 +24,9 @@ async function bootstrap() {
 	const app = await NestFactory.create(AppModule);
 	const grpcApp = await NestFactory.createMicroservice(AppModule, configurationOptions);
 
+    app.useGlobalPipes(new ValidationPipe());
+    app.enableCors();
+    
 	await app.listen(3000);
 	grpcApp.listen(() => {
 		console.log(`env --> ${process.env.NODE_ENV}`);

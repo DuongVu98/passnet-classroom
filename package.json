@@ -40,6 +40,8 @@
         "builder-pattern": "^1.2.4",
         "cache-manager": "^3.4.0",
         "cache-manager-redis-store": "^2.0.0",
+        "class-transformer": "^0.4.0",
+        "class-validator": "^0.13.1",
         "grpc": "^1.24.6",
         "ioredis": "^4.19.4",
         "mongoose": "^5.10.11",
