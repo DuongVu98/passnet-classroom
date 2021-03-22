@@ -27,12 +27,12 @@ async function bootstrap() {
 
     app.useGlobalPipes(new ValidationPipe());
     app.enableCors();
-    
+
+	console.log(`server port: ${port}`);
+	await app.listen(port);
+
 	grpcApp.listen(() => {
 		console.log(`env --> ${process.env.NODE_ENV}`);
 	});
-	console.log(`env --> ${process.env.NODE_ENV}`);
-
-	await app.listen(port);
 }
 bootstrap();
