@@ -1,6 +1,9 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { Builder } from "builder-pattern";
+import { ClassroomAggregateRoot } from "src/domain/aggregate/classroom.root";
 import { ClassroomId } from "src/domain/aggregate/vos/classroom-id.vo";
+import { JobId } from "src/domain/aggregate/vos/job-id.vo";
+import { ClassroomNotCreatedException, ClassroomNotFoundException } from "src/domain/exceptions/exceptions";
 import { ClassroomAggregateRootRepository } from "src/domain/repositories/classroom.repository";
 import { ClassroomView, CommentView, PostView } from "src/domain/views/views";
 
@@ -14,8 +17,31 @@ export class ViewProjector {
 		const idToFind = new ClassroomId(aggregateId);
 
 		return this.aggregateRepository.findById(idToFind).then((aggregate) => {
-			return Builder(ClassroomView)
-				.classroomId(aggregateId)
+			if(this.isAggregateNotNull(aggregate)) {
+                return this.mapEntityToView(aggregate);
+            } else {
+                throw new ClassroomNotFoundException(aggregateId);
+            }
+		});
+	}
+
+    public async queryClassroomViewFromJob(jobId: string): Promise<ClassroomView> {
+        return this.aggregateRepository.findByJobId(new JobId(jobId)).then((aggregate) => {
+            if(this.isAggregateNotNull(aggregate)) {
+                return this.mapEntityToView(aggregate);
+            } else {
+                throw new ClassroomNotCreatedException(jobId);
+            }
+        })
+    }
+
+    private isAggregateNotNull(aggregate: ClassroomAggregateRoot): boolean {
+        return aggregate != null;
+    }
+
+    private mapEntityToView(aggregate: ClassroomAggregateRoot): ClassroomView {
+        return Builder(ClassroomView)
+				.classroomId(aggregate.id.getId.toHexString())
 				.courseName(aggregate.courseName.name)
 				.students(aggregate.students.map((s) => s._id))
 				.teacher(aggregate.teacherId.getId)
@@ -40,6 +66,5 @@ export class ViewProjector {
 					)
 				)
 				.build();
-		});
-	}
+    }
 }

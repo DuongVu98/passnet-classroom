@@ -3,6 +3,7 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { ClassroomAggregateDocument, ClassroomAggregateRoot } from "../aggregate/classroom.root";
 import { ClassroomId } from "../aggregate/vos/classroom-id.vo";
+import { JobId } from "../aggregate/vos/job-id.vo";
 
 @Injectable()
 export class ClassroomAggregateRootRepository {
@@ -16,6 +17,10 @@ export class ClassroomAggregateRootRepository {
 
 	async findById(id: ClassroomId): Promise<ClassroomAggregateRoot> {
 		return this.classroomModel.findById(id);
+	}
+
+	async findByJobId(jobId: JobId): Promise<ClassroomAggregateRoot> {
+		return this.classroomModel.findOne({ jobId: jobId });
 	}
 
 	async insert(data: ClassroomAggregateRoot): Promise<ClassroomAggregateRoot> {

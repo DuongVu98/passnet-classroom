@@ -5,6 +5,7 @@ import { CourseName } from "src/domain/aggregate/vos/course-name.vo";
 import { UserId } from "src/domain/aggregate/vos/user-id.vos";
 import { Logger } from "@nestjs/common";
 import { Builder } from "builder-pattern";
+import { JobId } from "src/domain/aggregate/vos/job-id.vo";
 
 export class CreateClassroomCommandExecutor extends AbstractCommandExecutor<CreateClassroomCommand, any> {
 	logger: Logger = new Logger("CreateClassroomCommandExecutor");
@@ -18,6 +19,7 @@ export class CreateClassroomCommandExecutor extends AbstractCommandExecutor<Crea
 			.teacherId(new UserId(this.command.teacherId))
 			.courseName(new CourseName(this.command.courseName))
 			.posts([])
+			.jobId(new JobId(this.command.jobId))
 			.build();
 
 		return this.aggregateRepository.insert(classroom).then((result) => {

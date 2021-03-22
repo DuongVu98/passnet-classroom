@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Logger, Param, Post } from "@nestjs/common";
+import { Body, Controller, Get, HttpStatus, Logger, Param, Post, UseFilters } from "@nestjs/common";
 import { Builder } from "builder-pattern";
 import { AddStudentCommand, CreateClassroomCommand, UserAddCommentCommand, UserCreatePostCommand } from "src/domain/commands/commands";
 import { CommandFactory } from "src/usecases/factories/command.factory";
@@ -6,6 +6,8 @@ import { ViewProjector } from "src/usecases/queries/view.projector";
 import { Cacheable, CacheClear } from "@type-cacheable/core";
 import * as IoRedis from "ioredis";
 import { useAdapter } from "@type-cacheable/redis-adapter";
+import { ClassroomNotCreatedExceptionHandler, ClassroomNotFoundExceptionHandler } from "../filters/exception-handler.filter";
+import { GetClassroomViewForm, GetClassroomviewFromJobForm } from "src/domain/forms/query.form";
 
 export class HttpResponse {
 	constructor(message: any, status: string) {}
@@ -13,7 +15,7 @@ export class HttpResponse {
 
 const userClient = new IoRedis({
 	lazyConnect: true,
-	host: "localhost",
+	host: "192.168.99.100",
 	port: 6379,
 });
 const clientAdapter = useAdapter(userClient);
@@ -26,9 +28,9 @@ export class HomeController {
 
 	@Post("create-classroom")
 	public createClassroom(
-		@Body() { teacherId, courseName, taIds }: { teacherId: string; courseName: string; taIds: string[] }
+		@Body() { teacherId, courseName, taIds, jobId }: { teacherId: string; courseName: string; taIds: string[]; jobId: string }
 	): Promise<any> {
-		const command = Builder(CreateClassroomCommand).teacherId(teacherId).courseName(courseName).taIds(taIds).build();
+		const command = Builder(CreateClassroomCommand).teacherId(teacherId).courseName(courseName).taIds(taIds).jobId(jobId).build();
 		const commandExecutor = this.commandFactory.produceCreateClassroomCommandExecutor(command);
 
 		return commandExecutor.execute().then((result) => {
@@ -37,7 +39,7 @@ export class HomeController {
 	}
 
 	@Post("add-student")
-	@CacheClear({ cacheKey: (args: any[]) => args[0].classroomId, client: clientAdapter })
+	// @CacheClear({ cacheKey: (args: any[]) => args[0].classroomId, client: clientAdapter })
 	public addStudentToClassroom(@Body() { studentId, classroomId }: { studentId: string; classroomId: string }): Promise<any> {
 		this.logger.debug(`body received: ${classroomId}`);
 
@@ -50,7 +52,7 @@ export class HomeController {
 	}
 
 	@Post("create-post")
-	@CacheClear({ cacheKey: (args: any[]) => args[0].classroomId, client: clientAdapter })
+	// @CacheClear({ cacheKey: (args: any[]) => args[0].classroomId, client: clientAdapter })
 	public async studentCreatePost(
 		@Body() { content, classroomId, postOwnerId }: { content: string; classroomId: string; postOwnerId: string }
 	): Promise<any> {
@@ -63,7 +65,7 @@ export class HomeController {
 	}
 
 	@Post("add-comment")
-	@CacheClear({ cacheKey: (args: any[]) => args[0].classroomId, client: clientAdapter })
+	// @CacheClear({ cacheKey: (args: any[]) => args[0].classroomId, client: clientAdapter })
 	public userAddComment(
 		@Body() { ownerId, postId, content, classroomId }: { ownerId: string; postId: string; content: string; classroomId: string }
 	): Promise<any> {
@@ -80,9 +82,21 @@ export class HomeController {
 		});
 	}
 
-	@Get("classroom-view/:classroomId")
-	@Cacheable({ cacheKey: (args: any[]) => args[0], client: clientAdapter, ttlSeconds: 60 })
-	public getClassroomView(@Param("classroomId") classroomId: string): Promise<any> {
-		return this.viewProjector.queryClassroomView(classroomId);
+    /**
+     * TODO: Validate classroom ID
+     * Classroom ID is expected to have 24 hex string characters
+     * @param classroomId 
+     * @returns 
+     */
+	@Post("classroom-view/classroom-id")
+	// @Cacheable({ cacheKey: (args: any[]) => args[0], client: clientAdapter, ttlSeconds: 60 })
+	public getClassroomView(@Body() getClassroomViewForm: GetClassroomViewForm): Promise<any> {
+		return this.viewProjector.queryClassroomView(getClassroomViewForm.classroomId);
 	}
+
+    @Post("classroom-view/job-id")
+    @UseFilters(ClassroomNotFoundExceptionHandler, ClassroomNotCreatedExceptionHandler)
+    public getClassroomViewFromJob(@Body() getClassroomviewFromJobForm: GetClassroomviewFromJobForm): Promise<any> {
+        return this.viewProjector.queryClassroomViewFromJob(getClassroomviewFromJobForm.jobId);
+    }
 }

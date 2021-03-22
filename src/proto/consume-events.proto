@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option java_package = "com.cseiu.passnet.saga.classroomsaga";
+
+package consumeEvents;
+
+service EventConsumer {
+  rpc ConsumePostNewJobEvent (PostNewJobEvent) returns (MainServiceResponse) {}
+  rpc ConsumeAcceptStudentApplicationEvent (AcceptStudentApplicationEvent) returns (MainServiceResponse) {}
+  rpc ConsumeRemoveStudentApplicationEvent (RemoveStudentApplicationEvent) returns (MainServiceResponse) {}
+  rpc ConsumeDeleteJobEvent (DeleteJobEvent) returns (MainServiceResponse) {}
+}
+
+message MainServiceResponse {
+  string message = 1;
+}
+
+message PostNewJobEvent {
+  string ownerId = 1;
+  string jobId = 2;
+}
+
+message AcceptStudentApplicationEvent {
+  string jobId = 1;
+  string taId = 2;
+}
+
+message RemoveStudentApplicationEvent {
+  string jobId = 1;
+  string taId = 2;
+}
+
+message DeleteJobEvent {
+  string jobId = 1;
+}

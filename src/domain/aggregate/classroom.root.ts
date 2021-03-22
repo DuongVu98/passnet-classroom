@@ -6,6 +6,7 @@ import { CourseName } from "./vos/course-name.vo";
 import { UserId } from "src/domain/aggregate/vos/user-id.vos";
 import { Comment } from "./entities/comment.entity";
 import * as mongoose from "mongoose";
+import { JobId } from "./vos/job-id.vo";
 
 export type ClassroomAggregateDocument = ClassroomAggregateRoot & mongoose.Document;
 
@@ -28,6 +29,9 @@ export class ClassroomAggregateRoot extends Entity {
 
 	@Prop()
 	posts: Post[];
+
+	@Prop()
+	jobId: JobId;
 }
 
 export class ClassroomAggregateDomain {
