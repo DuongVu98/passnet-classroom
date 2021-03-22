@@ -7,12 +7,13 @@ import { AppModule } from "./app.module";
 // 		console.log(error);
 // 	});
 // });
+const port = process.env.SERVER_PORT_LISTENER;
 
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule);
 
 	console.log(`env --> ${process.env.NODE_ENV}`);
 
-	await app.listen(3000);
+	await app.listen(port);
 }
 bootstrap();
