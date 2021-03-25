@@ -8,7 +8,7 @@ import { AppConfigModule } from "./config/config.module";
 import { MongooseModule } from "@nestjs/mongoose";
 @Module({
 	imports: [
-		MongooseModule.forRoot("mongodb://localhost:27017/passnet_classroom_db"),
+		MongooseModule.forRoot(process.env.DATABASE_URL),
 		DomainModule,
 		UsecasesModule,
 		AdapterModule,

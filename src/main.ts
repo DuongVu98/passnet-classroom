@@ -15,8 +15,8 @@ const port = process.env.SERVER_PORT_LISTENER;
 const configurationOptions = {
 	transport: Transport.GRPC,
 	options: {
-		url: "localhost:50051",
-		package: "consumeEvents",
+		url: process.env.GRPC_OPTION_URL,
+		package: process.env.GRPC_OPTION_PACKAGE,
 		protoPath: join(__dirname, "proto/consume-events.proto"),
 	},
 };
