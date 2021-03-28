@@ -6,6 +6,9 @@ import { UsecasesModule } from "./usecases/usecases.module";
 import { AdapterModule } from "./adapter/adapter.module";
 import { AppConfigModule } from "./config/config.module";
 import { MongooseModule } from "@nestjs/mongoose";
+
+console.log(`db url -> ${process.env.DATABASE_URL}`)
+
 @Module({
 	imports: [
 		MongooseModule.forRoot(process.env.DATABASE_URL),
