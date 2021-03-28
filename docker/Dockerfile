@@ -1,4 +1,4 @@
-FROM node:12-alpine3.9
+FROM node:12-alpine3.9 as build
 
 WORKDIR /usr/src/app
 
@@ -12,7 +12,14 @@ RUN npm run build
 
 EXPOSE 3000
 
-ARG NODE_ENV=production
-ENV NODE_ENV=${NODE_ENV}
+FROM node:12-alpine3.9
 
-CMD ["node", "dist/main"]
+ARG NODE_ENV=production
+ARG ENV_PATH=.
+
+ENV NODE_ENV=${NODE_ENV}
+ENV ENV_PATH=${ENV_PATH}
+
+COPY ./dist ./src/env /app --from build
+
+ENTRYPOINT ["node", "dist/main"]
