@@ -22,5 +22,7 @@ ENV NODE_ENV=${NODE_ENV}
 ENV ENV_PATH=${ENV_PATH}
 
 COPY --from=build /usr/src/app/dist /usr/src/app/src/env ./
+COPY --from=build /usr/src/app/src/proto ./proto
+COPY --from=build /usr/src/app/node_modules ./node_modules
 
 ENTRYPOINT ["node", "main"]

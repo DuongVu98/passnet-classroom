@@ -10,6 +10,7 @@ import { AppModule } from "./app.module";
 // 		console.log(error);
 // 	});
 // });
+console.log(`grpc options --> ${process.env.GRPC_OPTION_URL}`)
 const port = process.env.SERVER_PORT_LISTENER;
 
 const configurationOptions = {
@@ -17,7 +18,7 @@ const configurationOptions = {
 	options: {
 		url: process.env.GRPC_OPTION_URL,
 		package: process.env.GRPC_OPTION_PACKAGE,
-		protoPath: join(__dirname, "proto/consume-events.proto"),
+		protoPath: join(__dirname, process.env.GRPC_CONSUME_EVENTS_PATH),
 	},
 };
 

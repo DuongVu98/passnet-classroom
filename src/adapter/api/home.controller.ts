@@ -4,7 +4,6 @@ import { AddStudentCommand, CreateClassroomCommand, UserAddCommentCommand, UserC
 import { CommandFactory } from "src/usecases/factories/command.factory";
 import { ViewProjector } from "src/usecases/queries/view.projector";
 import { Cacheable, CacheClear } from "@type-cacheable/core";
-import * as IoRedis from "ioredis";
 import { useAdapter } from "@type-cacheable/redis-adapter";
 import { ClassroomNotCreatedExceptionHandler, ClassroomNotFoundExceptionHandler } from "../filters/exception-handler.filter";
 import { GetClassroomViewForm, GetClassroomviewFromJobForm } from "src/domain/forms/query.form";
@@ -13,12 +12,12 @@ export class HttpResponse {
 	constructor(message: any, status: string) {}
 }
 
-const userClient = new IoRedis({
-	lazyConnect: true,
-	host: process.env.CACHE_CONNECTION_HOST,
-	port: process.env.CACHE_CONNECTION_PORT,
-});
-const clientAdapter = useAdapter(userClient);
+// const userClient = new IoRedis({
+// 	lazyConnect: true,
+// 	host: process.env.CACHE_CONNECTION_HOST,
+// 	port: process.env.CACHE_CONNECTION_PORT,
+// });
+// const clientAdapter = useAdapter(userClient);
 
 @Controller("home")
 export class HomeController {
