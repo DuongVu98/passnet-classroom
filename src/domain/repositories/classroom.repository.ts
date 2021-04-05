@@ -4,6 +4,7 @@ import { Model } from "mongoose";
 import { ClassroomAggregateDocument, ClassroomAggregateRoot } from "../aggregate/classroom.root";
 import { ClassroomId } from "../aggregate/vos/classroom-id.vo";
 import { JobId } from "../aggregate/vos/job-id.vo";
+import { UserId } from "../aggregate/vos/user-id.vos";
 
 @Injectable()
 export class ClassroomAggregateRootRepository {

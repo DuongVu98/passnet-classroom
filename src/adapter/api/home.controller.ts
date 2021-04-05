@@ -98,4 +98,12 @@ export class HomeController {
     public getClassroomViewFromJob(@Body() getClassroomviewFromJobForm: GetClassroomviewFromJobForm): Promise<any> {
         return this.viewProjector.queryClassroomViewFromJob(getClassroomviewFromJobForm.jobId);
     }
+
+    /**
+     * TODO: this can be served in User service after consume events from add/remove students/tas or create/remove classrooms from teachers
+     */
+    @Post("classroom-list")
+    public getClassroomListByMemberType(@Body() getClassroomListByMemberTypeForm: {uid: string, memberType: string}): Promise<any> {
+        return this.viewProjector.getClassroomListByMemberType(getClassroomListByMemberTypeForm.memberType, getClassroomListByMemberTypeForm.uid);
+    }
 }

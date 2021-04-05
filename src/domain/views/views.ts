@@ -19,3 +19,8 @@ export class CommentView {
 	commentOwner: string;
 	content: string;
 }
+
+export class ClassroomLiteView {
+    classroomId: string;
+	courseName: string;
+}
