@@ -22,12 +22,12 @@ export class EventHandlerFacade {
 	private applyAcceptStudentApplicationEvent(event: AcceptStudentApplicationExternalEvent): Promise<void> {
 		const eventHandler = this.eventHandlerFactory.produceAcceptStudentApplicationEventHandler(event);
 
-		return eventHandler.handle();
+		return eventHandler.handle().then();
 	}
 
 	private applyRemoveStudentApplicationEvent(event: RemoveStudentApplicationExternalEvent): Promise<void> {
 		const eventHandler = this.eventHandlerFactory.produceRemovetudentApplicationEventHandler(event);
 
-		return eventHandler.handle();
+		return eventHandler.handle().then();
 	}
 }

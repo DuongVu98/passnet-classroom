@@ -29,7 +29,7 @@ export class UserAddCommentCommandExecutor extends AbstractCommandExecutor<UserA
 
 				const aggregate = new ClassroomAggregateDomain(classroom).addCommentToPost(newComment, post);
 
-				return this.aggregateRepository.updateById(aggregate, new ClassroomId(this.command.aggregateId));
+				return this.aggregateRepository.update(aggregate);
 			})
 			.then((aggregate) => {
 				this.logger.log(`added new comment to aggregate ${aggregate}`);

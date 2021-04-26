@@ -10,15 +10,20 @@ export class AcceptStudentApplicationEventHandler extends AbstractEventHandler<A
 	public handle(): Promise<void> {
 		return this.aggregateRepository
 			.findByJobId(new JobId(this.event.jobId))
-			.then((classroom) => {
+			.then(async (classroom) => {
+                this.logger.log(`handle accept-student-application-event for classroom ${classroom}`);
+
 				if(classroom != null) {
-                    classroom.teacherAssistanceList.push(new UserId(this.event.studentId));
-				    return this.aggregateRepository.updateById(classroom, classroom.id);
+                    await classroom.teacherAssistanceList.push(new UserId(this.event.studentId));
+                    this.logger.log(`log updated classroom ${JSON.stringify(classroom.teacherAssistanceList)}`);
+				    return this.aggregateRepository.update(classroom);
                 }
 			})
 			.then((aggregate) => {
                 if(aggregate != null) {
                     this.logger.log(`handle accept-student-application-event for aggregate ${aggregate}`);
+                } else {
+                    this.logger.log(`aggregate after updated is null: ${aggregate}`);
                 }
 			})
 	}

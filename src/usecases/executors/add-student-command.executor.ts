@@ -17,7 +17,7 @@ export class AddStudentCommandExecutor extends AbstractCommandExecutor<AddStuden
 				// await classroom.students.push(new UserId(this.command.studentId));
 
 				const aggregate = await new ClassroomAggregateDomain(classroom).addStudentToClass(new UserId(this.command.studentId));
-				return this.aggregateRepository.updateById(aggregate, new ClassroomId(this.command.aggregateId));
+				return this.aggregateRepository.update(aggregate);
 			})
 			.then((aggregate) => {
 				this.logger.log(`added new student to classroom ${aggregate}`);

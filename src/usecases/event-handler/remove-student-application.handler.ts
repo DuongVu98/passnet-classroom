@@ -15,7 +15,7 @@ export class RemoveStudentApplicationEventHandler extends AbstractEventHandler<R
                     const newTaList = classroom.teacherAssistanceList.filter((taId) => !taId.equals(new UserId(this.event.studentId)));
                     classroom.teacherAssistanceList = newTaList;
     
-                    return this.aggregateRepository.updateById(classroom, classroom.id);
+                    return this.aggregateRepository.update(classroom);
                 }
 			})
 			.then((aggregate) => {

@@ -91,12 +91,21 @@ export class ViewProjector {
 	}
 
 	private getClassroomListByTeacherAssistance(uid: string): Promise<ClassroomLiteView[]> {
+		this.logger.log("process get classroomlist");
+
 		return this.aggregateRepository.findAll().then((classroomList) => {
 			return classroomList
-				.filter((classroom) => classroom.teacherAssistanceList.includes(new UserId(uid)))
-				.map((classroom) =>
-					Builder(ClassroomLiteView).classroomId(classroom.id.getId.toHexString()).courseName(classroom.courseName.name).build()
-				);
+				.filter((classroom) => classroom.teacherAssistanceList.some((ta) => {
+                    this.logger.log(`log from filter: ${JSON.stringify(ta)}`)
+                    return ta.equals(new UserId(uid));
+                }))
+				.map((classroom) => {
+					this.logger.log("match!!!");
+					return Builder(ClassroomLiteView)
+						.classroomId(classroom.id.getId.toHexString())
+						.courseName(classroom.courseName.name)
+						.build();
+				});
 		});
 	}
 

@@ -9,7 +9,7 @@ import { MongooseModule } from "@nestjs/mongoose";
 
 @Module({
 	imports: [
-		MongooseModule.forRoot(process.env.DATABASE_URL),
+		MongooseModule.forRoot(process.env.DATABASE_URL, { useFindAndModify: false }),
 		DomainModule,
 		UsecasesModule,
 		AdapterModule,

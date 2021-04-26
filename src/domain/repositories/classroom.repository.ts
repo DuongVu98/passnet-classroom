@@ -28,8 +28,8 @@ export class ClassroomAggregateRootRepository {
 		return this.classroomModel.create(data);
 	}
 
-	async updateById(data: ClassroomAggregateRoot, id: ClassroomId): Promise<ClassroomAggregateRoot> {
-		return this.classroomModel.findByIdAndUpdate(id, data);
+	async update(data: ClassroomAggregateRoot): Promise<ClassroomAggregateRoot> {
+        return this.classroomModel.findOneAndUpdate(data);
 	}
 
 	async removeById(id: ClassroomId): Promise<void> {
