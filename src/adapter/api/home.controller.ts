@@ -101,6 +101,7 @@ export class HomeController {
 
     /**
      * TODO: this can be served in User service after consume events from add/remove students/tas or create/remove classrooms from teachers
+     * Profile service
      */
     @Post("classroom-list")
     public getClassroomListByMemberType(@Body() getClassroomListByMemberTypeForm: {uid: string, memberType: string}): Promise<any> {
