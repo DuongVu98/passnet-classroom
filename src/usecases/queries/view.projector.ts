@@ -3,7 +3,7 @@ import { Builder } from "builder-pattern";
 import { ClassroomAggregateRoot } from "src/domain/aggregate/classroom.root";
 import { ClassroomId } from "src/domain/aggregate/vos/classroom-id.vo";
 import { JobId } from "src/domain/aggregate/vos/job-id.vo";
-import { UserId } from "src/domain/aggregate/vos/user-id.vos";
+import { UserId, UserIdDomain } from "src/domain/aggregate/vos/user-id.vos";
 import { ClassroomNotCreatedException, ClassroomNotFoundException } from "src/domain/exceptions/exceptions";
 import { ClassroomAggregateRootRepository } from "src/domain/repositories/classroom.repository";
 import { ClassroomLiteView, ClassroomView, CommentView, PostView } from "src/domain/views/views";
@@ -83,7 +83,7 @@ export class ViewProjector {
 	private getClassroomListByStudent(uid: string): Promise<ClassroomLiteView[]> {
 		return this.aggregateRepository.findAll().then((classroomList) => {
 			return classroomList
-				.filter((classroom) => classroom.students.includes(new UserId(uid)))
+				.filter((classroom) => classroom.students.some((student) => new UserIdDomain(student).equals(new UserId(uid))))
 				.map((classroom) =>
 					Builder(ClassroomLiteView).classroomId(classroom.id.getId.toHexString()).courseName(classroom.courseName.name).build()
 				);
@@ -95,24 +95,17 @@ export class ViewProjector {
 
 		return this.aggregateRepository.findAll().then((classroomList) => {
 			return classroomList
-				.filter((classroom) => classroom.teacherAssistanceList.some((ta) => {
-                    this.logger.log(`log from filter: ${JSON.stringify(ta)}`)
-                    return ta.equals(new UserId(uid));
-                }))
-				.map((classroom) => {
-					this.logger.log("match!!!");
-					return Builder(ClassroomLiteView)
-						.classroomId(classroom.id.getId.toHexString())
-						.courseName(classroom.courseName.name)
-						.build();
-				});
+				.filter((classroom) => classroom.teacherAssistanceList.some((ta) => new UserIdDomain(ta).equals(new UserId(uid))))
+				.map((classroom) =>
+					Builder(ClassroomLiteView).classroomId(classroom.id.getId.toHexString()).courseName(classroom.courseName.name).build()
+				);
 		});
 	}
 
 	private getClassroomListByTeacher(uid: string): Promise<ClassroomLiteView[]> {
 		return this.aggregateRepository.findAll().then((classroomList) => {
 			return classroomList
-				.filter((classroom) => classroom.teacherId.equals(new UserId(uid)))
+				.filter((classroom) => new UserIdDomain(classroom.teacherId).equals(new UserId(uid)))
 				.map((classroom) =>
 					Builder(ClassroomLiteView).classroomId(classroom.id.getId.toHexString()).courseName(classroom.courseName.name).build()
 				);

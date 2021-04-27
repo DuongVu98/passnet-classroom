@@ -13,15 +13,27 @@ export class ClassroomAggregateRootRepository {
 	constructor(@InjectModel("classrooms-repository") private classroomModel: Model<ClassroomAggregateDocument>) {}
 
 	async findAll(): Promise<ClassroomAggregateRoot[]> {
-		return this.classroomModel.find();
+        return (await this.classroomModel.find()).map(document => {
+            document.id = new ClassroomId(document._id);
+            return document;
+        })
+		// return this.classroomModel.find();
 	}
 
 	async findById(id: ClassroomId): Promise<ClassroomAggregateRoot> {
-		return this.classroomModel.findById(id);
+        return this.classroomModel.findById(id).then(document => {
+            document.id = new ClassroomId(document._id); 
+            return document;
+        })
+		// return this.classroomModel.findById(id);
 	}
 
 	async findByJobId(jobId: JobId): Promise<ClassroomAggregateRoot> {
-		return this.classroomModel.findOne({ jobId: jobId });
+        return this.classroomModel.findOne({ jobId: jobId }).then(document => {
+            document.id = new ClassroomId(document._id); 
+            return document;
+        })
+		// return this.classroomModel.findOne({ jobId: jobId });
 	}
 
 	async insert(data: ClassroomAggregateRoot): Promise<ClassroomAggregateRoot> {
