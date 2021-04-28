@@ -34,7 +34,7 @@
         "@nestjs/microservices": "^7.6.14",
         "@nestjs/mongoose": "^7.2.4",
         "@nestjs/platform-express": "^7.0.0",
-        "@nestjs/typeorm": "^7.1.4",
+        "@nestjs/typeorm": "^7.1.5",
         "@type-cacheable/core": "^9.1.0",
         "@type-cacheable/redis-adapter": "^9.1.0",
         "builder-pattern": "^1.2.4",
@@ -44,12 +44,12 @@
         "class-validator": "^0.13.1",
         "grpc": "^1.24.6",
         "mongoose": "^5.12.2",
-        "pg": "^8.4.1",
+        "pg": "^8.6.0",
         "redis": "^3.0.2",
         "reflect-metadata": "^0.1.13",
         "rimraf": "^3.0.2",
         "rxjs": "^6.5.4",
-        "typeorm": "^0.2.28",
+        "typeorm": "^0.2.32",
         "uuid": "^8.3.2"
     },
     "devDependencies": {
