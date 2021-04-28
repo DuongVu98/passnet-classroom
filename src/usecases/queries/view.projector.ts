@@ -1,6 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { Builder } from "builder-pattern";
-import { ClassroomAggregateRoot } from "src/domain/aggregate/classroom.root";
+import { Classroom } from "src/domain/aggregate/classroom.root";
 import { ClassroomId } from "src/domain/aggregate/vos/classroom-id.vo";
 import { JobId } from "src/domain/aggregate/vos/job-id.vo";
 import { UserId, UserIdDomain } from "src/domain/aggregate/vos/user-id.vos";
@@ -36,11 +36,11 @@ export class ViewProjector {
 		});
 	}
 
-	private isAggregateNotNull(aggregate: ClassroomAggregateRoot): boolean {
+	private isAggregateNotNull(aggregate: Classroom): boolean {
 		return aggregate != null;
 	}
 
-	private mapEntityToView(aggregate: ClassroomAggregateRoot): ClassroomView {
+	private mapEntityToView(aggregate: Classroom): ClassroomView {
 		return Builder(ClassroomView)
 			.classroomId(aggregate.id.getId.toHexString())
 			.courseName(aggregate.courseName.name)
@@ -105,7 +105,8 @@ export class ViewProjector {
 	private getClassroomListByTeacher(uid: string): Promise<ClassroomLiteView[]> {
 		return this.aggregateRepository.findAll().then((classroomList) => {
 			return classroomList
-				.filter((classroom) => new UserIdDomain(classroom.teacherId).equals(new UserId(uid)))
+				// .filter((classroom) => new UserIdDomain(classroom.teacherId).equals(new UserId(uid)))
+                .filter((classroom) => classroom.teacherId.equals(new UserId(uid)))
 				.map((classroom) =>
 					Builder(ClassroomLiteView).classroomId(classroom.id.getId.toHexString()).courseName(classroom.courseName.name).build()
 				);

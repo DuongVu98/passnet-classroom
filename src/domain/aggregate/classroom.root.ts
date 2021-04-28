@@ -8,10 +8,10 @@ import { Comment } from "./entities/comment.entity";
 import * as mongoose from "mongoose";
 import { JobId } from "./vos/job-id.vo";
 
-export type ClassroomAggregateDocument = ClassroomAggregateRoot & mongoose.Document;
+export type ClassroomDocument = Classroom & mongoose.Document;
 
 @Schema()
-export class ClassroomAggregateRoot extends Entity {
+export class Classroom extends Entity {
 	@Prop({ type: mongoose.Types.ObjectId })
 	id: ClassroomId;
 
@@ -35,14 +35,14 @@ export class ClassroomAggregateRoot extends Entity {
 }
 
 export class ClassroomAggregateDomain {
-	constructor(private _aggregate: ClassroomAggregateRoot) {}
+	constructor(private _aggregate: Classroom) {}
 
-	public addPost(post: Post): ClassroomAggregateRoot {
+	public addPost(post: Post): Classroom {
 		this._aggregate.posts.push(post);
 		return this._aggregate;
 	}
 
-	public addCommentToPost(comment: Comment, post: Post): ClassroomAggregateRoot {
+	public addCommentToPost(comment: Comment, post: Post): Classroom {
 		this._aggregate.posts.map((currentPost) => {
 			if (currentPost.postId === post.postId) {
 				currentPost = new PostDomainFunction(currentPost).addComment(comment);
@@ -52,14 +52,14 @@ export class ClassroomAggregateDomain {
 		return this._aggregate;
 	}
 
-	public addStudentToClass(student: UserId): ClassroomAggregateRoot {
+	public addStudentToClass(student: UserId): Classroom {
 		this._aggregate.students.push(student);
 		return this._aggregate;
 	}
 
-	get aggregate(): ClassroomAggregateRoot {
+	get aggregate(): Classroom {
 		return this._aggregate;
 	}
 }
 
-export const ClassroomSchema = SchemaFactory.createForClass(ClassroomAggregateRoot);
+export const ClassroomSchema = SchemaFactory.createForClass(Classroom);
