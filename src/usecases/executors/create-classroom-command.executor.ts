@@ -10,7 +10,7 @@ export class CreateClassroomCommandExecutor extends AbstractCommandExecutor<Crea
 
 	public async execute(): Promise<any> {
 		const teacherAssistanceList = this.command.taIds.map((id) => Builder(Member).uid(id).build());
-                    
+
 		const classroom: Classroom = Builder(Classroom)
 			.students([])
 			.teacherAssistanceList(teacherAssistanceList)

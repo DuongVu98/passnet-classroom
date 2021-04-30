@@ -19,7 +19,7 @@ import { Classroom, Comment, Member, Post } from "./domain/aggregate-sql/domain.
 			database: "classroom_db",
 			entities: [Classroom, Post, Comment, Member],
 			synchronize: true,
-            keepConnectionAlive: true
+			keepConnectionAlive: true,
 		}),
 		DomainModule,
 		UsecasesModule,

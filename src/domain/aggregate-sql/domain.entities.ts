@@ -42,25 +42,25 @@ export class Classroom {
 	@OneToMany(() => Member, (member) => member)
 	teacherAssistanceList: Member[];
 
-    @GetterDefault({defaultValue: []})
+	@GetterDefault({ defaultValue: [] })
 	@OneToMany(() => Post, (post) => post.classroom, { cascade: true, eager: true })
 	posts: Post[];
 
 	@Column((type) => Job, { prefix: "job" })
 	job: Job;
 
-	addStudentToClassroom(student: Member){
+	addStudentToClassroom(student: Member) {
 		this.students.push(student);
-	};
+	}
 
-	addPost(post: Post){
+	addPost(post: Post) {
 		this.posts.push(post);
-	};
+	}
 
-	addCommentToPost(comment: Comment, post: Post){
+	addCommentToPost(comment: Comment, post: Post) {
 		let targetPost = this.posts.filter((p) => p.id === post.id)[0];
 		targetPost.comments.push(comment);
-	};
+	}
 }
 
 @Entity({ name: "posts" })

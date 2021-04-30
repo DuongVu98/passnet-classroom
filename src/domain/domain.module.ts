@@ -4,11 +4,8 @@ import { Classroom, Comment, Member, Post } from "./aggregate-sql/domain.entitie
 import { ClassroomAggregateRepository } from "./repositories-sql/aggregate.repository";
 
 @Module({
-	imports: [
-		TypeOrmModule.forFeature([Classroom, Post, Comment, Member])
-	],
+	imports: [TypeOrmModule.forFeature([Classroom, Post, Comment, Member])],
 	providers: [ClassroomAggregateRepository],
 	exports: [ClassroomAggregateRepository],
 })
-export class DomainModule {
-}
+export class DomainModule {}
