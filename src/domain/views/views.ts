@@ -21,6 +21,6 @@ export class CommentView {
 }
 
 export class ClassroomLiteView {
-    classroomId: string;
+	classroomId: string;
 	courseName: string;
 }

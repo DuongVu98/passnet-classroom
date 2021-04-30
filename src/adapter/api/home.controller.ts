@@ -81,30 +81,33 @@ export class HomeController {
 		});
 	}
 
-    /**
-     * TODO: Validate classroom ID
-     * Classroom ID is expected to have 24 hex string characters
-     * @param classroomId 
-     * @returns 
-     */
+	/**
+	 * TODO: Validate classroom ID
+	 * Classroom ID is expected to have 24 hex string characters
+	 * @param classroomId
+	 * @returns
+	 */
 	@Post("classroom-view/classroom-id")
 	// @Cacheable({ cacheKey: (args: any[]) => args[0], client: clientAdapter, ttlSeconds: 60 })
 	public getClassroomView(@Body() getClassroomViewForm: GetClassroomViewForm): Promise<any> {
 		return this.viewProjector.queryClassroomView(getClassroomViewForm.classroomId);
 	}
 
-    @Post("classroom-view/job-id")
-    @UseFilters(ClassroomNotFoundExceptionHandler, ClassroomNotCreatedExceptionHandler)
-    public getClassroomViewFromJob(@Body() getClassroomviewFromJobForm: GetClassroomviewFromJobForm): Promise<any> {
-        return this.viewProjector.queryClassroomViewFromJob(getClassroomviewFromJobForm.jobId);
-    }
+	@Post("classroom-view/job-id")
+	@UseFilters(ClassroomNotFoundExceptionHandler, ClassroomNotCreatedExceptionHandler)
+	public getClassroomViewFromJob(@Body() getClassroomviewFromJobForm: GetClassroomviewFromJobForm): Promise<any> {
+		return this.viewProjector.queryClassroomViewFromJob(getClassroomviewFromJobForm.jobId);
+	}
 
-    /**
-     * TODO: this can be served in User service after consume events from add/remove students/tas or create/remove classrooms from teachers
-     * Profile service
-     */
-    @Post("classroom-list")
-    public getClassroomListByMemberType(@Body() getClassroomListByMemberTypeForm: {uid: string, memberType: string}): Promise<any> {
-        return this.viewProjector.getClassroomListByMemberType(getClassroomListByMemberTypeForm.memberType, getClassroomListByMemberTypeForm.uid);
-    }
+	/**
+	 * TODO: this can be served in User service after consume events from add/remove students/tas or create/remove classrooms from teachers
+	 * Profile service
+	 */
+	@Post("classroom-list")
+	public getClassroomListByMemberType(@Body() getClassroomListByMemberTypeForm: { uid: string; memberType: string }): Promise<any> {
+		return this.viewProjector.getClassroomListByMemberType(
+			getClassroomListByMemberTypeForm.memberType,
+			getClassroomListByMemberTypeForm.uid
+		);
+	}
 }

@@ -6,12 +6,11 @@ import { Job } from "../aggregate-sql/value-objects";
 
 @Injectable()
 export class ClassroomRepository {
-    
 	logger: Logger = new Logger("ClassroomRepository");
 
-    constructor(@InjectRepository(Classroom) private readonly classroomRepository: Repository<Classroom>){}
+	constructor(@InjectRepository(Classroom) private readonly classroomRepository: Repository<Classroom>) {}
 
-    findAll(): Promise<Classroom[]> {
+	findAll(): Promise<Classroom[]> {
 		return this.classroomRepository.find();
 	}
 
@@ -20,7 +19,7 @@ export class ClassroomRepository {
 	}
 
 	findByJob(job: Job): Promise<Classroom> {
-        return this.classroomRepository.findOne({where: {job}})
+		return this.classroomRepository.findOne({ where: { job } });
 	}
 
 	insert(data: Classroom): Promise<Classroom> {
@@ -34,4 +33,9 @@ export class ClassroomRepository {
 	removeById(id: string): Promise<any> {
 		return this.classroomRepository.delete(id);
 	}
+}
+
+@Injectable()
+export class TestRepository {
+
 }

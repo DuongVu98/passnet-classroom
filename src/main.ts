@@ -4,13 +4,7 @@ import { Transport } from "@nestjs/microservices";
 import { join } from "path";
 import { AppModule } from "./app.module";
 
-// process.on("unhandledRejection", (reason, promise) => {
-// 	console.log(`reason --> \n${reason} \n which promise --> \n${JSON.stringify(promise)}`);
-// 	promise.catch((error) => {
-// 		console.log(error);
-// 	});
-// });
-console.log(`grpc options --> ${process.env.GRPC_OPTION_URL}`)
+console.log(`grpc options --> ${process.env.GRPC_OPTION_URL}`);
 const port = process.env.SERVER_PORT_LISTENER;
 
 const configurationOptions = {
@@ -26,8 +20,8 @@ async function bootstrap() {
 	const app = await NestFactory.create(AppModule);
 	const grpcApp = await NestFactory.createMicroservice(AppModule, configurationOptions);
 
-    app.useGlobalPipes(new ValidationPipe());
-    app.enableCors();
+	app.useGlobalPipes(new ValidationPipe());
+	app.enableCors();
 
 	console.log(`server port: ${port}`);
 	await app.listen(port);

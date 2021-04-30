@@ -1,14 +1,14 @@
 import { Injectable } from "@nestjs/common";
 import { Builder } from "builder-pattern";
 import { AcceptStudentApplicationExternalEvent, RemoveStudentApplicationExternalEvent } from "src/domain/events/events";
-import { ClassroomAggregateRootRepository } from "src/domain/repositories/classroom.repository";
+import { ClassroomRepository } from "src/domain/repositories-sql/aggregate.repository";
 import { AcceptStudentApplicationEventHandler } from "../event-handler/accept-student-application.handler";
 import { AbstractEventHandler } from "../event-handler/event.handler";
 import { RemoveStudentApplicationEventHandler } from "../event-handler/remove-student-application.handler";
 
 @Injectable()
 export class EventHandlerFactory {
-	constructor(private aggregateRepository: ClassroomAggregateRootRepository) {}
+	constructor(private aggregateRepository: ClassroomRepository) {}
 
 	produceAcceptStudentApplicationEventHandler(
 		event: AcceptStudentApplicationExternalEvent

@@ -8,18 +8,18 @@ import {
 } from "src/domain/commands/commands";
 import { AbstractCommandExecutor } from "src/usecases/executors/command.executor";
 import { CreateClassroomCommandExecutor } from "src/usecases/executors/create-classroom-command.executor";
-import { ClassroomAggregateRootRepository } from "src/domain/repositories/classroom.repository";
 import { AddStudentCommandExecutor } from "src/usecases/executors/add-student-command.executor";
 import { UserCreatePostCommandExecutor } from "src/usecases/executors/user-create-post-command.executor";
 import { UserAddCommentCommandExecutor } from "src/usecases/executors/user-add-comment-command.executor";
 import { Builder } from "builder-pattern";
 import { UuidGenerateService } from "src/usecases/services/uuid-generate.service";
+import { ClassroomRepository } from "src/domain/repositories-sql/aggregate.repository";
 
 @Injectable()
 export class CommandFactory {
 	private logger: Logger = new Logger("CommandFactory");
 
-	constructor(private aggregateRepository: ClassroomAggregateRootRepository, private uuidGenerateService: UuidGenerateService) {}
+	constructor(private aggregateRepository: ClassroomRepository, private uuidGenerateService: UuidGenerateService) {}
 
 	produceCreateClassroomCommandExecutor(command: CreateClassroomCommand): AbstractCommandExecutor<CreateClassroomCommand, void> {
 		this.logger.debug(`create-class-command`);

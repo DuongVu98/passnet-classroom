@@ -1,14 +1,10 @@
 import { AbstractCommandExecutor } from "src/usecases/executors/command.executor";
 import { UserCreatePostCommand } from "src/domain/commands/commands";
-import { ClassroomId } from "src/domain/aggregate/vos/classroom-id.vo";
-import { Post } from "src/domain/aggregate/entities/post.entity";
 import { Builder } from "builder-pattern";
-import { Content } from "src/domain/aggregate/vos/content.vo";
-import { UserId } from "src/domain/aggregate/vos/user-id.vos";
-import { PostId } from "src/domain/aggregate/vos/post-id.vo";
 import { Logger } from "@nestjs/common";
-import { ClassroomAggregateDomain } from "src/domain/aggregate/classroom.root";
 import { UuidGenerateService } from "src/usecases/services/uuid-generate.service";
+import { Post } from "src/domain/aggregate-sql/entities";
+import { Content, User } from "src/domain/aggregate-sql/value-objects";
 
 export class UserCreatePostCommandExecutor extends AbstractCommandExecutor<UserCreatePostCommand, void> {
 	logger: Logger = new Logger("CreateClassroomCommandExecutor");
@@ -17,17 +13,17 @@ export class UserCreatePostCommandExecutor extends AbstractCommandExecutor<UserC
 
 	execute(): Promise<void> {
 		return this.aggregateRepository
-			.findById(new ClassroomId(this.command.aggregateId))
-			.then((classroom) => {
+			.findById(this.command.aggregateId)
+			.then(async (classroom) => {
 				const post: Post = Builder(Post)
-					.postId(new PostId(this.uuidGenerateService.generateUUID()))
+					.id(this.uuidGenerateService.generateUUID())
 					.comments([])
 					.content(new Content(this.command.postContent))
-					.postOwner(new UserId(this.command.userId))
+					.owner(new User(this.command.userId))
 					.build();
 
-				const aggregate = new ClassroomAggregateDomain(classroom).addPost(post);
-				return this.aggregateRepository.insert(aggregate);
+				await classroom.addPost(post);
+				return this.aggregateRepository.insert(classroom);
 			})
 			.then((aggregate) => {
 				this.logger.log(`created new post to aggregate ${aggregate}`);

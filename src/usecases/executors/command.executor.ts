@@ -1,8 +1,8 @@
-import { ClassroomAggregateRootRepository } from "src/domain/repositories/classroom.repository";
+import { ClassroomRepository } from "src/domain/repositories-sql/aggregate.repository";
 
 export abstract class AbstractCommandExecutor<COMMAND, RETURN> {
 	command: COMMAND;
-	aggregateRepository: ClassroomAggregateRootRepository;
+	aggregateRepository: ClassroomRepository;
 
 	public abstract execute(): Promise<RETURN>;
 
