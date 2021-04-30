@@ -13,13 +13,13 @@ import { UserCreatePostCommandExecutor } from "src/usecases/executors/user-creat
 import { UserAddCommentCommandExecutor } from "src/usecases/executors/user-add-comment-command.executor";
 import { Builder } from "builder-pattern";
 import { UuidGenerateService } from "src/usecases/services/uuid-generate.service";
-import { ClassroomRepository } from "src/domain/repositories-sql/aggregate.repository";
+import { ClassroomAggregateRepository } from "src/domain/repositories-sql/aggregate.repository";
 
 @Injectable()
 export class CommandFactory {
 	private logger: Logger = new Logger("CommandFactory");
 
-	constructor(private aggregateRepository: ClassroomRepository, private uuidGenerateService: UuidGenerateService) {}
+	constructor(private uuidGenerateService: UuidGenerateService, private aggregateRepository: ClassroomAggregateRepository) {}
 
 	produceCreateClassroomCommandExecutor(command: CreateClassroomCommand): AbstractCommandExecutor<CreateClassroomCommand, void> {
 		this.logger.debug(`create-class-command`);

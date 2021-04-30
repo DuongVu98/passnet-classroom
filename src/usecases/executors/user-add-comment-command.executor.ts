@@ -3,7 +3,7 @@ import { UserAddCommentCommand } from "src/domain/commands/commands";
 import { Logger } from "@nestjs/common";
 import { Builder } from "builder-pattern";
 import { UuidGenerateService } from "src/usecases/services/uuid-generate.service";
-import { Comment } from "src/domain/aggregate-sql/entities";
+import { Comment } from "src/domain/aggregate-sql/domain.entities";
 import { Content, User } from "src/domain/aggregate-sql/value-objects";
 export class UserAddCommentCommandExecutor extends AbstractCommandExecutor<UserAddCommentCommand, void> {
 	logger: Logger = new Logger("UserAddCommentCommandExecutor");

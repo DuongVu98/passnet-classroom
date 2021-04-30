@@ -5,21 +5,21 @@ import { DomainModule } from "./domain/domain.module";
 import { UsecasesModule } from "./usecases/usecases.module";
 import { AdapterModule } from "./adapter/adapter.module";
 import { AppConfigModule } from "./config/config.module";
-import { MongooseModule } from "@nestjs/mongoose";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { Classroom, Comment, Member, Post } from "./domain/aggregate-sql/domain.entities";
 
 @Module({
 	imports: [
-		MongooseModule.forRoot(process.env.DATABASE_URL, { useFindAndModify: false }),
 		TypeOrmModule.forRoot({
 			type: "postgres",
 			host: "localhost",
-			port: 3306,
+			port: 5432,
 			username: "admin",
 			password: "tungduong98",
 			database: "classroom_db",
-			entities: [],
+			entities: [Classroom, Post, Comment, Member],
 			synchronize: true,
+            keepConnectionAlive: true
 		}),
 		DomainModule,
 		UsecasesModule,
@@ -28,5 +28,6 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 	],
 	controllers: [AppController],
 	providers: [AppService],
+	exports: [],
 })
 export class AppModule {}

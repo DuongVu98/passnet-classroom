@@ -1,8 +1,8 @@
-import { ClassroomRepository } from "src/domain/repositories-sql/aggregate.repository";
+import { ClassroomAggregateRepository } from "src/domain/repositories-sql/aggregate.repository";
 
 export abstract class AbstractEventHandler<EVENT, RETURN> {
 	event: EVENT;
-	aggregateRepository: ClassroomRepository;
+	aggregateRepository: ClassroomAggregateRepository;
 
 	public abstract handle(): Promise<RETURN>;
 

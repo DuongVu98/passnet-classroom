@@ -1,21 +1,21 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import { Classroom } from "../aggregate-sql/entities";
+import { getRepository, Repository } from "typeorm";
+import { Classroom } from "../aggregate-sql/domain.entities";
 import { Job } from "../aggregate-sql/value-objects";
 
 @Injectable()
-export class ClassroomRepository {
+export class ClassroomAggregateRepository {
 	logger: Logger = new Logger("ClassroomRepository");
 
-	constructor(@InjectRepository(Classroom) private readonly classroomRepository: Repository<Classroom>) {}
+	constructor(@InjectRepository(Classroom) private classroomRepository: Repository<Classroom>) {}
 
 	findAll(): Promise<Classroom[]> {
 		return this.classroomRepository.find();
 	}
 
 	findById(id: string): Promise<Classroom> {
-		return this.classroomRepository.findOne(id);
+		return this.classroomRepository.findOne(id, {relations: ["posts"]});
 	}
 
 	findByJob(job: Job): Promise<Classroom> {
@@ -26,16 +26,11 @@ export class ClassroomRepository {
 		return this.classroomRepository.save(data);
 	}
 
-	update(data: Classroom): Promise<any> {
-		return this.classroomRepository.update(data.id, data);
+	async update(data: Classroom): Promise<any> {
+		await this.classroomRepository.update(data.id, data);
 	}
 
 	removeById(id: string): Promise<any> {
 		return this.classroomRepository.delete(id);
 	}
-}
-
-@Injectable()
-export class TestRepository {
-
 }

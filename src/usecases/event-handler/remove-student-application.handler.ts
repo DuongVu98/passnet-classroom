@@ -11,7 +11,7 @@ export class RemoveStudentApplicationEventHandler extends AbstractEventHandler<R
 			.findByJob(new Job(this.event.jobId))
 			.then((classroom) => {
 				if (classroom != null) {
-					const newTaList = classroom.teacherAssistanceList.filter((ta) => !(ta === new User(this.event.studentId)));
+					const newTaList = classroom.teacherAssistanceList.filter((ta) => !(ta.uid === this.event.studentId));
 					classroom.teacherAssistanceList = newTaList;
 
 					return this.aggregateRepository.update(classroom);

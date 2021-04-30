@@ -1,14 +1,36 @@
+import { Column } from "typeorm"
+
 export class CourseName {
-	constructor(public value: string) {}
+	constructor(value: string) {
+        this.value = value
+    }
+
+    @Column()
+    value: string
 }
 
 export class User {
-	constructor(public value: string) {}
+	constructor(value: string) {
+        this.value = value
+    }
+
+    @Column()
+    value: string
 }
 
 export class Content {
-	constructor(public value: string) {}
+	constructor(value: string) {
+        this.value = value
+    }
+
+    @Column()
+    value: string
 }
 export class Job {
-	constructor(public value: string) {}
+	constructor(value: string) {
+        this.value = value
+    }
+
+    @Column()
+    value: string
 }

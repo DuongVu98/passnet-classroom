@@ -2,6 +2,8 @@ import { AcceptStudentApplicationExternalEvent } from "src/domain/events/events"
 import { AbstractEventHandler } from "./event.handler";
 import { Logger } from "@nestjs/common";
 import { Job, User } from "src/domain/aggregate-sql/value-objects";
+import { Member } from "src/domain/aggregate-sql/domain.entities";
+import { Builder } from "builder-pattern";
 
 export class AcceptStudentApplicationEventHandler extends AbstractEventHandler<AcceptStudentApplicationExternalEvent, void> {
 	logger: Logger = new Logger("AcceptStudentApplicationEventHandler");
@@ -13,7 +15,7 @@ export class AcceptStudentApplicationEventHandler extends AbstractEventHandler<A
 				this.logger.log(`handle accept-student-application-event for classroom ${classroom}`);
 
 				if (classroom != null) {
-					await classroom.teacherAssistanceList.push(new User(this.event.studentId));
+					await classroom.teacherAssistanceList.push(Builder(Member).uid(this.event.studentId).build());
 					this.logger.log(`log updated classroom ${JSON.stringify(classroom.teacherAssistanceList)}`);
 					return this.aggregateRepository.update(classroom);
 				}

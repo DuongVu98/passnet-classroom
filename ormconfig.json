@@ -1,0 +1,11 @@
+{
+    "name": "name",
+    "type": "postgres",
+    "host": "localhost",
+    "port": 5432,
+    "username": "admin",
+    "password": "tungduong98",
+    "database": "classroom_db",
+    "entities": ["src/**/*.entities{.ts,.js}", "dist/**/*.entities{.ts,.js}"],
+    "synchronize": true
+  }
