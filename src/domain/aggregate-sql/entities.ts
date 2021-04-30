@@ -1,10 +1,10 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { CourseName, Job, User } from "./value-objects";
 import { Content } from "./value-objects";
 
-@Entity()
+@Entity({ name: "classrooms" })
 export class Classroom {
-	@PrimaryColumn()
+	@PrimaryGeneratedColumn()
 	id: string;
 
 	@Column((type) => CourseName)
