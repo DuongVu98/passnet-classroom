@@ -10,7 +10,10 @@ import { v4 as uuidv4 } from "uuid";
 export class ClassroomAggregateRepository {
 	logger: Logger = new Logger("ClassroomRepository");
 
-	constructor(@InjectRepository(Classroom) private classroomRepository: Repository<Classroom>, @InjectRepository(Post) private postRepository: Repository<Post>) {}
+	constructor(
+		@InjectRepository(Classroom) private classroomRepository: Repository<Classroom>,
+		@InjectRepository(Post) private postRepository: Repository<Post>
+	) {}
 
 	findAll(): Promise<Classroom[]> {
 		return this.classroomRepository.find();
@@ -29,13 +32,8 @@ export class ClassroomAggregateRepository {
 	}
 
 	async update(data: Classroom): Promise<any> {
-        const post: Post = Builder(Post)
-					.id(uuidv4())
-					.comments([])
-					.content(new Content("dumbContent"))
-					.owner(new User("dumbUser"))
-					.build();
-        await this.postRepository.save(post)
+		const post: Post = Builder(Post).id(uuidv4()).comments([]).content(new Content("dumbContent")).owner(new User("dumbUser")).build();
+		await this.postRepository.save(post);
 		await this.classroomRepository.update(data.id, data);
 	}
 
@@ -43,4 +41,3 @@ export class ClassroomAggregateRepository {
 		return this.classroomRepository.delete(id);
 	}
 }
-
