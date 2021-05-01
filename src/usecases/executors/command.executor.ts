@@ -1,4 +1,5 @@
-import { ClassroomAggregateRepository } from "src/domain/repositories-sql/aggregate.repository";
+import { BaseCommand } from "src/domain/commands/commands";
+import { ClassroomAggregateRepository } from "src/domain/repositories/aggregate.repository";
 
 export abstract class AbstractCommandExecutor<COMMAND, RETURN> {
 	command: COMMAND;
@@ -9,4 +10,8 @@ export abstract class AbstractCommandExecutor<COMMAND, RETURN> {
 	public setCommand(command: COMMAND): void {
 		this.command = command;
 	}
+}
+
+export interface CommandExecutor {
+    execute(command: BaseCommand): Promise<any>
 }

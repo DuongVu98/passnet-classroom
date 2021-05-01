@@ -6,7 +6,7 @@ import { UsecasesModule } from "./usecases/usecases.module";
 import { AdapterModule } from "./adapter/adapter.module";
 import { AppConfigModule } from "./config/config.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { Classroom, Comment, Member, Post } from "./domain/aggregate-sql/domain.entities";
+import { Classroom, Comment, Member, Post } from "./domain/aggregate/domain.entities";
 
 @Module({
 	imports: [

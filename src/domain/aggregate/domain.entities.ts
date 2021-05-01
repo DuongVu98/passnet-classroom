@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { CourseName, Job, User } from "./value-objects";
 import { Content } from "./value-objects";
 
@@ -33,13 +33,15 @@ export class Classroom {
 	@Column((type) => CourseName, { prefix: "course_name" })
 	courseName: CourseName;
 
-	@OneToMany(() => Member, (member) => member)
+	@JoinTable()
+	@ManyToMany(() => Member, (member) => member, { cascade: true })
 	students: Member[];
 
 	@Column((type) => User, { prefix: "teacher" })
 	teacher: User;
 
-	@OneToMany(() => Member, (member) => member)
+	@JoinTable()
+	@ManyToMany(() => Member, (member) => member, { cascade: true })
 	teacherAssistanceList: Member[];
 
 	@GetterDefault({ defaultValue: [] })
@@ -48,19 +50,6 @@ export class Classroom {
 
 	@Column((type) => Job, { prefix: "job" })
 	job: Job;
-
-	addStudentToClassroom(student: Member) {
-		this.students.push(student);
-	}
-
-	addPost(post: Post) {
-		this.posts.push(post);
-	}
-
-	addCommentToPost(comment: Comment, post: Post) {
-		let targetPost = this.posts.filter((p) => p.id === post.id)[0];
-		targetPost.comments.push(comment);
-	}
 }
 
 @Entity({ name: "posts" })
@@ -78,7 +67,7 @@ export class Post {
 	comments: Comment[];
 
 	@JoinColumn({ name: "classroom_id" })
-	@ManyToOne(() => Classroom, (classroom) => classroom.posts)
+	@OneToMany(() => Classroom, (classroom) => classroom.posts)
 	classroom: Classroom;
 }
 
@@ -105,4 +94,10 @@ export class Member {
 
 	@Column({ name: "uid" })
 	uid: string;
+
+	@ManyToMany(() => Classroom, (classroom) => classroom.students, { cascade: true })
+	classrooms: Classroom[];
+
+	@ManyToMany(() => Classroom, (classroom) => classroom.teacherAssistanceList, { cascade: true })
+	taClassroom: Classroom[];
 }

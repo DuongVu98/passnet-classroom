@@ -1,9 +1,9 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { Builder } from "builder-pattern";
-import { Classroom } from "src/domain/aggregate-sql/domain.entities";
-import { Job, User } from "src/domain/aggregate-sql/value-objects";
+import { Classroom } from "src/domain/aggregate/domain.entities";
+import { Job, User } from "src/domain/aggregate/value-objects";
 import { ClassroomNotCreatedException, ClassroomNotFoundException } from "src/domain/exceptions/exceptions";
-import { ClassroomAggregateRepository } from "src/domain/repositories-sql/aggregate.repository";
+import { ClassroomAggregateRepository } from "src/domain/repositories/aggregate.repository";
 import { ClassroomLiteView, ClassroomView, CommentView, PostView } from "src/domain/views/views";
 
 @Injectable()
@@ -13,7 +13,7 @@ export class ViewProjector {
 	constructor(private aggregateRepository: ClassroomAggregateRepository) {}
 
 	public async queryClassroomView(aggregateId: string): Promise<ClassroomView> {
-		return this.aggregateRepository.findById(aggregateId).then((aggregate) => {
+		return this.aggregateRepository.findClassroom(aggregateId).then((aggregate) => {
 			if (this.isAggregateNotNull(aggregate)) {
 				return this.mapEntityToView(aggregate);
 			} else {
@@ -23,7 +23,7 @@ export class ViewProjector {
 	}
 
 	public async queryClassroomViewFromJob(jobId: string): Promise<ClassroomView> {
-		return this.aggregateRepository.findByJob(new Job(jobId)).then((aggregate) => {
+		return this.aggregateRepository.findClassroomByJob(new Job(jobId)).then((aggregate) => {
 			if (this.isAggregateNotNull(aggregate)) {
 				return this.mapEntityToView(aggregate);
 			} else {

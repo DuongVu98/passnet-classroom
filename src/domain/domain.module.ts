@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { Classroom, Comment, Member, Post } from "./aggregate-sql/domain.entities";
-import { ClassroomAggregateRepository } from "./repositories-sql/aggregate.repository";
+import { Classroom, Comment, Member, Post } from "./aggregate/domain.entities";
+import { ClassroomAggregateRepository } from "./repositories/aggregate.repository";
 
 @Module({
 	imports: [TypeOrmModule.forFeature([Classroom, Post, Comment, Member])],
