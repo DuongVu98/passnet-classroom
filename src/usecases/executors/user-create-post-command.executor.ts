@@ -1,36 +1,39 @@
-import { AbstractCommandExecutor } from "src/usecases/executors/command.executor";
-import { UserCreatePostCommand } from "src/domain/commands/commands";
-import { ClassroomId } from "src/domain/aggregate/vos/classroom-id.vo";
+import { CommandExecutor } from "src/usecases/executors/command.executor";
+import { BaseCommand, UserCreatePostCommand } from "src/domain/commands/commands";
 import { Post } from "src/domain/aggregate/entities/post.entity";
 import { Builder } from "builder-pattern";
-import { Content } from "src/domain/aggregate/vos/content.vo";
-import { UserId } from "src/domain/aggregate/vos/user-id.vos";
-import { PostId } from "src/domain/aggregate/vos/post-id.vo";
 import { Logger } from "@nestjs/common";
-import { ClassroomAggregateDomain } from "src/domain/aggregate/classroom.root";
 import { UuidGenerateService } from "src/usecases/services/uuid-generate.service";
+import { ClassroomAggregateRepository } from "src/domain/repositories/classroom.repository";
+import { Content, PostId, UserId } from "src/domain/aggregate/vos/value-objects";
+import { Member } from "src/domain/aggregate/entities/member.entity";
+import { ClassroomDomainFunctions } from "src/domain/aggregate/entities/classroom.root";
 
-export class UserCreatePostCommandExecutor extends AbstractCommandExecutor<UserCreatePostCommand, void> {
+export class UserCreatePostCommandExecutor implements CommandExecutor {
 	logger: Logger = new Logger("CreateClassroomCommandExecutor");
 
-	uuidGenerateService: UuidGenerateService;
+	constructor(private classroomRepository: ClassroomAggregateRepository, private uuidGenerateService: UuidGenerateService) {}
 
-	execute(): Promise<void> {
-		return this.aggregateRepository
-			.findById(new ClassroomId(this.command.aggregateId))
-			.then((classroom) => {
-				const post: Post = Builder(Post)
-					.postId(new PostId(this.uuidGenerateService.generateUUID()))
-					.comments([])
-					.content(new Content(this.command.postContent))
-					.postOwner(new UserId(this.command.userId))
-					.build();
+	execute(command: BaseCommand): Promise<any> {
+		if (command instanceof UserCreatePostCommand) {
+			return this.classroomRepository
+				.findById(command.aggregateId)
+				.then((classroom) => {
+					const post: Post = Builder(Post)
+						.postId(new PostId(this.uuidGenerateService.generateUUID()))
+						.comments([])
+						.content(new Content(command.postContent))
+						.owner(new Member(new UserId(command.userId)))
+						.build();
 
-				const aggregate = new ClassroomAggregateDomain(classroom).addPost(post);
-				return this.aggregateRepository.insert(aggregate);
-			})
-			.then((aggregate) => {
-				this.logger.log(`created new post to aggregate ${aggregate}`);
-			});
+					const aggregate = new ClassroomDomainFunctions(classroom).addPost(post);
+					return this.classroomRepository.insert(aggregate);
+				})
+				.then((aggregate) => {
+					this.logger.log(`created new post to aggregate ${aggregate}`);
+				});
+		} else {
+			return Promise.reject();
+		}
 	}
 }

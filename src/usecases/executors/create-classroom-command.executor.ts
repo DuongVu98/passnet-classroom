@@ -1,29 +1,36 @@
-import { AbstractCommandExecutor } from "src/usecases/executors/command.executor";
-import { CreateClassroomCommand } from "src/domain/commands/commands";
+import { CommandExecutor } from "src/usecases/executors/command.executor";
+import { BaseCommand, CreateClassroomCommand } from "src/domain/commands/commands";
 import { Classroom } from "src/domain/aggregate/entities/classroom.root";
-import { CourseName } from "src/domain/aggregate/vos/course-name.vo";
-import { UserId } from "src/domain/aggregate/vos/user-id.vos";
 import { Logger } from "@nestjs/common";
 import { Builder } from "builder-pattern";
-import { JobId } from "src/domain/aggregate/vos/job-id.vo";
+import { ClassroomAggregateRepository } from "src/domain/repositories/classroom.repository";
+import { Member } from "src/domain/aggregate/entities/member.entity";
+import { rejects } from "assert";
+import { CourseName, Job, UserId } from "src/domain/aggregate/vos/value-objects";
 
-export class CreateClassroomCommandExecutor extends AbstractCommandExecutor<CreateClassroomCommand, any> {
+export class CreateClassroomCommandExecutor implements CommandExecutor {
 	logger: Logger = new Logger("CreateClassroomCommandExecutor");
 
-	public async execute(): Promise<any> {
-		const teacherAssistanceList = this.command.taIds.map((id) => new UserId(id));
+	constructor(private classroomRepository: ClassroomAggregateRepository) {}
 
-		const classroom: Classroom = Builder(Classroom)
-			.students([])
-			.teacherAssistanceList(teacherAssistanceList)
-			.teacherId(new UserId(this.command.teacherId))
-			.courseName(new CourseName(this.command.courseName))
-			.posts([])
-			.jobId(new JobId(this.command.jobId))
-			.build();
+	execute(command: BaseCommand): Promise<any> {
+		if (command instanceof CreateClassroomCommand) {
+			const teacherAssistanceList = command.taIds.map((id) => new Member(new UserId(id)));
 
-		return this.aggregateRepository.insert(classroom).then((result) => {
-			this.logger.log(`Result: ${result}`);
-		});
+			const classroom: Classroom = Builder(Classroom)
+				.students([])
+				.teacherAssistanceList(teacherAssistanceList)
+				.teacherId(new Member(new UserId(command.teacherId)))
+				.courseName(new CourseName(command.courseName))
+				.posts([])
+				.jobId(new Job(command.jobId))
+				.build();
+
+			return this.classroomRepository.insert(classroom).then((result) => {
+				this.logger.log(`Result: ${result}`);
+			});
+		} else {
+			return Promise.reject();
+		}
 	}
 }

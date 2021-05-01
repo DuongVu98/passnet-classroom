@@ -3,21 +3,12 @@ import { Builder } from "builder-pattern";
 import { AddStudentCommand, CreateClassroomCommand, UserAddCommentCommand, UserCreatePostCommand } from "src/domain/commands/commands";
 import { CommandFactory } from "src/usecases/factories/command.factory";
 import { ViewProjector } from "src/usecases/queries/view.projector";
-import { Cacheable, CacheClear } from "@type-cacheable/core";
-import { useAdapter } from "@type-cacheable/redis-adapter";
 import { ClassroomNotCreatedExceptionHandler, ClassroomNotFoundExceptionHandler } from "../filters/exception-handler.filter";
 import { GetClassroomViewForm, GetClassroomviewFromJobForm } from "src/domain/forms/query.form";
 
 export class HttpResponse {
 	constructor(message: any, status: string) {}
 }
-
-// const userClient = new IoRedis({
-// 	lazyConnect: true,
-// 	host: process.env.CACHE_CONNECTION_HOST,
-// 	port: process.env.CACHE_CONNECTION_PORT,
-// });
-// const clientAdapter = useAdapter(userClient);
 
 @Controller("home")
 export class HomeController {
@@ -32,7 +23,7 @@ export class HomeController {
 		const command = Builder(CreateClassroomCommand).teacherId(teacherId).courseName(courseName).taIds(taIds).jobId(jobId).build();
 		const commandExecutor = this.commandFactory.produceCreateClassroomCommandExecutor(command);
 
-		return commandExecutor.execute().then((result) => {
+		return commandExecutor.execute(command).then((result) => {
 			return new HttpResponse(result, HttpStatus.OK.toString());
 		});
 	}
@@ -45,7 +36,7 @@ export class HomeController {
 		const command = Builder(AddStudentCommand).aggregateId(classroomId).studentId(studentId).build();
 		const commandExecutor = this.commandFactory.produceAddStudentCommandExecutor(command);
 
-		return commandExecutor.execute().then((result) => {
+		return commandExecutor.execute(command).then((result) => {
 			return new HttpResponse(result, HttpStatus.OK.toString());
 		});
 	}
@@ -58,7 +49,7 @@ export class HomeController {
 		const command = Builder(UserCreatePostCommand).userId(postOwnerId).aggregateId(classroomId).postContent(content).build();
 		const commandExecutor = this.commandFactory.produceUserCreatePostCommandExecutor(command);
 
-		return commandExecutor.execute().then((result) => {
+		return commandExecutor.execute(command).then((result) => {
 			return new HttpResponse(result, HttpStatus.OK.toString());
 		});
 	}
@@ -76,7 +67,7 @@ export class HomeController {
 			.build();
 		const commandExecutor = this.commandFactory.produceUserAddCommentCommandExecutor(command);
 
-		return commandExecutor.execute().then((result) => {
+		return commandExecutor.execute(command).then((result) => {
 			return new HttpResponse(result, HttpStatus.OK.toString());
 		});
 	}

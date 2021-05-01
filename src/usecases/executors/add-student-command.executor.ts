@@ -1,26 +1,30 @@
-import { AbstractCommandExecutor } from "src/usecases/executors/command.executor";
-import { AddStudentCommand } from "src/domain/commands/commands";
-import { ClassroomId } from "src/domain/aggregate/vos/classroom-id.vo";
-import { UserId } from "src/domain/aggregate/vos/user-id.vos";
+import { CommandExecutor } from "src/usecases/executors/command.executor";
+import { AddStudentCommand, BaseCommand } from "src/domain/commands/commands";
 import { Logger } from "@nestjs/common";
-import { ClassroomAggregateDomain } from "src/domain/aggregate/classroom.root";
+import { ClassroomAggregateRepository } from "src/domain/repositories/classroom.repository";
+import { ClassroomDomainFunctions } from "src/domain/aggregate/entities/classroom.root";
+import { UserId } from "src/domain/aggregate/vos/value-objects";
 
-export class AddStudentCommandExecutor extends AbstractCommandExecutor<AddStudentCommand, void> {
+export class AddStudentCommandExecutor implements CommandExecutor {
 	logger: Logger = new Logger("AddStudentCommandExecutor");
 
-	execute(): Promise<void> {
-		this.logger.debug(`log aggregateId from command -> ${this.command.aggregateId}`);
+	constructor(private classroomRepository: ClassroomAggregateRepository) {}
 
-		return this.aggregateRepository
-			.findById(new ClassroomId(this.command.aggregateId))
-			.then(async (classroom) => {
-				// await classroom.students.push(new UserId(this.command.studentId));
+	execute(command: BaseCommand): Promise<any> {
+		if (command instanceof AddStudentCommand) {
+			this.logger.debug(`log aggregateId from command -> ${command.aggregateId}`);
 
-				const aggregate = await new ClassroomAggregateDomain(classroom).addStudentToClass(new UserId(this.command.studentId));
-				return this.aggregateRepository.update(aggregate);
-			})
-			.then((aggregate) => {
-				this.logger.log(`added new student to classroom ${aggregate}`);
-			});
+			return this.classroomRepository
+				.findById(command.aggregateId)
+				.then(async (classroom) => {
+					const aggregate = await new ClassroomDomainFunctions(classroom).addStudentToClass(new UserId(command.studentId));
+					return this.classroomRepository.update(aggregate);
+				})
+				.then((aggregate) => {
+					this.logger.log(`added new student to classroom ${aggregate}`);
+				});
+		} else {
+			return Promise.reject();
+		}
 	}
 }

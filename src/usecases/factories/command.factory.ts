@@ -6,40 +6,42 @@ import {
 	UserAddCommentCommand,
 	UserCreatePostCommand,
 } from "src/domain/commands/commands";
-import { AbstractCommandExecutor } from "src/usecases/executors/command.executor";
 import { CreateClassroomCommandExecutor } from "src/usecases/executors/create-classroom-command.executor";
-import { ClassroomAggregateRootRepository } from "src/domain/repositories/classroom.repository";
 import { AddStudentCommandExecutor } from "src/usecases/executors/add-student-command.executor";
 import { UserCreatePostCommandExecutor } from "src/usecases/executors/user-create-post-command.executor";
 import { UserAddCommentCommandExecutor } from "src/usecases/executors/user-add-comment-command.executor";
-import { Builder } from "builder-pattern";
 import { UuidGenerateService } from "src/usecases/services/uuid-generate.service";
+import { ClassroomAggregateRepository } from "src/domain/repositories/classroom.repository";
+import { CommandExecutor } from "../executors/command.executor";
 
 @Injectable()
 export class CommandFactory {
 	private logger: Logger = new Logger("CommandFactory");
 
-	constructor(private aggregateRepository: ClassroomAggregateRootRepository, private uuidGenerateService: UuidGenerateService) {}
+	constructor(private aggregateRepository: ClassroomAggregateRepository, private uuidGenerateService: UuidGenerateService) {}
 
-	produceCreateClassroomCommandExecutor(command: CreateClassroomCommand): AbstractCommandExecutor<CreateClassroomCommand, void> {
-		this.logger.debug(`create-class-command`);
-		return Builder(CreateClassroomCommandExecutor).command(command).aggregateRepository(this.aggregateRepository).build();
+	produce(command: BaseCommand): CommandExecutor {
+		if (command instanceof CreateClassroomCommand) {
+			return this.produceCreateClassroomCommandExecutor(command);
+		} else if (command instanceof AddStudentCommand) {
+			return this.produceAddStudentCommandExecutor(command);
+		} else if (command instanceof UserCreatePostCommand) {
+			return this.produceUserCreatePostCommandExecutor(command);
+		} else if (command instanceof UserAddCommentCommand) {
+			return this.produceUserAddCommentCommandExecutor(command);
+		}
 	}
-	produceAddStudentCommandExecutor(command: AddStudentCommand): AbstractCommandExecutor<AddStudentCommand, void> {
-		return Builder(AddStudentCommandExecutor).command(command).aggregateRepository(this.aggregateRepository).build();
+
+	produceCreateClassroomCommandExecutor(command: CreateClassroomCommand): CommandExecutor {
+		return new CreateClassroomCommandExecutor(this.aggregateRepository);
 	}
-	produceUserCreatePostCommandExecutor(command: UserCreatePostCommand): AbstractCommandExecutor<UserCreatePostCommand, void> {
-		return Builder(UserCreatePostCommandExecutor)
-			.command(command)
-			.aggregateRepository(this.aggregateRepository)
-			.uuidGenerateService(this.uuidGenerateService)
-			.build();
+	produceAddStudentCommandExecutor(command: AddStudentCommand): CommandExecutor {
+		return new AddStudentCommandExecutor(this.aggregateRepository);
 	}
-	produceUserAddCommentCommandExecutor(command: UserAddCommentCommand): AbstractCommandExecutor<UserAddCommentCommand, void> {
-		return Builder(UserAddCommentCommandExecutor)
-			.command(command)
-			.aggregateRepository(this.aggregateRepository)
-			.uuidGenerateService(this.uuidGenerateService)
-			.build();
+	produceUserCreatePostCommandExecutor(command: UserCreatePostCommand): CommandExecutor {
+		return new UserCreatePostCommandExecutor(this.aggregateRepository, this.uuidGenerateService);
+	}
+	produceUserAddCommentCommandExecutor(command: UserAddCommentCommand): CommandExecutor {
+		return new UserAddCommentCommandExecutor(this.aggregateRepository, this.uuidGenerateService);
 	}
 }

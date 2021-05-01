@@ -1,9 +1,9 @@
-import { Content } from "../vos/value-objects";
+import { Content, PostId } from "../vos/value-objects";
 import { Comment } from "./comment.entity";
 import { Member } from "./member.entity";
 
 export class Post {
-	postId: string;
+	postId: PostId;
 	content: Content;
 	owner: Member;
 	comments: Comment[];
