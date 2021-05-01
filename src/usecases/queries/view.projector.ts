@@ -104,12 +104,17 @@ export class ViewProjector {
 
 	private getClassroomListByTeacher(uid: string): Promise<ClassroomLiteView[]> {
 		return this.aggregateRepository.findAll().then((classroomList) => {
-			return classroomList
-				// .filter((classroom) => new UserIdDomain(classroom.teacherId).equals(new UserId(uid)))
-                .filter((classroom) => classroom.teacherId.equals(new UserId(uid)))
-				.map((classroom) =>
-					Builder(ClassroomLiteView).classroomId(classroom.id.getId.toHexString()).courseName(classroom.courseName.name).build()
-				);
+			return (
+				classroomList
+					// .filter((classroom) => new UserIdDomain(classroom.teacherId).equals(new UserId(uid)))
+					.filter((classroom) => classroom.teacherId.equals(new UserId(uid)))
+					.map((classroom) =>
+						Builder(ClassroomLiteView)
+							.classroomId(classroom.id.getId.toHexString())
+							.courseName(classroom.courseName.name)
+							.build()
+					)
+			);
 		});
 	}
 }

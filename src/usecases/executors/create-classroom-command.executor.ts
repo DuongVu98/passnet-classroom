@@ -1,6 +1,6 @@
 import { AbstractCommandExecutor } from "src/usecases/executors/command.executor";
 import { CreateClassroomCommand } from "src/domain/commands/commands";
-import { Classroom } from "src/domain/aggregate/classroom.root";
+import { Classroom } from "src/domain/aggregate/entities/classroom.root";
 import { CourseName } from "src/domain/aggregate/vos/course-name.vo";
 import { UserId } from "src/domain/aggregate/vos/user-id.vos";
 import { Logger } from "@nestjs/common";

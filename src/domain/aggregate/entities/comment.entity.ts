@@ -1,9 +1,8 @@
-import { CommentId } from "../vos/comment-id.vo";
-import { Content } from "../vos/content.vo";
-import { UserId } from "src/domain/aggregate/vos/user-id.vos";
+import { CommentId, Content } from "../vos/value-objects";
+import { Member } from "./member.entity";
 
 export class Comment {
 	commentId: CommentId;
 	content: Content;
-	commentOwner: UserId;
+	owner: Member;
 }

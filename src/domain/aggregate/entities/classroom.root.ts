@@ -1,40 +1,34 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Entity } from "./aggregate.root";
-import { Post, PostDomainFunction } from "./entities/post.entity";
-import { ClassroomId } from "./vos/classroom-id.vo";
-import { CourseName } from "./vos/course-name.vo";
-import { UserId } from "src/domain/aggregate/vos/user-id.vos";
-import { Comment } from "./entities/comment.entity";
 import * as mongoose from "mongoose";
-import { JobId } from "./vos/job-id.vo";
+import { Post, PostDomainFunction } from "./post.entity";
+import { Comment } from "./comment.entity";
+import { CourseName, Job } from "../vos/value-objects";
+import { Member } from "./member.entity";
 
 export type ClassroomDocument = Classroom & mongoose.Document;
 
 @Schema()
-export class Classroom extends Entity {
-	@Prop({ type: mongoose.Types.ObjectId })
-	id: ClassroomId;
-
+export class Classroom {
 	@Prop()
 	courseName: CourseName;
 
 	@Prop()
-	students: UserId[];
+	students: Member[];
 
 	@Prop()
-	teacherId: UserId;
+	teacherId: Member;
 
 	@Prop()
-	teacherAssistanceList: UserId[];
+	teacherAssistanceList: Member[];
 
 	@Prop()
 	posts: Post[];
 
 	@Prop()
-	jobId: JobId;
+	jobId: Job;
 }
 
-export class ClassroomAggregateDomain {
+export class ClassroomDomainFunctions {
 	constructor(private _aggregate: Classroom) {}
 
 	public addPost(post: Post): Classroom {
@@ -52,7 +46,7 @@ export class ClassroomAggregateDomain {
 		return this._aggregate;
 	}
 
-	public addStudentToClass(student: UserId): Classroom {
+	public addStudentToClass(student: Member): Classroom {
 		this._aggregate.students.push(student);
 		return this._aggregate;
 	}

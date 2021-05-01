@@ -43,7 +43,7 @@ export class EventConsumerGrpcGateway {
 	consumeAcceptStudentApplicationEvent(event: AcceptStudentApplicationEvent): MainServiceResponse {
 		this.logger.log(JSON.stringify(event));
 
-        const externalEvent = Builder(AcceptStudentApplicationExternalEvent).jobId(event.jobId).studentId(event.taId).build();
+		const externalEvent = Builder(AcceptStudentApplicationExternalEvent).jobId(event.jobId).studentId(event.taId).build();
 		this.eventHandlerFacade.apply(externalEvent);
 
 		return { message: "success" };
@@ -53,7 +53,7 @@ export class EventConsumerGrpcGateway {
 	consumeRemoveStudentApplicationEvent(event: RemoveStudentApplicationEvent): MainServiceResponse {
 		this.logger.log(JSON.stringify(event));
 
-        const externalEvent = Builder(RemoveStudentApplicationExternalEvent).jobId(event.jobId).studentId(event.taId).build();
+		const externalEvent = Builder(RemoveStudentApplicationExternalEvent).jobId(event.jobId).studentId(event.taId).build();
 		this.eventHandlerFacade.apply(externalEvent);
 
 		return { message: "success" };

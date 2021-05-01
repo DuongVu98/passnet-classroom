@@ -1,12 +1,11 @@
-import { Content } from "../vos/content.vo";
-import { UserId } from "src/domain/aggregate/vos/user-id.vos";
+import { Content } from "../vos/value-objects";
 import { Comment } from "./comment.entity";
-import { PostId } from "src/domain/aggregate/vos/post-id.vo";
+import { Member } from "./member.entity";
 
 export class Post {
-	postId: PostId;
+	postId: string;
 	content: Content;
-	postOwner: UserId;
+	owner: Member;
 	comments: Comment[];
 }
 
