@@ -1,9 +1,11 @@
-export class AcceptStudentApplicationExternalEvent {
+export class Event {}
+
+export class AcceptStudentApplicationExternalEvent extends Event {
 	studentId: string;
 	jobId: string;
 }
 
-export class RemoveStudentApplicationExternalEvent {
+export class RemoveStudentApplicationExternalEvent extends Event {
 	studentId: string;
 	jobId: string;
 }

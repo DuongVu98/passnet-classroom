@@ -1,9 +1,8 @@
-import { IsNotEmpty, IsString, Length } from "class-validator";
-import { IsHexString } from "../constraints/constraints";
+import { IsNotEmpty, IsString } from "class-validator";
 
 export class GetClassroomViewForm {
-	@Length(24, 24)
-	@IsHexString("hexString", { message: "Invalid ID" })
+	@IsString()
+	@IsNotEmpty()
 	classroomId: string;
 }
 

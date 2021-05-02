@@ -2,13 +2,16 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import * as mongoose from "mongoose";
 import { Post, PostDomainFunction } from "./post.entity";
 import { Comment } from "./comment.entity";
-import { CourseName, Job } from "../vos/value-objects";
+import { ClassroomId, CourseName, Job } from "../vos/value-objects";
 import { Member } from "./member.entity";
 
 export type ClassroomDocument = Classroom & mongoose.Document;
 
 @Schema()
 export class Classroom {
+	@Prop({ required: true, unique: true })
+	classroomId: ClassroomId;
+
 	@Prop()
 	courseName: CourseName;
 

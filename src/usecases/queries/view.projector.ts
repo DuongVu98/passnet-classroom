@@ -1,23 +1,19 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { Builder } from "builder-pattern";
-import { Classroom } from "src/domain/aggregate/classroom.root";
-import { ClassroomId } from "src/domain/aggregate/vos/classroom-id.vo";
-import { JobId } from "src/domain/aggregate/vos/job-id.vo";
-import { UserId, UserIdDomain } from "src/domain/aggregate/vos/user-id.vos";
+import { Classroom } from "src/domain/aggregate/entities/classroom.root";
+import { ClassroomId, Job } from "src/domain/aggregate/vos/value-objects";
 import { ClassroomNotCreatedException, ClassroomNotFoundException } from "src/domain/exceptions/exceptions";
-import { ClassroomAggregateRootRepository } from "src/domain/repositories/classroom.repository";
+import { ClassroomAggregateRepository } from "src/domain/repositories/classroom.repository";
 import { ClassroomLiteView, ClassroomView, CommentView, PostView } from "src/domain/views/views";
 
 @Injectable()
 export class ViewProjector {
 	logger: Logger = new Logger("ViewProjector");
 
-	constructor(private aggregateRepository: ClassroomAggregateRootRepository) {}
+	constructor(private aggregateRepository: ClassroomAggregateRepository) {}
 
 	public async queryClassroomView(aggregateId: string): Promise<ClassroomView> {
-		const idToFind = new ClassroomId(aggregateId);
-
-		return this.aggregateRepository.findById(idToFind).then((aggregate) => {
+		return this.aggregateRepository.findById(new ClassroomId(aggregateId)).then((aggregate) => {
 			if (this.isAggregateNotNull(aggregate)) {
 				return this.mapEntityToView(aggregate);
 			} else {
@@ -27,7 +23,7 @@ export class ViewProjector {
 	}
 
 	public async queryClassroomViewFromJob(jobId: string): Promise<ClassroomView> {
-		return this.aggregateRepository.findByJobId(new JobId(jobId)).then((aggregate) => {
+		return this.aggregateRepository.findByJobId(new Job(jobId)).then((aggregate) => {
 			if (this.isAggregateNotNull(aggregate)) {
 				return this.mapEntityToView(aggregate);
 			} else {
@@ -42,24 +38,24 @@ export class ViewProjector {
 
 	private mapEntityToView(aggregate: Classroom): ClassroomView {
 		return Builder(ClassroomView)
-			.classroomId(aggregate.id.getId.toHexString())
-			.courseName(aggregate.courseName.name)
-			.students(aggregate.students.map((s) => s._id))
-			.teacher(aggregate.teacherId.getId)
-			.teacherAssistanceList(aggregate.teacherAssistanceList.map((ta) => ta._id))
+			.classroomId(aggregate.classroomId.value)
+			.courseName(aggregate.courseName.value)
+			.students(aggregate.students.map((s) => s.userId.value))
+			.teacher(aggregate.teacherId.userId.value)
+			.teacherAssistanceList(aggregate.teacherAssistanceList.map((ta) => ta.userId.value))
 			.posts(
 				aggregate.posts.map((post) =>
 					Builder(PostView)
-						.postId(post.postId._id)
-						.postOwner(post.postOwner._id)
-						.content(post.content.content)
+						.postId(post.postId.value)
+						.postOwner(post.owner.userId.value)
+						.content(post.content.value)
 						.comments(
 							post.comments.map((comment) => {
 								this.logger.debug(comment);
 								return Builder(CommentView)
-									.commentId(comment.commentId._id)
-									.commentOwner(comment.commentOwner._id)
-									.content(comment.content.content)
+									.commentId(comment.commentId.value)
+									.commentOwner(comment.owner.userId.value)
+									.content(comment.content.value)
 									.build();
 							})
 						)
@@ -83,9 +79,9 @@ export class ViewProjector {
 	private getClassroomListByStudent(uid: string): Promise<ClassroomLiteView[]> {
 		return this.aggregateRepository.findAll().then((classroomList) => {
 			return classroomList
-				.filter((classroom) => classroom.students.some((student) => new UserIdDomain(student).equals(new UserId(uid))))
+				.filter((classroom) => classroom.students.some((student) => student.userId.value === uid))
 				.map((classroom) =>
-					Builder(ClassroomLiteView).classroomId(classroom.id.getId.toHexString()).courseName(classroom.courseName.name).build()
+					Builder(ClassroomLiteView).classroomId(classroom.classroomId.value).courseName(classroom.courseName.value).build()
 				);
 		});
 	}
@@ -95,26 +91,21 @@ export class ViewProjector {
 
 		return this.aggregateRepository.findAll().then((classroomList) => {
 			return classroomList
-				.filter((classroom) => classroom.teacherAssistanceList.some((ta) => new UserIdDomain(ta).equals(new UserId(uid))))
+				.filter((classroom) => classroom.teacherAssistanceList.some((ta) => ta.userId.value === uid))
 				.map((classroom) =>
-					Builder(ClassroomLiteView).classroomId(classroom.id.getId.toHexString()).courseName(classroom.courseName.name).build()
+					Builder(ClassroomLiteView).classroomId(classroom.classroomId.value).courseName(classroom.courseName.value).build()
 				);
 		});
 	}
 
 	private getClassroomListByTeacher(uid: string): Promise<ClassroomLiteView[]> {
 		return this.aggregateRepository.findAll().then((classroomList) => {
-			return (
-				classroomList
-					// .filter((classroom) => new UserIdDomain(classroom.teacherId).equals(new UserId(uid)))
-					.filter((classroom) => classroom.teacherId.equals(new UserId(uid)))
-					.map((classroom) =>
-						Builder(ClassroomLiteView)
-							.classroomId(classroom.id.getId.toHexString())
-							.courseName(classroom.courseName.name)
-							.build()
-					)
-			);
+			this.logger.debug(`debug classroomlist -> ${classroomList}`);
+			return classroomList
+				.filter((classroom) => classroom.teacherId.userId.value === uid)
+				.map((classroom) =>
+					Builder(ClassroomLiteView).classroomId(classroom.classroomId.value).courseName(classroom.courseName.value).build()
+				);
 		});
 	}
 }

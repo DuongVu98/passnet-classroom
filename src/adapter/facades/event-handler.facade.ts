@@ -20,14 +20,14 @@ export class EventHandlerFacade {
 	}
 
 	private applyAcceptStudentApplicationEvent(event: AcceptStudentApplicationExternalEvent): Promise<void> {
-		const eventHandler = this.eventHandlerFactory.produceAcceptStudentApplicationEventHandler(event);
+		const eventHandler = this.eventHandlerFactory.produce(event);
 
-		return eventHandler.handle().then();
+		return eventHandler.handle(event).then();
 	}
 
 	private applyRemoveStudentApplicationEvent(event: RemoveStudentApplicationExternalEvent): Promise<void> {
-		const eventHandler = this.eventHandlerFactory.produceRemovetudentApplicationEventHandler(event);
+		const eventHandler = this.eventHandlerFactory.produce(event);
 
-		return eventHandler.handle().then();
+		return eventHandler.handle(event).then();
 	}
 }

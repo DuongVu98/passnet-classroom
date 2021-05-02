@@ -3,7 +3,8 @@ import { AddStudentCommand, BaseCommand } from "src/domain/commands/commands";
 import { Logger } from "@nestjs/common";
 import { ClassroomAggregateRepository } from "src/domain/repositories/classroom.repository";
 import { ClassroomDomainFunctions } from "src/domain/aggregate/entities/classroom.root";
-import { UserId } from "src/domain/aggregate/vos/value-objects";
+import { ClassroomId, UserId } from "src/domain/aggregate/vos/value-objects";
+import { Member } from "src/domain/aggregate/entities/member.entity";
 
 export class AddStudentCommandExecutor implements CommandExecutor {
 	logger: Logger = new Logger("AddStudentCommandExecutor");
@@ -15,9 +16,11 @@ export class AddStudentCommandExecutor implements CommandExecutor {
 			this.logger.debug(`log aggregateId from command -> ${command.aggregateId}`);
 
 			return this.classroomRepository
-				.findById(command.aggregateId)
+				.findById(new ClassroomId(command.aggregateId))
 				.then(async (classroom) => {
-					const aggregate = await new ClassroomDomainFunctions(classroom).addStudentToClass(new UserId(command.studentId));
+					const aggregate = await new ClassroomDomainFunctions(classroom).addStudentToClass(
+						new Member(new UserId(command.studentId))
+					);
 					return this.classroomRepository.update(aggregate);
 				})
 				.then((aggregate) => {

@@ -29,19 +29,22 @@ export class CommandFactory {
 			return this.produceUserCreatePostCommandExecutor(command);
 		} else if (command instanceof UserAddCommentCommand) {
 			return this.produceUserAddCommentCommandExecutor(command);
+		} else {
+			this.logger.error("command type not found");
+			return null;
 		}
 	}
 
-	produceCreateClassroomCommandExecutor(command: CreateClassroomCommand): CommandExecutor {
-		return new CreateClassroomCommandExecutor(this.aggregateRepository);
+	private produceCreateClassroomCommandExecutor(command: CreateClassroomCommand): CommandExecutor {
+		return new CreateClassroomCommandExecutor(this.aggregateRepository, this.uuidGenerateService);
 	}
-	produceAddStudentCommandExecutor(command: AddStudentCommand): CommandExecutor {
+	private produceAddStudentCommandExecutor(command: AddStudentCommand): CommandExecutor {
 		return new AddStudentCommandExecutor(this.aggregateRepository);
 	}
-	produceUserCreatePostCommandExecutor(command: UserCreatePostCommand): CommandExecutor {
+	private produceUserCreatePostCommandExecutor(command: UserCreatePostCommand): CommandExecutor {
 		return new UserCreatePostCommandExecutor(this.aggregateRepository, this.uuidGenerateService);
 	}
-	produceUserAddCommentCommandExecutor(command: UserAddCommentCommand): CommandExecutor {
+	private produceUserAddCommentCommandExecutor(command: UserAddCommentCommand): CommandExecutor {
 		return new UserAddCommentCommandExecutor(this.aggregateRepository, this.uuidGenerateService);
 	}
 }

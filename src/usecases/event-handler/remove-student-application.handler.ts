@@ -1,27 +1,33 @@
 import { Logger } from "@nestjs/common";
-import { JobId } from "src/domain/aggregate/vos/job-id.vo";
-import { UserId } from "src/domain/aggregate/vos/user-id.vos";
+import { Job, UserId } from "src/domain/aggregate/vos/value-objects";
 import { RemoveStudentApplicationExternalEvent } from "src/domain/events/events";
-import { AbstractEventHandler } from "./event.handler";
+import { ClassroomAggregateRepository } from "src/domain/repositories/classroom.repository";
+import { EventHandler } from "./event.handler";
 
-export class RemoveStudentApplicationEventHandler extends AbstractEventHandler<RemoveStudentApplicationExternalEvent, void> {
+export class RemoveStudentApplicationEventHandler implements EventHandler {
 	logger: Logger = new Logger("RemoveStudentApplicationEventHandler");
 
-	public handle(): Promise<void> {
-		return this.aggregateRepository
-			.findByJobId(new JobId(this.event.jobId))
-			.then((classroom) => {
-				if (classroom != null) {
-					const newTaList = classroom.teacherAssistanceList.filter((taId) => !taId.equals(new UserId(this.event.studentId)));
-					classroom.teacherAssistanceList = newTaList;
+	constructor(private classroomRepository: ClassroomAggregateRepository) {}
 
-					return this.aggregateRepository.update(classroom);
-				}
-			})
-			.then((aggregate) => {
-				if (aggregate != null) {
-					this.logger.log(`handle remove-student-application-event for aggregate ${aggregate}`);
-				}
-			});
+	handle(event: Event): Promise<any> {
+		if (event instanceof RemoveStudentApplicationExternalEvent) {
+			return this.classroomRepository
+				.findByJobId(new Job(event.jobId))
+				.then((classroom) => {
+					if (classroom != null) {
+						const newTaList = classroom.teacherAssistanceList.filter((taId) => !(taId.userId.value === event.studentId));
+						classroom.teacherAssistanceList = newTaList;
+
+						return this.classroomRepository.update(classroom);
+					}
+				})
+				.then((aggregate) => {
+					if (aggregate != null) {
+						this.logger.log(`handle remove-student-application-event for aggregate ${aggregate}`);
+					}
+				});
+		} else {
+			return Promise.reject();
+		}
 	}
 }

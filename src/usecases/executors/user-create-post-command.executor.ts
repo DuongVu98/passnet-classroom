@@ -5,7 +5,7 @@ import { Builder } from "builder-pattern";
 import { Logger } from "@nestjs/common";
 import { UuidGenerateService } from "src/usecases/services/uuid-generate.service";
 import { ClassroomAggregateRepository } from "src/domain/repositories/classroom.repository";
-import { Content, PostId, UserId } from "src/domain/aggregate/vos/value-objects";
+import { ClassroomId, Content, PostId, UserId } from "src/domain/aggregate/vos/value-objects";
 import { Member } from "src/domain/aggregate/entities/member.entity";
 import { ClassroomDomainFunctions } from "src/domain/aggregate/entities/classroom.root";
 
@@ -17,7 +17,7 @@ export class UserCreatePostCommandExecutor implements CommandExecutor {
 	execute(command: BaseCommand): Promise<any> {
 		if (command instanceof UserCreatePostCommand) {
 			return this.classroomRepository
-				.findById(command.aggregateId)
+				.findById(new ClassroomId(command.aggregateId))
 				.then((classroom) => {
 					const post: Post = Builder(Post)
 						.postId(new PostId(this.uuidGenerateService.generateUUID()))

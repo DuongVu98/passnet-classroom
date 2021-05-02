@@ -1,24 +1,30 @@
 import { Injectable } from "@nestjs/common";
 import { Builder } from "builder-pattern";
-import { AcceptStudentApplicationExternalEvent, RemoveStudentApplicationExternalEvent } from "src/domain/events/events";
+import { AcceptStudentApplicationExternalEvent, Event, RemoveStudentApplicationExternalEvent } from "src/domain/events/events";
 import { ClassroomAggregateRepository } from "src/domain/repositories/classroom.repository";
 import { AcceptStudentApplicationEventHandler } from "../event-handler/accept-student-application.handler";
-import { AbstractEventHandler } from "../event-handler/event.handler";
+import { EventHandler } from "../event-handler/event.handler";
 import { RemoveStudentApplicationEventHandler } from "../event-handler/remove-student-application.handler";
 
 @Injectable()
 export class EventHandlerFactory {
-	constructor(private aggregateRepository: ClassroomAggregateRepository) {}
+	constructor(private classroomRepository: ClassroomAggregateRepository) {}
 
-	produceAcceptStudentApplicationEventHandler(
-		event: AcceptStudentApplicationExternalEvent
-	): AbstractEventHandler<AcceptStudentApplicationExternalEvent, void> {
-		return Builder(AcceptStudentApplicationEventHandler).aggregateRepository(this.aggregateRepository).event(event).build();
+	produce(event: Event): EventHandler {
+		if (event instanceof AcceptStudentApplicationExternalEvent) {
+			return this.produceAcceptStudentApplicationEventHandler(event);
+		} else if (event instanceof RemoveStudentApplicationExternalEvent) {
+			return this.produceRemovetudentApplicationEventHandler(event);
+		} else {
+			return null;
+		}
 	}
 
-	produceRemovetudentApplicationEventHandler(
-		event: RemoveStudentApplicationExternalEvent
-	): AbstractEventHandler<RemoveStudentApplicationExternalEvent, void> {
-		return Builder(RemoveStudentApplicationEventHandler).aggregateRepository(this.aggregateRepository).event(event).build();
+	private produceAcceptStudentApplicationEventHandler(event: AcceptStudentApplicationExternalEvent): EventHandler {
+		return new AcceptStudentApplicationEventHandler(this.classroomRepository);
+	}
+
+	private produceRemovetudentApplicationEventHandler(event: RemoveStudentApplicationExternalEvent): EventHandler {
+		return new RemoveStudentApplicationEventHandler(this.classroomRepository);
 	}
 }

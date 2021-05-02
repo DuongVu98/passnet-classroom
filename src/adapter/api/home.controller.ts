@@ -21,7 +21,7 @@ export class HomeController {
 		@Body() { teacherId, courseName, taIds, jobId }: { teacherId: string; courseName: string; taIds: string[]; jobId: string }
 	): Promise<any> {
 		const command = Builder(CreateClassroomCommand).teacherId(teacherId).courseName(courseName).taIds(taIds).jobId(jobId).build();
-		const commandExecutor = this.commandFactory.produceCreateClassroomCommandExecutor(command);
+		const commandExecutor = this.commandFactory.produce(command);
 
 		return commandExecutor.execute(command).then((result) => {
 			return new HttpResponse(result, HttpStatus.OK.toString());
@@ -34,7 +34,7 @@ export class HomeController {
 		this.logger.debug(`body received: ${classroomId}`);
 
 		const command = Builder(AddStudentCommand).aggregateId(classroomId).studentId(studentId).build();
-		const commandExecutor = this.commandFactory.produceAddStudentCommandExecutor(command);
+		const commandExecutor = this.commandFactory.produce(command);
 
 		return commandExecutor.execute(command).then((result) => {
 			return new HttpResponse(result, HttpStatus.OK.toString());
@@ -47,7 +47,7 @@ export class HomeController {
 		@Body() { content, classroomId, postOwnerId }: { content: string; classroomId: string; postOwnerId: string }
 	): Promise<any> {
 		const command = Builder(UserCreatePostCommand).userId(postOwnerId).aggregateId(classroomId).postContent(content).build();
-		const commandExecutor = this.commandFactory.produceUserCreatePostCommandExecutor(command);
+		const commandExecutor = this.commandFactory.produce(command);
 
 		return commandExecutor.execute(command).then((result) => {
 			return new HttpResponse(result, HttpStatus.OK.toString());
@@ -65,7 +65,7 @@ export class HomeController {
 			.content(content)
 			.aggregateId(classroomId)
 			.build();
-		const commandExecutor = this.commandFactory.produceUserAddCommentCommandExecutor(command);
+		const commandExecutor = this.commandFactory.produce(command);
 
 		return commandExecutor.execute(command).then((result) => {
 			return new HttpResponse(result, HttpStatus.OK.toString());

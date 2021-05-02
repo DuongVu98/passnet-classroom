@@ -5,7 +5,7 @@ import { Logger } from "@nestjs/common";
 import { Builder } from "builder-pattern";
 import { UuidGenerateService } from "src/usecases/services/uuid-generate.service";
 import { ClassroomAggregateRepository } from "src/domain/repositories/classroom.repository";
-import { CommentId, Content, UserId } from "src/domain/aggregate/vos/value-objects";
+import { ClassroomId, CommentId, Content, UserId } from "src/domain/aggregate/vos/value-objects";
 import { Member } from "src/domain/aggregate/entities/member.entity";
 import { ClassroomDomainFunctions } from "src/domain/aggregate/entities/classroom.root";
 
@@ -17,7 +17,7 @@ export class UserAddCommentCommandExecutor implements CommandExecutor {
 	execute(command: BaseCommand): Promise<any> {
 		if (command instanceof UserAddCommentCommand) {
 			return this.classroomRepository
-				.findById(command.aggregateId)
+				.findById(new ClassroomId(command.aggregateId))
 				.then((classroom) => {
 					const post = classroom.posts.filter((p) => p.postId.value === command.postId)[0];
 					const newComment = Builder(Comment)

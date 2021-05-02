@@ -13,6 +13,9 @@ export class UserOnlineState {
 export class UserDisplayName {
 	constructor(public value: string) {}
 }
+export class ClassroomId {
+	constructor(public value: string) {}
+}
 export class PostId {
 	constructor(public value: string) {}
 }

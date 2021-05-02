@@ -2,7 +2,7 @@ import { Injectable, Logger } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { ClassroomDocument, Classroom } from "../aggregate/entities/classroom.root";
-import { Job } from "../aggregate/vos/value-objects";
+import { ClassroomId, Job } from "../aggregate/vos/value-objects";
 
 @Injectable()
 export class ClassroomAggregateRepository {
@@ -11,15 +11,15 @@ export class ClassroomAggregateRepository {
 	constructor(@InjectModel("classrooms-repository") private classroomModel: Model<ClassroomDocument>) {}
 
 	async findAll(): Promise<Classroom[]> {
-		return this.classroomModel.find();
+		return this.classroomModel.find().exec();
 	}
 
-	async findById(id: string): Promise<Classroom> {
-		return this.classroomModel.findById(id);
+	async findById(id: ClassroomId): Promise<Classroom> {
+		return this.classroomModel.findOne({ classroomId: id }).exec();
 	}
 
 	async findByJobId(jobId: Job): Promise<Classroom> {
-		return this.classroomModel.findOne({ jobId: jobId });
+		return this.classroomModel.findOne({ jobId: jobId }).exec();
 	}
 
 	async insert(data: Classroom): Promise<Classroom> {
@@ -27,10 +27,10 @@ export class ClassroomAggregateRepository {
 	}
 
 	async update(data: Classroom): Promise<Classroom> {
-		return this.classroomModel.findOneAndUpdate(data);
+		return this.classroomModel.findOneAndUpdate(data).exec();
 	}
 
-	async removeById(id: string): Promise<void> {
-		this.classroomModel.findByIdAndRemove(id);
+	async removeById(id: ClassroomId): Promise<void> {
+		this.classroomModel.findOneAndRemove({ classroomId: id }).exec();
 	}
 }
