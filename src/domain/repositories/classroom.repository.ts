@@ -27,7 +27,7 @@ export class ClassroomAggregateRepository {
 	}
 
 	async update(data: Classroom): Promise<Classroom> {
-		return this.classroomModel.findOneAndUpdate(data).exec();
+		return this.classroomModel.findOneAndUpdate({classroomId: data.classroomId}, data).exec();
 	}
 
 	async removeById(id: ClassroomId): Promise<void> {
