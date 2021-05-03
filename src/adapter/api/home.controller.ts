@@ -5,6 +5,7 @@ import { CommandFactory } from "src/usecases/factories/command.factory";
 import { ViewProjector } from "src/usecases/queries/view.projector";
 import { ClassroomNotCreatedExceptionHandler, ClassroomNotFoundExceptionHandler } from "../filters/exception-handler.filter";
 import { GetClassroomViewForm, GetClassroomviewFromJobForm } from "src/domain/forms/query.form";
+import { PostView } from "src/domain/views/views";
 
 export class HttpResponse {
 	constructor(message: any, status: string) {}
@@ -100,5 +101,13 @@ export class HomeController {
 			getClassroomListByMemberTypeForm.memberType,
 			getClassroomListByMemberTypeForm.uid
 		);
+	}
+
+    @Post("post-list")
+	@UseFilters(ClassroomNotFoundExceptionHandler, ClassroomNotCreatedExceptionHandler)
+	public getAllPostsFromClassroom(@Body() form: { classroomId: string }): Promise<PostView[]> {
+		return this.viewProjector.queryClassroomView(form.classroomId).then((classroomView) => {
+			return classroomView.posts;
+		});
 	}
 }
