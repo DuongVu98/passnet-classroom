@@ -103,7 +103,7 @@ export class HomeController {
 		);
 	}
 
-    @Post("post-list")
+	@Post("post-list")
 	@UseFilters(ClassroomNotFoundExceptionHandler, ClassroomNotCreatedExceptionHandler)
 	public getAllPostsFromClassroom(@Body() form: { classroomId: string }): Promise<PostView[]> {
 		return this.viewProjector.queryClassroomView(form.classroomId).then((classroomView) => {
