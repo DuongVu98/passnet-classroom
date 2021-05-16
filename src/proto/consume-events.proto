@@ -5,19 +5,16 @@ option java_package = "com.cseiu.passnet.saga.classroomsaga";
 package consumeEvents;
 
 service EventConsumer {
-  rpc ConsumePostNewJobEvent (PostNewJobEvent) returns (MainServiceResponse) {}
-  rpc ConsumeAcceptStudentApplicationEvent (AcceptStudentApplicationEvent) returns (MainServiceResponse) {}
-  rpc ConsumeRemoveStudentApplicationEvent (RemoveStudentApplicationEvent) returns (MainServiceResponse) {}
-  rpc ConsumeDeleteJobEvent (DeleteJobEvent) returns (MainServiceResponse) {}
+  rpc ConsumeAcceptStudentApplicationEvent (AcceptStudentApplicationEvent) returns (ServiceResponse) {}
+  rpc ConsumeRemoveStudentApplicationEvent (RemoveStudentApplicationEvent) returns (ServiceResponse) {}
 }
 
-message MainServiceResponse {
+service CompensatingExecutor {
+  rpc Rollback(EventId) returns (ServiceResponse) {}
+}
+
+message ServiceResponse {
   string message = 1;
-}
-
-message PostNewJobEvent {
-  string ownerId = 1;
-  string jobId = 2;
 }
 
 message AcceptStudentApplicationEvent {
@@ -30,6 +27,6 @@ message RemoveStudentApplicationEvent {
   string taId = 2;
 }
 
-message DeleteJobEvent {
-  string jobId = 1;
+message EventId {
+  string eventId = 1;
 }

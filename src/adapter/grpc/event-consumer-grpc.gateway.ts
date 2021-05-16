@@ -4,27 +4,20 @@ import { Builder } from "builder-pattern";
 import { AcceptStudentApplicationExternalEvent, RemoveStudentApplicationExternalEvent } from "src/domain/events/events";
 import { EventHandlerFacade } from "../facades/event-handler.facade";
 
-interface MainServiceResponse {
+interface ServiceResponse {
 	message: string;
-}
-
-interface PostNewJobEvent {
-	ownerId: string;
-	jobId: string;
 }
 
 interface AcceptStudentApplicationEvent {
 	jobId: string;
 	taId: string;
+    eventId: string;
 }
 
 interface RemoveStudentApplicationEvent {
 	jobId: string;
 	taId: string;
-}
-
-interface DeleteJobEvent {
-	jobId: string;
+    eventId: string;
 }
 
 @Controller()
@@ -33,14 +26,8 @@ export class EventConsumerGrpcGateway {
 
 	constructor(private eventHandlerFacade: EventHandlerFacade) {}
 
-	@GrpcMethod("EventConsumer", "ConsumePostNewJobEvent")
-	consumePostNewJobEvent(event: PostNewJobEvent): MainServiceResponse {
-		this.logger.log(JSON.stringify(event));
-		return { message: "success" };
-	}
-
 	@GrpcMethod("EventConsumer", "ConsumeAcceptStudentApplicationEvent")
-	consumeAcceptStudentApplicationEvent(event: AcceptStudentApplicationEvent): MainServiceResponse {
+	consumeAcceptStudentApplicationEvent(event: AcceptStudentApplicationEvent): ServiceResponse {
 		this.logger.log(JSON.stringify(event));
 
 		const externalEvent = Builder(AcceptStudentApplicationExternalEvent).jobId(event.jobId).studentId(event.taId).build();
@@ -50,18 +37,12 @@ export class EventConsumerGrpcGateway {
 	}
 
 	@GrpcMethod("EventConsumer", "ConsumeRemoveStudentApplicationEvent")
-	consumeRemoveStudentApplicationEvent(event: RemoveStudentApplicationEvent): MainServiceResponse {
+	consumeRemoveStudentApplicationEvent(event: RemoveStudentApplicationEvent): ServiceResponse {
 		this.logger.log(JSON.stringify(event));
 
 		const externalEvent = Builder(RemoveStudentApplicationExternalEvent).jobId(event.jobId).studentId(event.taId).build();
 		this.eventHandlerFacade.apply(externalEvent);
 
-		return { message: "success" };
-	}
-
-	@GrpcMethod("EventConsumer", "ConsumeDeleteJobEvent")
-	consumeDeleteJobEvent(event: DeleteJobEvent): MainServiceResponse {
-		this.logger.log(JSON.stringify(event));
 		return { message: "success" };
 	}
 }

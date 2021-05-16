@@ -11,7 +11,8 @@ export class AcceptStudentApplicationEventHandler implements EventHandler {
 	constructor(private classroomRepository: ClassroomAggregateRepository) {}
 
 	handle(event: Event): Promise<any> {
-		if (event instanceof AcceptStudentApplicationExternalEvent)
+		if (event instanceof AcceptStudentApplicationExternalEvent) {
+            
 			return this.classroomRepository
 				.findByJobId(new Job(event.jobId))
 				.then(async (classroom) => {
@@ -30,5 +31,6 @@ export class AcceptStudentApplicationEventHandler implements EventHandler {
 						this.logger.log(`aggregate after updated is null: ${aggregate}`);
 					}
 				});
+        }
 	}
 }
