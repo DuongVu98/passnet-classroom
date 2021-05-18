@@ -1,13 +1,10 @@
 import { Controller, Logger } from "@nestjs/common";
 import { GrpcMethod } from "@nestjs/microservices";
 import { Builder } from "builder-pattern";
-import { Member } from "src/domain/aggregate/entities/member.entity";
-import { Job, UserId } from "src/domain/aggregate/vos/value-objects";
+import { Job } from "src/domain/aggregate/vos/value-objects";
 import { AddTeacherAssistanceCommand, RemoveTeacherAssistanceCommand } from "src/domain/commands/commands";
-import { AcceptStudentApplicationExternalEvent, RemoveStudentApplicationExternalEvent } from "src/domain/events/events";
 import { ClassroomAggregateRepository } from "src/domain/repositories/classroom.repository";
 import { CommandFactory } from "src/usecases/factories/command.factory";
-import { EventHandlerFacade } from "../facades/event-handler.facade";
 
 interface ServiceResponse {
 	message: string;
@@ -30,19 +27,12 @@ export class EventConsumerGrpcGateway {
 	private logger = new Logger("GrpcEventConsumer");
 
 	constructor(
-		private eventHandlerFacade: EventHandlerFacade,
 		private classroomRepository: ClassroomAggregateRepository,
 		private commandExecutorProvider: CommandFactory
 	) {}
 
 	@GrpcMethod("EventConsumer", "ConsumeAcceptStudentApplicationEvent")
 	consumeAcceptStudentApplicationEvent(event: AcceptStudentApplicationEvent): Promise<ServiceResponse> {
-		// this.logger.log(JSON.stringify(event));
-
-		// const externalEvent = Builder(AcceptStudentApplicationExternalEvent).jobId(event.jobId).studentId(event.taId).build();
-		// this.eventHandlerFacade.apply(externalEvent);
-
-		// return { message: "success" };
 
 		return this.classroomRepository
 			.findByJobId(new Job(event.jobId))
@@ -57,21 +47,17 @@ export class EventConsumerGrpcGateway {
 				}
 			})
 			.then(() => {
-				return { message: "success" };
+                this.logger.log("return success")
+				return { message: "SUCCESS" };
 			})
 			.catch((error) => {
-				return { message: "failure" };
+                this.logger.error(`throw error: ${error}`)
+				return { message: "FAILURE" };
 			});
 	}
 
 	@GrpcMethod("EventConsumer", "ConsumeRemoveStudentApplicationEvent")
 	consumeRemoveStudentApplicationEvent(event: RemoveStudentApplicationEvent): Promise<ServiceResponse> {
-		// this.logger.log(JSON.stringify(event));
-
-		// const externalEvent = Builder(RemoveStudentApplicationExternalEvent).jobId(event.jobId).studentId(event.taId).build();
-		// this.eventHandlerFacade.apply(externalEvent);
-
-		// return { message: "success" };
 
 		return this.classroomRepository
 			.findByJobId(new Job(event.jobId))
@@ -86,10 +72,12 @@ export class EventConsumerGrpcGateway {
 				}
 			})
 			.then(() => {
-				return { message: "success" };
+                this.logger.log("return success")
+				return { message: "SUCCESS" };
 			})
 			.catch((error) => {
-				return { message: "failure" };
+                this.logger.error(`throw error: ${error}`)
+				return { message: "FAILURE" };
 			});
 	}
 }
