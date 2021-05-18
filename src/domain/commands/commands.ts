@@ -23,3 +23,11 @@ export class UserAddCommentCommand extends BaseCommand {
 	postId: string;
 	content: string;
 }
+
+export class AddTeacherAssistanceCommand extends BaseCommand {
+    taId: string;
+}
+
+export class RemoveTeacherAssistanceCommand extends BaseCommand {
+    taId: string;
+}

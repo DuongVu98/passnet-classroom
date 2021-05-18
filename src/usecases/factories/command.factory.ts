@@ -1,8 +1,10 @@
 import { Injectable, Logger } from "@nestjs/common";
 import {
 	AddStudentCommand,
+    AddTeacherAssistanceCommand,
 	BaseCommand,
 	CreateClassroomCommand,
+    RemoveTeacherAssistanceCommand,
 	UserAddCommentCommand,
 	UserCreatePostCommand,
 } from "src/domain/commands/commands";
@@ -13,6 +15,8 @@ import { UserAddCommentCommandExecutor } from "src/usecases/executors/user-add-c
 import { UuidGenerateService } from "src/usecases/services/uuid-generate.service";
 import { ClassroomAggregateRepository } from "src/domain/repositories/classroom.repository";
 import { CommandExecutor } from "../executors/command.executor";
+import { AddTeacherAssistanceCommandExecutor } from "../executors/add-ta-command.executor";
+import { RemoveTeacherAssistanceCommandExecutor } from "../executors/remove-ta-command.executor";
 
 @Injectable()
 export class CommandFactory {
@@ -29,6 +33,10 @@ export class CommandFactory {
 			return this.produceUserCreatePostCommandExecutor(command);
 		} else if (command instanceof UserAddCommentCommand) {
 			return this.produceUserAddCommentCommandExecutor(command);
+		} else if (command instanceof AddTeacherAssistanceCommand) {
+			return this.produceAddTeacherAssistanceCommandExecutor(command);
+		} else if (command instanceof RemoveTeacherAssistanceCommand) {
+			return this.produceRemoveTeacherAssistanceCommandExecutor(command);
 		} else {
 			this.logger.error("command type not found");
 			return null;
@@ -47,4 +55,10 @@ export class CommandFactory {
 	private produceUserAddCommentCommandExecutor(command: UserAddCommentCommand): CommandExecutor {
 		return new UserAddCommentCommandExecutor(this.aggregateRepository, this.uuidGenerateService);
 	}
+    private produceAddTeacherAssistanceCommandExecutor(command: AddTeacherAssistanceCommand): CommandExecutor {
+		return new AddTeacherAssistanceCommandExecutor(this.aggregateRepository);
+	}
+    private produceRemoveTeacherAssistanceCommandExecutor(command: RemoveTeacherAssistanceCommand): CommandExecutor {
+        return new RemoveTeacherAssistanceCommandExecutor(this.aggregateRepository);
+    }
 }
