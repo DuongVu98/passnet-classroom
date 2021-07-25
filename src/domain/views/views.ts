@@ -26,3 +26,8 @@ export class ClassroomLiteView {
 	courseName: string;
 	code: string;
 }
+
+export class MemberView {
+	profileId: string;
+	role: string;
+}

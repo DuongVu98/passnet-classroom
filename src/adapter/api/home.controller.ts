@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Logger, Param, Post } from "@nestjs/common";
+import { Body, Controller, Get, HttpStatus, Logger, Param, Post, UseFilters } from "@nestjs/common";
 import { Builder } from "builder-pattern";
 import {
 	AddStudentCommand,
@@ -8,6 +8,7 @@ import {
 	JoinClassroomByCodeCommand,
 } from "src/domain/commands/commands";
 import { CommandFactory } from "src/usecases/factories/command.factory";
+import { ClassroomNotFoundExceptionHandler } from "../filters/exception-handler.filter";
 
 export class HttpResponse {
 	constructor(message: any, status: string) {}
@@ -89,6 +90,7 @@ export class ClassroomController {
 	}
 
 	@Post("join-class")
+	@UseFilters(ClassroomNotFoundExceptionHandler)
 	public joinClassroomByCode(@Body() { classCode, profileId, orgId }: { classCode: string; profileId: string; orgId: string }) {
 		const command = Builder(JoinClassroomByCodeCommand).aggregateId("").classCode(classCode).memberId(profileId).orgId(orgId).build();
 		const commandExecutor = this.commandFactory.produce(command);

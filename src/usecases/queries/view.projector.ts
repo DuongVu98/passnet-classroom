@@ -1,10 +1,10 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { Builder } from "builder-pattern";
 import { Classroom } from "src/domain/aggregate/entities/classroom.root";
-import { ClassroomId, Job, Role } from "src/domain/aggregate/vos/value-objects";
+import { ClassroomId, Job, ProfileId, Role } from "src/domain/aggregate/vos/value-objects";
 import { ClassroomNotCreatedException, ClassroomNotFoundException } from "src/domain/exceptions/exceptions";
 import { ClassroomAggregateRepository } from "src/domain/repositories/classroom.repository";
-import { ClassroomLiteView, ClassroomView, CommentView, PostView } from "src/domain/views/views";
+import { ClassroomLiteView, ClassroomView, CommentView, MemberView, PostView } from "src/domain/views/views";
 
 @Injectable()
 export class ViewProjector {
@@ -42,7 +42,7 @@ export class ViewProjector {
 			.courseName(aggregate.courseName.value)
 			.students(aggregate.members.filter((mem) => mem.role === Role.STUDENT).map((mem) => mem.profileId.value))
 			.assistants(aggregate.members.filter((mem) => mem.role === Role.ASSISTANT).map((mem) => mem.profileId.value))
-			.teacher(aggregate.lecturer.profileId.value)
+			.teacher(aggregate.members.find((mem) => mem.role === Role.LECTURER).profileId.value)
 			.code(aggregate.classCode.value)
 			.posts(
 				aggregate.posts.map((post) =>
@@ -80,7 +80,7 @@ export class ViewProjector {
 	private getClassroomListByStudent(uid: string): Promise<ClassroomLiteView[]> {
 		return this.aggregateRepository.findAll().then((classroomList) => {
 			return classroomList
-				.filter((classroom) => classroom.students.some((student) => student.profileId.value === uid))
+				.filter((classroom) => classroom.members.some((student) => student.profileId.value === uid && student.role == Role.STUDENT))
 				.map((classroom) =>
 					Builder(ClassroomLiteView).classroomId(classroom.classroomId.value).courseName(classroom.courseName.value).build()
 				);
@@ -88,8 +88,6 @@ export class ViewProjector {
 	}
 
 	private getClassroomListByAssistant(uid: string): Promise<ClassroomLiteView[]> {
-		this.logger.log("process get classroomlist");
-
 		return this.aggregateRepository.findAll().then((classroomList) => {
 			return classroomList
 				.filter((classroom) => classroom.assistants.some((ta) => ta.profileId.value === uid))
@@ -103,10 +101,24 @@ export class ViewProjector {
 		return this.aggregateRepository.findAll().then((classroomList) => {
 			this.logger.debug(`debug classroomlist -> ${classroomList}`);
 			return classroomList
-				.filter((classroom) => classroom.lecturer.profileId.value === uid)
+				.filter((classroom) => classroom.members.filter((mem) => mem.profileId.value === uid).length > 0)
 				.map((classroom) =>
 					Builder(ClassroomLiteView).classroomId(classroom.classroomId.value).courseName(classroom.courseName.value).build()
 				);
 		});
+	}
+
+	getClassroomMembers(classroomId: string): Promise<MemberView[]> {
+		return this.aggregateRepository
+			.findById(new ClassroomId(classroomId))
+			.then((aggregate) => aggregate.members)
+			.then((members) => {
+				return members.map((mem) => {
+					return {
+						profileId: mem.profileId.value,
+						role: mem.role.toString(),
+					};
+				});
+			});
 	}
 }

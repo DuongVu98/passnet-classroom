@@ -1,16 +1,18 @@
-import { Body, Controller, Get, Param, Post, Query, UseFilters } from "@nestjs/common";
+import { Body, Controller, Get, Logger, Param, Post, Query, UseFilters } from "@nestjs/common";
 import { GetClassroomViewForm, GetClassroomviewFromJobForm } from "src/domain/forms/query.form";
-import { PostView } from "src/domain/views/views";
+import { MemberView, PostView } from "src/domain/views/views";
 import { ViewProjector } from "src/usecases/queries/view.projector";
 import { ClassroomNotCreatedExceptionHandler, ClassroomNotFoundExceptionHandler } from "../filters/exception-handler.filter";
 
 @Controller("api/query")
 export class QueryController {
+	logger: Logger = new Logger("QueryController");
+
 	constructor(private viewProjector: ViewProjector) {}
 
-	@Get("classrooms/:id")
-	public getClassroomView(@Body() getClassroomViewForm: GetClassroomViewForm): Promise<any> {
-		return this.viewProjector.queryClassroomView(getClassroomViewForm.classroomId);
+	@Get("classrooms/by-id")
+	public getClassroomView(@Query("id") classroomId: string): Promise<any> {
+		return this.viewProjector.queryClassroomView(classroomId);
 	}
 
 	@Post("classrooms/by-job")
@@ -30,5 +32,11 @@ export class QueryController {
 		return this.viewProjector.queryClassroomView(id).then((classroomView) => {
 			return classroomView.posts;
 		});
+	}
+
+	@Get("classrooms/:id/members")
+	@UseFilters(ClassroomNotFoundExceptionHandler)
+	public getClassroomMembers(@Param("id") classroomId: string): Promise<MemberView[]> {
+		return this.viewProjector.getClassroomMembers(classroomId);
 	}
 }
