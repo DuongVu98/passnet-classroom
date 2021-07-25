@@ -22,6 +22,17 @@ export class PostId {
 export class CommentId {
 	constructor(public value: string) {}
 }
-export class UserId {
+export class ProfileId {
 	constructor(public value: string) {}
+}
+export class ClassCode {
+	constructor(public value: string) {}
+}
+export class OrganizationId {
+	constructor(public value: string) {}
+}
+export enum Role {
+	LECTURER,
+	ASSISTANT,
+	STUDENT,
 }

@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import * as mongoose from "mongoose";
 import { Post, PostDomainFunction } from "./post.entity";
 import { Comment } from "./comment.entity";
-import { ClassroomId, CourseName, Job } from "../vos/value-objects";
+import { ClassCode, ClassroomId, CourseName, Job, OrganizationId } from "../vos/value-objects";
 import { Member } from "./member.entity";
 
 export type ClassroomDocument = Classroom & mongoose.Document;
@@ -19,16 +19,25 @@ export class Classroom {
 	students: Member[];
 
 	@Prop()
-	teacherId: Member;
+	lecturer: Member;
 
 	@Prop()
-	teacherAssistanceList: Member[];
+	assistants: Member[];
+
+	@Prop()
+	members: Member[];
 
 	@Prop()
 	posts: Post[];
 
 	@Prop()
 	jobId: Job;
+
+	@Prop()
+	classCode: ClassCode;
+
+	@Prop()
+	organizationId: OrganizationId;
 }
 
 export class ClassroomDomainFunctions {
@@ -50,7 +59,7 @@ export class ClassroomDomainFunctions {
 	}
 
 	public addStudentToClass(student: Member): Classroom {
-		this._aggregate.students.push(student);
+		this._aggregate.members.push(student);
 		return this._aggregate;
 	}
 

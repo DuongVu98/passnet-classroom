@@ -1,5 +1,6 @@
-import { UserId } from "../vos/value-objects";
+import { ProfileId, Role } from "../vos/value-objects";
 
 export class Member {
-	constructor(public userId: UserId) {}
+	profileId: ProfileId;
+	role: Role;
 }

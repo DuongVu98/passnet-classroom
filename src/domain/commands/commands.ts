@@ -7,27 +7,33 @@ export class CreateClassroomCommand extends BaseCommand {
 	courseName: string;
 	taIds: string[];
 	jobId: string;
+	organizationId: string;
 }
 
 export class AddStudentCommand extends BaseCommand {
 	studentId: string;
 }
 
-export class UserCreatePostCommand extends BaseCommand {
+export class CreatePostCommand extends BaseCommand {
 	userId: string;
 	postContent: string;
 }
 
-export class UserAddCommentCommand extends BaseCommand {
+export class AddCommentCommand extends BaseCommand {
 	commentOwnerId: string;
 	postId: string;
 	content: string;
 }
 
-export class AddTeacherAssistanceCommand extends BaseCommand {
-    taId: string;
+export class AddAssistantCommand extends BaseCommand {
+	taId: string;
 }
 
-export class RemoveTeacherAssistanceCommand extends BaseCommand {
-    taId: string;
+export class RemoveAssistantCommand extends BaseCommand {
+	taId: string;
+}
+export class JoinClassroomByCodeCommand extends BaseCommand {
+	memberId: string;
+	classCode: string;
+	orgId: string;
 }

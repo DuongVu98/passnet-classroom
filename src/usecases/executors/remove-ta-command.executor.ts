@@ -1,22 +1,23 @@
 import { Logger } from "@nestjs/common";
 import { ClassroomId } from "src/domain/aggregate/vos/value-objects";
-import { BaseCommand, RemoveTeacherAssistanceCommand } from "src/domain/commands/commands";
+import { BaseCommand, RemoveAssistantCommand } from "src/domain/commands/commands";
+import { CommandNotCompatibleException } from "src/domain/exceptions/exceptions";
 import { ClassroomAggregateRepository } from "src/domain/repositories/classroom.repository";
 import { CommandExecutor } from "./command.executor";
 
-export class RemoveTeacherAssistanceCommandExecutor implements CommandExecutor {
+export class RemoveAssistantCommandExecutor implements CommandExecutor {
 	logger: Logger = new Logger("AddTeacherAssistanceCommandExecutor");
 
 	constructor(private classroomRepository: ClassroomAggregateRepository) {}
 
 	execute(command: BaseCommand): Promise<any> {
-		if (command instanceof RemoveTeacherAssistanceCommand) {
+		if (command instanceof RemoveAssistantCommand) {
 			return this.classroomRepository
 				.findById(new ClassroomId(command.aggregateId))
 				.then((classroom) => {
 					if (classroom != null) {
-						const newTaList = classroom.teacherAssistanceList.filter((taId) => !(taId.userId.value === command.taId));
-						classroom.teacherAssistanceList = newTaList;
+						const newTaList = classroom.assistants.filter((taId) => !(taId.profileId.value === command.taId));
+						classroom.assistants = newTaList;
 
 						return this.classroomRepository.update(classroom);
 					}
@@ -26,6 +27,8 @@ export class RemoveTeacherAssistanceCommandExecutor implements CommandExecutor {
 						this.logger.log(`handle remove-student-application-event for aggregate ${aggregate}`);
 					}
 				});
+		} else {
+			return Promise.reject(new CommandNotCompatibleException("RemoveAssistantCommand"));
 		}
 	}
 }

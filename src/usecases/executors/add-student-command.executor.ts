@@ -3,8 +3,10 @@ import { AddStudentCommand, BaseCommand } from "src/domain/commands/commands";
 import { Logger } from "@nestjs/common";
 import { ClassroomAggregateRepository } from "src/domain/repositories/classroom.repository";
 import { ClassroomDomainFunctions } from "src/domain/aggregate/entities/classroom.root";
-import { ClassroomId, UserId } from "src/domain/aggregate/vos/value-objects";
+import { ClassroomId, ProfileId, Role } from "src/domain/aggregate/vos/value-objects";
 import { Member } from "src/domain/aggregate/entities/member.entity";
+import { Builder } from "builder-pattern";
+import { CommandNotCompatibleException } from "src/domain/exceptions/exceptions";
 
 export class AddStudentCommandExecutor implements CommandExecutor {
 	logger: Logger = new Logger("AddStudentCommandExecutor");
@@ -19,7 +21,7 @@ export class AddStudentCommandExecutor implements CommandExecutor {
 				.findById(new ClassroomId(command.aggregateId))
 				.then(async (classroom) => {
 					const aggregate = await new ClassroomDomainFunctions(classroom).addStudentToClass(
-						new Member(new UserId(command.studentId))
+						Builder(Member).profileId(new ProfileId(command.studentId)).role(Role.STUDENT).build()
 					);
 					return this.classroomRepository.update(aggregate);
 				})
@@ -27,7 +29,7 @@ export class AddStudentCommandExecutor implements CommandExecutor {
 					this.logger.log(`added new student to classroom ${aggregate}`);
 				});
 		} else {
-			return Promise.reject();
+			return Promise.reject(new CommandNotCompatibleException("AddStudentCommand"));
 		}
 	}
 }

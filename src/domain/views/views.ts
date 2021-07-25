@@ -3,8 +3,9 @@ export class ClassroomView {
 	courseName: string;
 	students: string[];
 	teacher: string;
-	teacherAssistanceList: string[];
+	assistants: string[];
 	posts: PostView[];
+	code: string;
 }
 
 export class PostView {
@@ -23,4 +24,5 @@ export class CommentView {
 export class ClassroomLiteView {
 	classroomId: string;
 	courseName: string;
+	code: string;
 }

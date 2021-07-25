@@ -2,7 +2,7 @@ import { Injectable, Logger } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { ClassroomDocument, Classroom } from "../aggregate/entities/classroom.root";
-import { ClassroomId, Job } from "../aggregate/vos/value-objects";
+import { ClassroomId, Job, OrganizationId } from "../aggregate/vos/value-objects";
 
 @Injectable()
 export class ClassroomAggregateRepository {
@@ -12,6 +12,10 @@ export class ClassroomAggregateRepository {
 
 	async findAll(): Promise<Classroom[]> {
 		return this.classroomModel.find().exec();
+	}
+
+	async findAllByOrg(organzationId: OrganizationId): Promise<Classroom[]> {
+		return this.classroomModel.find({ organizationId: organzationId }).exec();
 	}
 
 	async findById(id: ClassroomId): Promise<Classroom> {

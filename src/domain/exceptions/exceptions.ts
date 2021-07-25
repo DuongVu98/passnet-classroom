@@ -11,3 +11,9 @@ export class ClassroomNotCreatedException extends HttpException {
 		super(`Classroom with id ${jobId} has not been created`, HttpStatus.NOT_FOUND);
 	}
 }
+
+export class CommandNotCompatibleException extends HttpException {
+	constructor(commandName: string) {
+		super(`This must be ${commandName}`, HttpStatus.NOT_FOUND);
+	}
+}

@@ -1,5 +1,5 @@
 import { Logger } from "@nestjs/common";
-import { Job, UserId } from "src/domain/aggregate/vos/value-objects";
+import { Job, ProfileId } from "src/domain/aggregate/vos/value-objects";
 import { RemoveStudentApplicationExternalEvent } from "src/domain/events/events";
 import { ClassroomAggregateRepository } from "src/domain/repositories/classroom.repository";
 import { EventHandler } from "./event.handler";
@@ -15,8 +15,8 @@ export class RemoveStudentApplicationEventHandler implements EventHandler {
 				.findByJobId(new Job(event.jobId))
 				.then((classroom) => {
 					if (classroom != null) {
-						const newTaList = classroom.teacherAssistanceList.filter((taId) => !(taId.userId.value === event.studentId));
-						classroom.teacherAssistanceList = newTaList;
+						const newTaList = classroom.assistants.filter((taId) => !(taId.profileId.value === event.studentId));
+						classroom.assistants = newTaList;
 
 						return this.classroomRepository.update(classroom);
 					}

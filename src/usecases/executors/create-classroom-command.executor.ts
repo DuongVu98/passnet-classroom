@@ -6,8 +6,9 @@ import { Builder } from "builder-pattern";
 import { ClassroomAggregateRepository } from "src/domain/repositories/classroom.repository";
 import { Member } from "src/domain/aggregate/entities/member.entity";
 import { rejects } from "assert";
-import { ClassroomId, CourseName, Job, UserId } from "src/domain/aggregate/vos/value-objects";
+import { ClassCode, ClassroomId, CourseName, Job, OrganizationId, ProfileId, Role } from "src/domain/aggregate/vos/value-objects";
 import { UuidGenerateService } from "../services/uuid-generate.service";
+import { CommandNotCompatibleException } from "src/domain/exceptions/exceptions";
 
 export class CreateClassroomCommandExecutor implements CommandExecutor {
 	logger: Logger = new Logger("CreateClassroomCommandExecutor");
@@ -16,23 +17,32 @@ export class CreateClassroomCommandExecutor implements CommandExecutor {
 
 	execute(command: BaseCommand): Promise<any> {
 		if (command instanceof CreateClassroomCommand) {
-			const teacherAssistanceList = command.taIds.map((id) => new Member(new UserId(id)));
+			const teacherAssistanceList = command.taIds.map((id) =>
+				Builder(Member).profileId(new ProfileId(id)).role(Role.ASSISTANT).build()
+			);
 
 			const classroom: Classroom = Builder(Classroom)
 				.classroomId(new ClassroomId(this.uuidGenerateService.generateUUID()))
-				.students([])
-				.teacherAssistanceList(teacherAssistanceList)
-				.teacherId(new Member(new UserId(command.teacherId)))
+				.members([
+					...teacherAssistanceList,
+					Builder(Member).profileId(new ProfileId(command.teacherId)).role(Role.LECTURER).build(),
+				])
 				.courseName(new CourseName(command.courseName))
-				.posts([])
+				.classCode(new ClassCode(this.generateCode()))
+				.organizationId(new OrganizationId(command.organizationId))
 				.jobId(new Job(command.jobId))
+				.posts([])
 				.build();
 
 			return this.classroomRepository.insert(classroom).then((result) => {
 				this.logger.log(`Result: ${result}`);
 			});
 		} else {
-			return Promise.reject();
+			return Promise.reject(new CommandNotCompatibleException("CreateClassroomCommand"));
 		}
+	}
+
+	private generateCode(): string {
+		return Math.random().toString(36).substring(7);
 	}
 }
