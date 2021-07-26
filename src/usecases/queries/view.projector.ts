@@ -90,7 +90,7 @@ export class ViewProjector {
 	private getClassroomListByAssistant(uid: string): Promise<ClassroomLiteView[]> {
 		return this.aggregateRepository.findAll().then((classroomList) => {
 			return classroomList
-				.filter((classroom) => classroom.assistants.some((ta) => ta.profileId.value === uid))
+				.filter((classroom) => classroom.members.some((ta) => ta.profileId.value === uid && ta.role == Role.ASSISTANT))
 				.map((classroom) =>
 					Builder(ClassroomLiteView).classroomId(classroom.classroomId.value).courseName(classroom.courseName.value).build()
 				);
